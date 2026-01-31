@@ -1,0 +1,112 @@
+[
+    {
+        "input": {
+            "attribute": "model",
+            "candidate_record": "mazda mx-5",
+            "similar_records": ["miata", "toyota corolla", "honda civic"]
+        },
+        "output": {
+            "output": "miata",
+            "explanation": "mazda mx-5 and miata refer to the same real-world entity (the same vehicle model)."
+        }
+    },
+    {
+        "input": {
+            "attribute": "model",
+            "candidate_record": "ford mustang",
+            "similar_records": ["chevrolet camaro", "dodge charger", "toyota supra"]
+        },
+        "output": {
+            "output": "''",
+            "explanation": "ford mustang is a distinct vehicle model not represented in the list of similar records."
+        }
+    },
+    {
+        "input": {
+            "attribute": "brand",
+            "candidate_record": "mercedes",
+            "similar_records": ["mercedes-benz", "benz", "audi", "bmw"]
+        },
+        "output": {
+            "output": "mercedes-benz",
+            "explanation": "mercedes and mercedes-benz refer to the same real-world brand."
+        }
+    },
+    {
+        "input": {
+            "attribute": "brand",
+            "candidate_record": "vw",
+            "similar_records": ["volkswagen", "mercedes-benz", "toyota"]
+        },
+        "output": {
+            "output": "volkswagen",
+            "explanation": "vw is a common abbreviation for the volkswagen brand."
+        }
+    },
+    {
+        "input": {
+            "attribute": "brand",
+            "candidate_record": "benz",
+            "similar_records": ["honda", "hyundai", "mercedes-benz"]
+        },
+        "output": {
+            "output": "mercedes-benz",
+            "explanation": "benz is a shorthand for the mercedes-benz brand."
+        }
+    },
+    {
+        "input": {
+            "attribute": "brand",
+            "candidate_record": "mercedes benz",
+            "similar_records": ["ford", "chevrolet", "volkswagen"]
+        },
+        "output": {
+            "output": "''",
+            "explanation": "mercedes benz (mercedes-benz) is a distinct brand not represented in the list."
+        }
+    },
+    {
+        "input": {
+            "attribute": "brand",
+            "candidate_record": "volkswagen",
+            "similar_records": ["vw", "subaru", "nissan"]
+        },
+        "output": {
+            "output": "vw",
+            "explanation": "volkswagen and vw refer to the same real-world brand."
+        }
+    },
+    {
+        "input": {
+            "attribute": "model",
+            "candidate_record": "mazda roadster",
+            "similar_records": ["mazda mx-5", "eunos roadster", "nissan 370z"]
+        },
+        "output": {
+            "output": "mazda mx-5",
+            "explanation": "mazda roadster is the japanese market name for the mazda mx-5."
+        }
+    },
+    {
+        "input": {
+            "attribute": "brand",
+            "candidate_record": "chevy",
+            "similar_records": ["chevrolet", "ford", "toyota"]
+        },
+        "output": {
+            "output": "chevrolet",
+            "explanation": "chevy is a common abbreviation for the chevrolet brand."
+        }
+    },
+    {
+        "input": {
+            "attribute": "model",
+            "candidate_record": "mr2 spyder",
+            "similar_records": ["toyota mr2", "honda s2000", "mazda rx-8"]
+        },
+        "output": {
+            "output": "toyota mr2",
+            "explanation": "mr2 spyder is the name for the third-generation toyota mr2 (w30) in certain markets."
+        }
+    }
+]
