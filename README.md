@@ -1,53 +1,68 @@
 # Vehicle Normalization (VN)
 
-A Python framework for normalizing unstructured vehicle information into standardized, canonical formats using LLM-powered extraction and semantic matching.
+A Python framework for normalizing raw vehicle representations into a standardized, canonical form using LLM-powered extraction and semantic matching.
 
-> **Note:** This version is tailored for a specific research context. The framework is designed to be extensible for different use cases.
+## Motivation
 
-## Overview
+Automotive data sourced from different marketplaces suffers from three problems:
 
-VN implements a three-stage normalization pipeline:
+- **Inconsistent naming** — identical entities represented by different string values across sources (e.g. `"mercedes"`, `"mercedes-benz"`, `"Mercedes Benz"`)
+- **Inconsistent granularity** — identical attributes expressed at varying levels of detail (e.g. `"automatic"` vs `"7-speed DCT"`)
+- **Semantic overlap** — attribute values that mix distinct vehicle characteristics into a single field
 
-1. **Extraction** — LLM parses free-form vehicle descriptions into structured data
-2. **Retrieval** — Vector similarity search finds candidate matches from a catalog
-3. **Matching** — LLM determines if extracted values match existing catalog entries or are new
+The hypothesis behind VN is that eliminating these inconsistencies produces a standardized representation that improves the performance of downstream ML models. Additionaly, it enables data integration across heterogeneous automotive sources.
+
+## Pipeline
+
+VN implements two modes controlled by `extract_only` on `Normalizer`:
+
+**Extract-only** (`extract_only=True`) — fast, no catalog or vector store:
+1. LLM parses a free-form vehicle description → structured `Vehicle` object (30+ fields)
+
+**Full pipeline** (`extract_only=False`):
+1. **Extract** — LLM parses description into structured fields
+2. **Retrieve** — FAISS HNSW similarity search finds top-k candidates from catalog for `brand`, `model`, `submodel`, `trim_level`
+3. **Match** — LLM decides if extracted value matches an existing catalog entry or is new
+4. **Intra-batch dedup** — sequential matching within a batch prevents synonyms from entering the catalog as separate entries
+5. **Catalog update** — new canonical values written to `db/catalog.db` (SQLite) + FAISS indexes flushed to `db/`
 
 ## Project Structure
 
 ```
 vn/
-├── main.py                 # Entry point
 ├── src/
-│   ├── models.py           # Vehicle Pydantic model
-│   └── normalizer.py       # Core normalization engine
+│   ├── models.py             # Vehicle Pydantic model + Resolution
+│   └── normalizer.py         # Normalizer class + serialize_row()
 ├── prompts/
-│   ├── extraction.j2       # Extraction prompt template
-│   └── matching.j2         # Matching prompt template
+│   ├── extraction.j2         # Jinja2 extraction prompt (few-shot baked in at init)
+│   └── matching.j2           # Jinja2 matching prompt
 ├── samples/
-│   ├── extraction.json     # Few-shot examples for extraction
-│   └── matching.json       # Few-shot examples for matching
+│   ├── extraction.json       # Few-shot examples for extraction
+│   └── matching.json         # Few-shot examples for matching
+├── scripts/
+│   ├── normalize.py          # Full-pipeline batch normalization for any CSV
+│   ├── normalize_all.py      # Batch normalization for autoscout24, craigslist, mucars
+│   ├── estimate.py           # Cost + time estimator (samples N descriptions)
+│   ├── audit.py              # Inspect pipeline output on a small sample
+│   └── bench_batch.py        # Benchmark batch sizes for throughput
 ├── data/
-│   └── catalog.json        # Persisted canonical values
-└── db/                     # Chroma vector database
+│   ├── autoscout24.csv       # 251k rows, European marketplace
+│   ├── craigslist.csv        # 427k rows, US marketplace (miles)
+│   └── mucars.csv            # 102k rows, Moroccan marketplace
+└── db/
+    ├── catalog.db            # SQLite: canonical values + HNSW value index
+    └── hnsw_*.index          # FAISS HNSW binary indexes (one per catalog attribute)
 ```
 
 ## Installation
 
-Requires Python >= 3.10. Using [uv](https://github.com/astral-sh/uv):
+Requires Python >= 3.10 and an OpenAI API key. Using [uv](https://github.com/astral-sh/uv):
 
 ```bash
 uv sync
 ```
 
-Or with pip:
-
-```bash
-pip install -e .
-```
-
-## Configuration
-
-Create a `.env` file with your OpenAI API key:
+Create a `.env` file:
 
 ```
 OPENAI_API_KEY=your-api-key
@@ -58,76 +73,72 @@ OPENAI_API_KEY=your-api-key
 ```python
 from src.normalizer import Normalizer
 
-# Initialize the normalizer
-vn = Normalizer(
-    model="gpt-4.1-nano",           # or "gpt-5-nano", "gpt-5-mini"
-    embedding_model="text-embedding-3-small",
-    k=3                              # candidates to retrieve
-)
+# Extract-only (no catalog, no FAISS)
+normalizer = Normalizer(extract_only=True)
+result = await normalizer.extract("volvo v60 2.4 d6 awd wagon automatic")
 
-# Extract structured data from a description
-result = await vn.extract("volvo v60 2.4 d6 awd wagon automatic")
+# Full pipeline: extract + retrieve + match + catalog update
+normalizer = Normalizer(extract_only=False)
+vehicles, metrics = await normalizer(["seat arona 2021 ibiza 1.6 bencina blanco"])
 
-# Full pipeline: extract + retrieve + match
-logs = await vn(["seat arona 2021 ibiza 1.6 bencina blanco"])
+# Verbose mode: includes raw extraction and catalog operations per row
+vehicles, metrics = await normalizer([...], verbose=True)
 
-# Check API costs
-print(vn.get_cost())
+# Cost tracking
+print(f"${normalizer.get_cost():.4f}")
+```
+
+### Recommended workflow
+
+Optimal batch size and prefetch depend on the LLM model, your API tier (TPM/RPM limits), and network latency. The recommended sequence before running a full normalization is:
+
+**Step 1 — Find the optimal batch size and prefetch setting:**
+```bash
+uv run python scripts/bench_batch.py
+```
+This tests batch sizes `[20, 30, 40, 50]` with and without `prefetch=1`, measuring DPM/RPM/TPM for each combination. Pick the configuration that maximizes DPM without hitting your TPM ceiling. A 60-second cooldown is applied between configurations for a fair comparison.
+
+**Step 2 — Estimate cost and time for a full run:**
+```bash
+uv run python scripts/estimate.py --batch_size <optimal> --n 250
+```
+Samples 250 descriptions per dataset, runs them through the full pipeline, and extrapolates cost and time to the full dataset. Defaults: `batch_size=50`, `prefetch=1`.
+
+**Step 3 — Run normalization with the optimal parameters:**
+```bash
+uv run python scripts/normalize_all.py --batch_size <optimal>
+```
+Crash-safe and resumable — re-run the same command to continue from where it left off.
+
+### Other commands
+
+```bash
+# Single dataset
+uv run python scripts/normalize_all.py --datasets autoscout24
+
+# Test a few samples without saving
+uv run python scripts/normalize_all.py --test --test_n 5
+
+# Wipe everything and restart
+uv run python scripts/normalize_all.py --fresh_start
+
+# Audit pipeline output on a small sample
+uv run python scripts/audit.py --datasets autoscout24 --n 5
 ```
 
 ## Extending the Vehicle Model
 
-The `Vehicle` class in [src/models.py](src/models.py) defines the attributes to extract. When adding new attributes, the approach depends on the attribute type:
-
-### 1. Numerical attributes
-
-Straightforward to add. Only requires updating:
-- [src/models.py](src/models.py) — add the field to the `Vehicle` class
-- [samples/extraction.json](samples/extraction.json) — add few-shot examples
-
-```python
-class Vehicle(BaseModel):
-    # ... existing fields ...
-    mileage: Optional[float] = None
-```
-
-### 2. Categorical with low cardinality
-
-Use a `Literal` type to constrain the possible values. Only requires updating:
-- [src/models.py](src/models.py) — add the field with `Literal` type
-- [samples/extraction.json](samples/extraction.json) — add few-shot examples
-
-```python
-class Vehicle(BaseModel):
-    # ... existing fields ...
-    fuel_type: Optional[Literal["petrol", "diesel", "electric", "hybrid"]] = None
-```
-
-### 3. Categorical with high cardinality
-
-More complex. These attributes need to go through the RAG pipeline for matching against a catalog. Requires updating:
-- [src/models.py](src/models.py) — add the field as `str`
-- [src/normalizer.py](src/normalizer.py) — update retrieval and matching logic
-- [samples/extraction.json](samples/extraction.json) — add few-shot examples
-- [samples/matching.json](samples/matching.json) — add few-shot examples
-
-```python
-class Vehicle(BaseModel):
-    # ... existing fields ...
-    new_attribute: Optional[str] = None
-```
-
-## Adding LLM Providers
-
-Currently OpenAI is supported. The code is designed to be extensible for additional providers. See the `provider` parameter in the `Normalizer` class and the LangChain integrations used throughout.
+- **New low-cardinality field**: add `Literal` field to `Vehicle` in `src/models.py`, add examples to `samples/extraction.json`, add a rule to `prompts/extraction.j2` if non-obvious.
+- **New numerical field with unit**: add a value field + `_unit` Literal field as a pair (see `engine_power` / `engine_power_unit` pattern). Preserve original units — do not convert in the prompt.
+- **New high-cardinality catalog attribute**: add `str` field to `Vehicle`, add to `self.attributes` in `Normalizer.__init__`, add matching examples to `samples/matching.json`.
 
 ## Dependencies
 
-- `langchain` / `langchain-openai` — LLM orchestration
-- `langchain-chroma` — Vector database
-- `pydantic` — Data validation
+- `langchain` / `langchain-openai` — LLM orchestration and structured output
+- `faiss-cpu` — HNSW vector similarity search
+- `pydantic` — Vehicle schema and validation
 - `jinja2` — Prompt templating
-- `aiofiles` — Async file operations
+- `openai` — Embeddings API
 
 ## License
 
