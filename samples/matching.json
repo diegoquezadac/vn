@@ -1,112 +1,126 @@
 [
     {
-        "input": {
-            "attribute": "model",
-            "candidate_record": "mazda mx-5",
-            "similar_records": ["miata", "toyota corolla", "honda civic"]
-        },
-        "output": {
-            "output": "miata",
-            "explanation": "mazda mx-5 and miata refer to the same real-world entity (the same vehicle model)."
-        }
+        "input": {"attribute": "brand", "x": "mercedes", "y": "mercedes-benz"},
+        "output": {"reasoning": "'mercedes' is the common shorthand for the manufacturer officially known as 'mercedes-benz'.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "model",
-            "candidate_record": "ford mustang",
-            "similar_records": ["chevrolet camaro", "dodge charger", "toyota supra"]
-        },
-        "output": {
-            "output": "''",
-            "explanation": "ford mustang is a distinct vehicle model not represented in the list of similar records."
-        }
+        "input": {"attribute": "brand", "x": "mercedes-benz", "y": "mercedes"},
+        "output": {"reasoning": "'mercedes-benz' is the official name; 'mercedes' is its universally accepted shorthand — same manufacturer.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "brand",
-            "candidate_record": "mercedes",
-            "similar_records": ["mercedes-benz", "benz", "audi", "bmw"]
-        },
-        "output": {
-            "output": "mercedes-benz",
-            "explanation": "mercedes and mercedes-benz refer to the same real-world brand."
-        }
+        "input": {"attribute": "brand", "x": "vw", "y": "volkswagen"},
+        "output": {"reasoning": "'vw' is the standard abbreviation for 'volkswagen'.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "brand",
-            "candidate_record": "vw",
-            "similar_records": ["volkswagen", "mercedes-benz", "toyota"]
-        },
-        "output": {
-            "output": "volkswagen",
-            "explanation": "vw is a common abbreviation for the volkswagen brand."
-        }
+        "input": {"attribute": "brand", "x": "chevy", "y": "chevrolet"},
+        "output": {"reasoning": "'chevy' is the common nickname for 'chevrolet'.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "brand",
-            "candidate_record": "benz",
-            "similar_records": ["honda", "hyundai", "mercedes-benz"]
-        },
-        "output": {
-            "output": "mercedes-benz",
-            "explanation": "benz is a shorthand for the mercedes-benz brand."
-        }
+        "input": {"attribute": "brand", "x": "alfa romeo", "y": "alfa-romeo"},
+        "output": {"reasoning": "Same brand, hyphen vs space difference only.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "brand",
-            "candidate_record": "mercedes benz",
-            "similar_records": ["ford", "chevrolet", "volkswagen"]
-        },
-        "output": {
-            "output": "''",
-            "explanation": "mercedes benz (mercedes-benz) is a distinct brand not represented in the list."
-        }
+        "input": {"attribute": "model", "x": "serie 3", "y": "3 series"},
+        "output": {"reasoning": "'serie 3' is the Spanish/French name for the BMW '3 series' — same model line.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "brand",
-            "candidate_record": "volkswagen",
-            "similar_records": ["vw", "subaru", "nissan"]
-        },
-        "output": {
-            "output": "vw",
-            "explanation": "volkswagen and vw refer to the same real-world brand."
-        }
+        "input": {"attribute": "model", "x": "t roc", "y": "t-roc"},
+        "output": {"reasoning": "Same Volkswagen model, spacing vs hyphen difference only.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "model",
-            "candidate_record": "mazda roadster",
-            "similar_records": ["mazda mx-5", "eunos roadster", "nissan 370z"]
-        },
-        "output": {
-            "output": "mazda mx-5",
-            "explanation": "mazda roadster is the japanese market name for the mazda mx-5."
-        }
+        "input": {"attribute": "model", "x": "c 350", "y": "c350"},
+        "output": {"reasoning": "Same Mercedes model, spacing difference only.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "brand",
-            "candidate_record": "chevy",
-            "similar_records": ["chevrolet", "ford", "toyota"]
-        },
-        "output": {
-            "output": "chevrolet",
-            "explanation": "chevy is a common abbreviation for the chevrolet brand."
-        }
+        "input": {"attribute": "submodel", "x": "320 d", "y": "320d"},
+        "output": {"reasoning": "Same BMW submodel, spacing difference only.", "is_match": true}
     },
     {
-        "input": {
-            "attribute": "model",
-            "candidate_record": "mr2 spyder",
-            "similar_records": ["toyota mr2", "honda s2000", "mazda rx-8"]
-        },
-        "output": {
-            "output": "toyota mr2",
-            "explanation": "mr2 spyder is the name for the third-generation toyota mr2 (w30) in certain markets."
-        }
+        "input": {"attribute": "brand", "x": "toyota", "y": "honda"},
+        "output": {"reasoning": "'toyota' and 'honda' are two entirely distinct manufacturers.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "brand", "x": "fiat", "y": "alfa-romeo"},
+        "output": {"reasoning": "Fiat and Alfa Romeo are separate brands (both under Stellantis, but distinct marques).", "is_match": false}
+    },
+    {
+        "input": {"attribute": "brand", "x": "skoda", "y": "volkswagen"},
+        "output": {"reasoning": "Skoda is a separate brand from Volkswagen despite being in the same group.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "corolla", "y": "corolla cross"},
+        "output": {"reasoning": "'corolla cross' is a distinct SUV variant — not the same as the base 'corolla' sedan/hatchback.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "corolla", "y": "corolla verso"},
+        "output": {"reasoning": "'corolla verso' is a distinct MPV/compact van body style — not the same as the base 'corolla'.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "xc40", "y": "xc60"},
+        "output": {"reasoning": "'xc40' and 'xc60' are two different Volvo SUV models.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "tts", "y": "tt"},
+        "output": {"reasoning": "'tts' is a higher-performance variant of the Audi TT — they are distinct models.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "trim_level", "x": "titanium", "y": "titanium sport"},
+        "output": {"reasoning": "'titanium sport' is a distinct trim above 'titanium' — the 'sport' qualifier makes it a different level.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "trim_level", "x": "titanium", "y": "titanium x"},
+        "output": {"reasoning": "'titanium x' is a distinct trim above 'titanium' — the 'x' qualifier makes it a different level.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "trim_level", "x": "comfortline style", "y": "comfortline"},
+        "output": {"reasoning": "'comfortline style' adds the 'style' qualifier, making it a distinct trim — not the same as 'comfortline'.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "500x", "y": "500"},
+        "output": {"reasoning": "The 'x' suffix in '500x' denotes a distinct SUV model — not the same as the base '500' city car.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "xceed", "y": "ceed"},
+        "output": {"reasoning": "'xceed' is a separate crossover model from Kia; 'ceed' is a different hatchback model. Sharing a name root does not make them the same model.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "submodel", "x": "touring", "y": "d xdrive touring (e61)"},
+        "output": {"reasoning": "'d xdrive touring (e61)' is a specific engine/drivetrain/generation variant; 'touring' alone is not a match for that more qualified entry.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "golf gti", "y": "golf"},
+        "output": {"reasoning": "'golf gti' is a distinct performance variant with a different engine and suspension tune — not the same as the base 'golf'. The 'gti' suffix is a meaningful qualifier, not mere formatting.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "308 sw", "y": "308"},
+        "output": {"reasoning": "'308 sw' is the estate/wagon body style of the Peugeot 308, listed as a separate model. 'SW' is a meaningful body-style qualifier — not the same vehicle as the '308' hatchback.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "transit connect", "y": "transit custom"},
+        "output": {"reasoning": "'transit connect' (compact van) and 'transit custom' (medium van) are distinct Ford Transit family members of different sizes and payloads — not the same model.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "submodel", "x": "long range", "y": "long range awd"},
+        "output": {"reasoning": "'long range awd' specifies all-wheel drive — a distinct drivetrain variant from 'long range' alone. The AWD qualifier makes it a different catalog entry.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "trim_level", "x": "se", "y": "s"},
+        "output": {"reasoning": "'SE' (Sport Edition) and 'S' are distinct trim levels in many manufacturers' lineups — SE is above S and has different standard equipment. One letter difference, but they are not the same trim.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "xsara picasso", "y": "xsara"},
+        "output": {"reasoning": "'xsara picasso' is a distinct MPV model from Citroën — not the same as the 'xsara' hatchback. The 'picasso' suffix denotes a different body style and platform; it is not merely a variant name.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "model", "x": "grand cherokee l", "y": "grand cherokee"},
+        "output": {"reasoning": "'grand cherokee l' is the long-wheelbase, 3-row version launched in 2021 — a distinct model from the standard 2-row 'grand cherokee'. The 'l' suffix is a meaningful qualifier, not a formatting difference.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "submodel", "x": "gti", "y": "gti performance"},
+        "output": {"reasoning": "'gti performance' is a distinct higher-output variant (245hp) compared to the standard 'gti' (230hp). 'gti' is not shorthand for 'gti performance' — they are separate catalog entries.", "is_match": false}
+    },
+    {
+        "input": {"attribute": "trim_level", "x": "inscription", "y": "inscription expression"},
+        "output": {"reasoning": "'inscription expression' is a distinct sub-tier within Volvo's Inscription family — not the same as base 'inscription'. 'expression' is a meaningful additional qualifier.", "is_match": false}
     }
 ]

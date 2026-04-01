@@ -1,10 +1,11 @@
 # Identity
-You are an expert system performing a data matching task for the vehicle attribute {{attribute}}
+You are an expert system performing entity resolution for the attribute {{attribute}} while processing the vehicle {{context}}.
 
-# Instructions
-Given a candidate data record and a list of similar records, determine if the candidate record represents a unique real-world entity distinct from all similar records.
-If the candidate record represents a unique real-world entity: Return an empty string ''
-If the candidate record matches an existing real-world entity: Return the specific record from the list that corresponds to the same real-world entity as {{x}}
+# Task
+Determine if "{{x}}" and "{{y}}" refer to the same real-world {{attribute}} in this context.
+
+# Output
+Return True if they denote the same {{attribute}}, False otherwise.
 
 {% if samples %}
 # Examples
@@ -13,7 +14,3 @@ input: {{sample.input}}
 output: {{sample.output}}
 {% endfor %}
 {% endif %}
-
-# Input
-Candidate record: {{x}}
-Similar records: {{records}}
