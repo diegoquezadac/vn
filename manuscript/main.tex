@@ -1,0 +1,521 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\begin{document}
+
+\title{Vehicle Normalization Framework\\
+\thanks{Identify applicable funding agency here. If none, delete this.}
+}
+
+\author{\IEEEauthorblockN{1\textsuperscript{st} Diego Quezada}
+\IEEEauthorblockA{\textit{Departamento de Informática} \\
+\textit{Universidad Técnica Federico Santa María}\\
+Valparaíso, Chile \\
+diego.quezadac@sansano.usm.cl}
+\and
+\IEEEauthorblockN{2\textsuperscript{nd} Carlos Valle}
+\IEEEauthorblockA{\textit{Escuela de Ingeniería Informática} \\
+\textit{PUCV}\\
+Valparaíso, Chile \\
+carlos.valle@pucv.cl}
+\and
+\IEEEauthorblockN{3\textsuperscript{rd} Ricardo Ñanculef}
+\IEEEauthorblockA{\textit{Departamento de Informática} \\
+\textit{Universidad Técnica Federico Santa María}\\
+Valparaíso, Chile \\
+jnancu@inf.utfsm.cl}}
+
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+LLM, RAG, Information Extraction, Information Retrieval, Entity Resolution
+
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+% Paragraph about the context
+The global second-hand car market, valued at approximately USD 1.90 trillion in 2024, is projected to grow at a compound annual growth rate (CAGR) of 9.4\% from 2022 to 2027 \cite{hu2025583}. Key factors driving this growth include rising new vehicle prices, enhanced vehicle financing options, and advancements in online platforms \cite{hu2025583, zacharof}, which facilitate access to inventory and information impacting consumer trust, such as online reviews and ratings \cite{zhang2025decoding}.
+
+% Paragraph about the problem
+The expansion of online platforms has produced a proliferation of heterogeneous vehicle datasets across automotive markets. Without a shared standard for representing vehicles, descriptions of the same real-world entity diverge along three axes: \textbf{naming inconsistency}, where the same concept appears under different strings (e.g., ``mercedes'', ``mercedes-benz'', ``mercedes benz''); \textbf{granularity inconsistency}, where the same attribute is expressed at different levels of detail (e.g., ``automatic'' vs.\ ``7-speed DCT''); and \textbf{scope inconsistency}, where a single field conflates values that belong to distinct real-world dimensions (e.g., a \textit{fuel type} column containing both ``petrol'' and ``phev''). Left unaddressed, these inconsistencies propagates through downstream machine learning (ML) pipelines, undermining feature extraction, similarity computation, and ultimately model performance.
+
+% Paragraph about standard efforts
+Several standardization efforts have attempted to formalize vehicle data representation, yet none has produced a solution applicable to open, cross-market datasets. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, has proven effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data is rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. Together, these efforts address narrow, well-scoped problems within specific industry contexts, leaving the challenge of normalizing heterogeneous vehicle listings from open source datasets largely unresolved. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
+
+% Paragraph about contribution
+In this work, we propose a general vehicle normalization framework that leverages recent advances in large language models (LLMs) applied to information extraction (IE), information retrieval (IR), and entity resolution (ER) to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream machine learning (ML) tasks. Our framework is open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements, and is designed to serve as a shared baseline for future research on ML applications in the vehicle domain.
+
+
+\section{Related Work}
+
+\subsection{Vehicle Data Preprocessing in ML}
+
+Every ML study on vehicle data confronts the fact that each dataset uses its own representation: different columns, naming conventions, languages, abbreviations, and attribute domains. In practice, each study builds a tailored preprocessing pipeline from scratch, and none of the resulting transformations transfers to a new dataset or market.
+
+Bergmann and Feuerriegel~\cite{bergmann2025125640} provide the most detailed example of this pattern. Working with 92,239 used car sales from a Swiss retailer, they faced approximately 50,000 unique equipment identifiers represented as short German-language text descriptions (e.g., \textit{``Navigationsfunktion `Discover media' fuer Radiosystem `Composition media'\,''}). Their preprocessing pipeline consisted of three steps: first, they manually selected 18 target equipment categories (e.g., navigation system, alloy rims, park assist) based on the search filters of a Swiss online platform, validated by 51 car dealers; second, they mapped the 50,000 textual descriptions onto these 18 categories using a keyword-based search combined with regular expressions; third, they applied one-hot encoding to produce 18 binary predictors. This pipeline improved prediction performance (MAE) by 3.27\%. Crucially, the authors describe their approach as ``tailored'' to their partner company's data and market. The keyword rules are language-specific (German), the 18 categories reflect Swiss consumer preferences, and the mapping logic would need to be rebuilt for any new market, language, or equipment taxonomy.
+
+Fayyaz et al.~\cite{vehicles7030094} expose how raw vehicle listings resist direct ML application. Working with real-world listing data, they found that transmission entries varied widely (e.g., ``6-Speed A/T'', ``8-Speed PDK'', ``CVT-F''), mileage was stored as strings (e.g., ``10,000 mi.''), and engine specifications were embedded in free text (e.g., ``2.0L 255HP'') requiring regex extraction. They also standardized color names from manufacturer branding (e.g., ``Midnight Black'' mapped to ``Black''). After systematic feature engineering, Linear Regression $R^2$ improved from 0.03 to 0.80, yet the authors acknowledge that their pipeline is dataset-specific. Dutulescu et al.~\cite{electronics12143083} confirm that this problem extends across markets: training deep learning models on a German dataset (300,000+ entries) and evaluating on a Romanian dataset (15,000+ entries), they found that car model embeddings failed for infrequent models and explicitly called for ``a method for dataset standardization across different car markets.'' Madhusudhanan et al.~\cite{10825740} faced similar challenges at larger scale, handling 56 categorical features (make, model, trim, equipment, market region) across approximately 2 million records, where state-of-the-art tabular models could not even process the dataset due to the high cardinality of unstandardized vehicle attributes.
+
+These studies collectively demonstrate that vehicle data preprocessing remains ad-hoc, non-transferable, and a significant engineering bottleneck. Our framework addresses this gap by providing a reusable normalization pipeline that is agnostic to source schema, language, and market.
+
+\subsection{Information Extraction}
+
+IE from product descriptions has evolved from task-specific sequence taggers to general-purpose LLM-based extractors. OpenTag~\cite{zheng2018opentag} formalized product attribute value extraction (AVE) as sequence tagging with a BiLSTM-CRF architecture, achieving 83\% F1 with only 150 annotated samples. Wang et al.~\cite{wang2020aveqa} reformulated AVE as question answering, where each attribute becomes a query and the model identifies answer spans using a shared BERT encoder.
+
+The most relevant line of work for our framework comes from Brinkmann et al. In an initial study~\cite{brinkmann2023chatgpt_ie}, they showed that ChatGPT achieves performance comparable to fine-tuned pre-trained language models (PLMs) for product information extraction while requiring far less training data: a single few-shot example boosted open extraction F1 by approximately 33\%. Their follow-up, ExtractGPT~\cite{brinkmann2024extractgpt}, evaluated GPT-3.5, GPT-4, and Llama-3-70B on attribute-value extraction from unstructured product descriptions, with GPT-4 reaching 85\% F1 and outperforming BERT-based baselines. Most directly relevant to our work, Brinkmann et al.~\cite{brinkmann2024adbis} extended AVE to include \textit{normalization}, exploring GPT-3.5 and GPT-4 for both extracting and normalizing attribute values to a unified scale. On the WDC-PAVE benchmark, GPT-4 achieved 91\% F1 with 10 demonstrations, and the authors found LLMs to be especially strong at name expansion and string wrangling for normalization, which is precisely the capability our framework exploits for vehicle attribute extraction.
+
+Beyond product-specific work, GoLLIE~\cite{sainz2024gollie} demonstrated that encoding annotation guidelines as Python class definitions with docstrings enables high-quality zero-shot IE, outperforming GPT-3.5 on NER tasks. This finding is directly relevant to our approach, where the vehicle attribute schema serves an analogous role as a structured extraction guide.
+
+\subsection{Information Retrieval}
+
+The RAG paradigm, introduced by Lewis et al.~\cite{lewis2020rag}, combines parametric (model weights) and non-parametric (retrieved documents) knowledge by coupling a seq2seq model with a dense vector index. For the retrieval component specifically, Karpukhin et al.~\cite{karpukhin2020dpr} established that learned dual-encoder embeddings (Dense Passage Retrieval) outperform BM25 by 9--19\% absolute in top-20 retrieval accuracy. Izacard et al.~\cite{izacard2022contriever} showed that fully unsupervised dense retrieval via contrastive learning matches BM25 without requiring labeled query-passage pairs, which is particularly relevant when labeled vehicle matching data is scarce.
+
+For efficient nearest-neighbor search over embedding spaces, the FAISS library~\cite{johnson2021faiss, douze2024faiss} provides GPU-optimized algorithms supporting brute-force, inverted file (IVF), product quantization (PQ), and hierarchical navigable small world (HNSW) indexing. On the embedding side, Sentence-BERT~\cite{reimers2019sbert} established the paradigm of pre-computed sentence embeddings for efficient similarity search, while recent models such as E5~\cite{wang2022e5} and BGE~\cite{xiao2024bge} have achieved state-of-the-art results on retrieval benchmarks. Our framework uses HNSW indexes built over sentence embeddings to retrieve candidate values for open-domain vehicle attributes.
+
+\subsection{Entity Resolution}
+
+ER determines whether two surface forms refer to the same real-world entity (e.g., whether ``mercedes'' and ``mercedes-benz'' denote the same brand). Pre-LLM approaches relied on fine-tuning PLMs: Ditto~\cite{li2020ditto} fine-tuned BERT and RoBERTa for entity matching with domain knowledge injection and data augmentation, achieving up to 29\% F1 improvement over prior methods. Narayan et al.~\cite{narayan2022foundation} were the first to cast entity matching as a prompting task for GPT-3, showing that foundation models achieve competitive performance without task-specific fine-tuning.
+
+The most systematic investigation of LLM-based ER comes from the Mannheim group. Peeters and Bizer~\cite{peeters2023chatgpt_em} conducted the first evaluation of ChatGPT for entity matching, finding that it achieves 82.35\% F1 in zero-shot on the WDC Products benchmark, competitive with RoBERTa fine-tuned on 2,000 labeled examples. They explored prompt engineering strategies including similarity-based demonstration selection and matching rule provision. In their comprehensive follow-up, MatchGPT~\cite{peeters2025matchgpt}, they evaluated GPT-4, GPT-4o, and Llama across product and bibliographic datasets. GPT-4 in zero-shot outperformed fine-tuned PLMs by 40--68\% F1 for previously unseen entities, a setting directly analogous to vehicle normalization where new brands, models, and trims continuously appear. They further investigated prompt design, demonstration selection, and matching rule generation, providing a methodological foundation for LLM-based matching in specialized domains. Steiner et al.~\cite{steiner2024finetune_em} complemented this work by exploring fine-tuning LLMs for entity matching, finding that it improves smaller models but can hurt cross-domain transfer for larger ones.
+
+On the efficiency front, Zhang et al.~\cite{zhang2024anymatch} showed that a fine-tuned GPT-2 model achieves quality within 4.4\% F1 of MatchGPT while requiring four orders of magnitude fewer parameters, demonstrating that cost-effective deployment is feasible. Wang et al.~\cite{wang2025comem} compared three LLM matching strategies (binary matching, comparing, and selecting from candidates) and found the selecting strategy most cost-effective.
+
+
+\section{Method}
+\label{sec:method}
+
+Let the normalized vehicle schema consist of $m$ attributes
+$A_1, A_2, \dots, A_m$, where each attribute $A_j$ is associated with a
+domain $\mathcal{V}_j$ of valid values. Attribute domains are partitioned
+into two types:
+\begin{equation}
+\mathcal{V}_j =
+\begin{cases}
+\mathcal{V}_j^{\text{closed}} & \text{if } j \in \mathcal{I}_{\text{closed}}, \\[4pt]
+\mathcal{V}_j^{\text{open}} & \text{if } j \in \mathcal{I}_{\text{open}}.
+\end{cases}
+\end{equation}
+A \textit{closed-domain} attribute has a domain that is fully specified
+in advance and does not change during normalization. This includes both
+finite categorical sets (e.g., fuel type
+$\in \{\text{petrol, diesel, electric, hybrid}\}$) and numerical ranges
+(e.g., mileage $\in \mathbb{R}^+$). An \textit{open-domain} attribute
+(e.g., brand, model) has a domain that grows as the system encounters
+previously unseen entities.
+
+The normalized vehicle space is the Cartesian product of all attribute
+domains:
+\begin{equation}
+\tilde{\mathcal{X}} = \prod_{j=1}^{m} \mathcal{V}_j.
+\end{equation}
+Vehicle normalization is formulated as a mapping
+\begin{equation}
+\phi: \Sigma^+ \to \tilde{\mathcal{X}},
+\end{equation}
+that takes a serialized vehicle representation
+$s = \text{Serialize}(\mathbf{x}) \in \Sigma^+$, where $\mathbf{x}$ is
+the raw input record and $\Sigma$ denotes the character alphabet, and
+produces $\phi(s) = \tilde{\mathbf{x}} \in \tilde{\mathcal{X}}$. For
+tabular datasets, $\text{Serialize}$ concatenates column names with their
+values (e.g., \textit{col1: val1, col2: val2, \dots}); for free-text
+descriptions, the input is used directly.
+
+\paragraph{Knowledge catalog.}
+For each open-domain attribute $A_j$ with
+$j \in \mathcal{I}_{\text{open}}$, we maintain a knowledge catalog:
+\begin{equation}
+\mathcal{K}_j = \{(c_1, \mathbf{e}_1), \dots,
+(c_{|\mathcal{K}_j|}, \mathbf{e}_{|\mathcal{K}_j|})\},
+\end{equation}
+where each pair $(c_i, \mathbf{e}_i)$ consists of a canonical entity
+value $c_i \in \mathcal{V}_j^{\text{open}}$ and its embedding
+$\mathbf{e}_i = \text{Encode}(c_i) \in \mathbb{R}^{d}$. Any text
+encoder may serve as the encoding function; in this study we use
+OpenAI's \textit{text-embedding-3-small}.
+
+\begin{figure}[t]
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tikzpicture}[
+    node distance=0.18cm and 0.3cm,
+    every node/.style={font=\scriptsize},
+    op/.style={draw, rounded corners=2pt, fill=gray!8, 
+               draw=gray!60, thick, minimum height=0.45cm,
+               minimum width=1.7cm, inner sep=1.5pt, align=center},
+    llm/.style={draw, rounded corners=2pt, fill=blue!6, 
+                draw=blue!40, thick, minimum height=0.45cm,
+                minimum width=1.7cm, inner sep=1.5pt, align=center},
+    dat/.style={align=center, inner sep=0.5pt},
+    cat/.style={draw, rounded corners=2pt, fill=yellow!8, 
+                draw=yellow!60, thick, minimum width=1.4cm,
+                minimum height=0.85cm, inner sep=1.5pt, align=center},
+    outnode/.style={draw, rounded corners=2pt, fill=teal!8,
+                    draw=teal!50, thick, minimum height=0.45cm,
+                    minimum width=1.7cm, inner sep=1.5pt, align=center},
+    dm/.style={font=\scriptsize\itshape, text=gray!55},
+    arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
+    darr/.style={-{Stealth[length=2.5pt]}, gray!45, dashed},
+    lb/.style={font=\scriptsize, text=gray!55},
+]
+ 
+% Main vertical flow
+\node[dat] (x) {$\mathbf{x}$};
+\node[dm, right=0.06cm of x] {$1 \times d$};
+ 
+\node[op, below=of x] (ser) {Serialize};
+\draw[arr] (x) -- (ser);
+ 
+\node[dat, below=0.14cm of ser] (s) {$s \in \Sigma^+$};
+\draw[arr] (ser) -- (s);
+ 
+\node[llm, below=of s] (ie) 
+    {\textbf{IE}\\[-1pt] $\mathrm{LLM}(\mathrm{prompt}_{\mathrm{ext}}, s)$};
+\draw[arr] (s) -- (ie);
+ 
+\node[dat, below=0.14cm of ie] (xhat) 
+    {$\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$};
+\draw[arr] (ie) -- (xhat);
+ 
+\node[op, below=of xhat] (ser2) {Serialize};
+\draw[arr] (xhat) -- (ser2);
+ 
+\node[dat, below=0.14cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
+\draw[arr] (ser2) -- (shat);
+ 
+\node[op, below=of shat] (enc) {Encode};
+\draw[arr] (shat) -- (enc);
+\node[lb, anchor=west] at ([xshift=0.06cm]enc.east) {$j \in \mathcal{I}_{\mathrm{open}}$};
+ 
+\node[op, below=of enc] (topk) {TopK};
+\draw[arr] (enc) -- (topk);
+ 
+\node[dat, below=0.14cm of topk] (rj) 
+    {$\mathcal{R}_j = (c_1, \dots, c_k)$};
+\draw[arr] (topk) -- (rj);
+ 
+% Substitution + ER
+\node[op, below=of rj] (sub) 
+    {$\hat{s}_{j \to c_i}$};
+\draw[arr] (rj) -- (sub);
+ 
+\node[llm, below=of sub] (er) 
+    {\textbf{ER}\\[-1pt] $M(\hat{s}, \hat{s}_{j \to c_i})$};
+\draw[arr] (sub) -- (er);
+ 
+% shat feeds ER
+\draw[arr, rounded corners=2pt] 
+    (shat.west) -- ++(-0.4,0) |- (er.west);
+ 
+% Decision
+\node[dat, below=0.14cm of er] (aj) {$a_j$};
+\draw[arr] (er) -- (aj);
+ 
+% Match/novel annotation — right of a_j
+\node[dm, right=0.06cm of aj] 
+    {match: $c_{i^*}$ / novel: $\hat{a}_j$};
+ 
+% Output
+\node[outnode, below=of aj] (output) 
+    {$\tilde{\mathbf{x}}$};
+\draw[arr] (aj) -- (output);
+ 
+% Catalog (right side) — well separated
+\node[cat, right=2.0cm of topk] (catalog) 
+    {\textbf{Catalog} $\mathcal{K}_j$\\
+     $(c_i, \mathbf{e}_i)$\\
+     HNSW};
+\draw[arr] (catalog) -- (topk)
+    node[lb, above, midway] {$\mathrm{sim}(\mathbf{e}_j, \mathbf{e}_i)$};
+ 
+% Encode annotation — aligned with catalog
+\node[dm, anchor=west] at (catalog.west |- enc) 
+    {$\hat{a}_j \to \mathbf{e}_j \in \mathbb{R}^d$};
+ 
+% Catalog update — route from output.east
+\draw[darr, rounded corners=2pt] 
+    (output.east) -| (catalog.south)
+    node[lb, right, pos=0.65] 
+    {update $\mathcal{K}_j$};
+ 
+% Closed-domain bypass
+\draw[darr, rounded corners=2pt] 
+    (xhat.west) -- ++(-0.5,0) |- (output.west)
+    node[lb, left, pos=0.15] 
+    {$j \in \mathcal{I}_{\mathrm{closed}}$}
+    node[lb, left, pos=0.5] 
+    {$a_j = \hat{a}_j$};
+ 
+\end{tikzpicture}%
+}
+\caption{Vehicle normalization pipeline. The raw record $\mathbf{x}$ is 
+serialized and passed to the LLM for attribute extraction (IE). 
+Closed-domain attributes (dashed bypass) are assigned directly. 
+Open-domain attributes are embedded, matched against a knowledge 
+catalog $\mathcal{K}_j$ via HNSW, and resolved (ER) by comparing 
+serialized vehicle descriptions. Novel entities expand the catalog.}
+\label{fig:pipeline}
+\end{figure}
+
+
+\paragraph{Information extraction.}
+Given a serialized description $s$, a single LLM call extracts
+candidate values for all attributes simultaneously:
+\begin{equation}
+\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m) =
+\text{LLM}(\text{prompt}_{\text{ext}}, s).
+\end{equation}
+For closed-domain attributes, the extracted value is used directly as
+$a_j = \hat{a}_j$, since the prompt constrains the output to
+$\mathcal{V}_j^{\text{closed}}$. For open-domain attributes, the
+candidate $\hat{a}_j$ is passed to the retrieval and resolution steps
+described below.
+
+\paragraph{Information retrieval.}
+For each open-domain attribute $A_j$, the extracted candidate is embedded
+as $\mathbf{e}_j = \text{Encode}(\hat{a}_j)$, and the top-$k$ most
+similar canonical entities are retrieved from catalog $\mathcal{K}_j$:
+\begin{equation}
+\mathcal{R}_j = \operatorname{top\text{-}k}_{(c_i, \mathbf{e}_i)
+\in \mathcal{K}_j}\;
+\text{sim}(\mathbf{e}_j, \mathbf{e}_i), \quad
+\text{sim}(\mathbf{u}, \mathbf{v}) =
+\frac{\mathbf{u}^\top \mathbf{v}}
+{\|\mathbf{u}\|_2 \, \|\mathbf{v}\|_2}.
+\end{equation}
+The candidates in $\mathcal{R}_j$ are ranked in decreasing order of
+similarity.
+
+\paragraph{Entity resolution.}
+Given the extracted attributes $\hat{\mathbf{x}}$ and the ranked
+candidates $\mathcal{R}_j = (c_1, c_2, \dots, c_k)$ for each
+open-domain attribute $A_j$, we compare two serialized vehicle
+descriptions. Let
+\begin{equation}
+\hat{s} = \text{Serialize}(\hat{\mathbf{x}})
+\end{equation}
+be the serialization of the extracted attributes. For each candidate
+$c_i \in \mathcal{R}_j$, we construct a variant in which the value of
+attribute $A_j$ is replaced by $c_i$:
+\begin{equation}
+\hat{s}_{j \to c_i} = \text{Serialize}(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m).
+\end{equation}
+The LLM then evaluates whether both descriptions refer to the same
+vehicle:
+\begin{equation}
+M(\hat{s},\, \hat{s}_{j \to c_i}) =
+\text{LLM}(\text{prompt}_{\text{res}},\, \hat{s},\,
+\hat{s}_{j \to c_i}) \in \{0, 1\}.
+\end{equation}
+The iteration proceeds in similarity-ranked order and stops at the
+first match; let $i^* = \min\{i : M(\hat{s},\,\hat{s}_{j \to c_i}) = 1\}$
+denote the rank of that match. The normalized value is:
+\begin{equation}
+a_j =
+\begin{cases}
+c_{i^*} & \text{if a match exists,} \\[4pt]
+\hat{a}_j & \text{otherwise (novel entity).}
+\end{cases}
+\end{equation}
+In the novel-entity case, the catalog is expanded:
+$\mathcal{K}_j \leftarrow \mathcal{K}_j \cup
+\{(\hat{a}_j, \text{Encode}(\hat{a}_j))\}$.
+
+
+Algorithm~\ref{algo:normalization} summarizes the complete pipeline.
+
+\begin{algorithm}
+\caption{\label{algo:normalization} Vehicle Normalization}
+\begin{algorithmic}[1]
+\Require Raw vehicle record $\mathbf{x}$,
+Catalogs $\{\mathcal{K}_j\}_{j \in \mathcal{I}_{\text{open}}}$
+\Ensure Normalized representation
+$\tilde{\mathbf{x}} = (a_1, \dots, a_m)$
+
+\State $s \gets \text{Serialize}(\mathbf{x})$
+\State $\hat{\mathbf{x}} \gets
+\text{LLM}(\text{prompt}_{\text{ext}}, s)$
+\State $\hat{s} \gets \text{Serialize}(\hat{\mathbf{x}})$
+
+\For{$j \in \mathcal{I}_{\text{closed}}$}
+    \State $a_j \gets \hat{a}_j$
+\EndFor
+
+\For{$j \in \mathcal{I}_{\text{open}}$}
+    \State $\mathbf{e}_j \gets \text{Encode}(\hat{a}_j)$
+    \State $\mathcal{R}_j \gets
+    \operatorname{TopK}_{(c_i, \mathbf{e}_i) \in \mathcal{K}_j}
+    \text{sim}(\mathbf{e}_j, \mathbf{e}_i)$
+    \State $a_j \gets \hat{a}_j$
+    \Comment{default: novel entity}
+    \For{$c_i \in \mathcal{R}_j$ in ranked order}
+        \State $\hat{s}_{j \to c_i} \gets
+        \text{Serialize}(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$
+        \If{$M(\hat{s},\, \hat{s}_{j \to c_i}) = 1$}
+            \State $a_j \gets c_i$
+            \State \textbf{break}
+        \EndIf
+    \EndFor
+    \If{$a_j = \hat{a}_j$}
+        \State $\mathcal{K}_j \leftarrow \mathcal{K}_j \cup
+        \{(\hat{a}_j, \text{Encode}(\hat{a}_j))\}$
+    \EndIf
+\EndFor
+
+\State \Return $\tilde{\mathbf{x}} = (a_1, \dots, a_m)$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Experiments}
+
+\subsection{Datasets}
+
+Our experiments draw on three publicly available automotive listing datasets
+covering distinct geographic markets, schema conventions, and languages,
+summarized in Table~\ref{tab:datasets}. AutoScout24 is a European dataset with structured fields and
+mileage reported in kilometers. Craigslist is a North American dataset
+characterized by informal free-text descriptions and mileage in miles; its
+29,667 nominal model values reflect raw seller input rather than a controlled
+vocabulary, and are expected to collapse substantially after normalization.
+MuCars is a Moroccan dataset with several market-specific attributes,
+including mileage reported as ranges and Fiscal Power as a tax-based engine
+category rather than a direct power measurement. The heterogeneity across markets, units, and naming conventions makes these three
+sources well suited for evaluating the robustness of the normalization method.
+
+\begin{table}[h]
+\caption{Dataset Statistics}
+\label{tab:datasets}
+\centering
+\begin{tabular}{lrrrrl}
+\hline
+\textbf{Dataset} & \textbf{Listings} & \textbf{Brands} & \textbf{Models} & \textbf{Cols} & \textbf{Region} \\
+\hline
+AutoScout24 & 251,079 & 47  & 1,312  & 15 & Europe \\
+Craigslist  & 426,880 & 42  & 29,667 & 26 & North America \\
+MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Annotation Protocol}
+\label{sec:annotation}
+
+Ground truth for IE and ER is produced by a three-model LLM ensemble acting as
+independent annotators: \textbf{GPT-5.4} (OpenAI), \textbf{Claude Opus 4.6}
+(Anthropic), and \textbf{Gemini 3.1 Pro} (Google DeepMind). Each annotator is
+prompted zero-shot with the task instruction and the input example; the full
+prompts are provided in Appendix~\ref{app:prompts}.
+
+Labels are assigned by majority vote: a label is accepted when at least two of
+the three annotators agree. For IE, this criterion is applied field-by-field; a
+field for which all three annotators produce different values is marked
+\texttt{ABSTAIN} and excluded from evaluation. For ER, the decision is binary
+(match or no-match), so a majority always exists unless one annotator withholds
+judgment; such pairs are discarded and replaced by resampling. In both settings
+we process instances until 100 fully annotated examples are collected, sampling
+in a stratified manner to ensure coverage of the attribute value distribution.
+
+We report inter-annotator agreement (IAA) as a data quality indicator alongside
+the primary evaluation metrics: Fleiss' $\kappa$~\cite{fleiss1971kappa} over all
+three annotators and the pairwise raw agreement rate $P_A$, computed for each of
+the three annotator pairs and then averaged.
+
+\subsection{Evaluation Setup}
+\label{sec:eval_setup}
+
+\textbf{Information Extraction.} IE is evaluated on each of the three sources
+independently. For AutoScout24 and MuCars, which contain no free-text field, the
+input is the serialized structured row (comma-separated \textit{col:\,value}
+pairs). For Craigslist, the raw free-text listing description is used directly.
+We use 100 labeled examples per source, stratified across the distribution of
+key attribute values (brand, fuel type, transmission type), yielding 300
+evaluation instances in total.
+
+\textbf{Information Retrieval.} IR depends on a pre-populated catalog, so we
+adopt a leave-one-source-out rotation: two sources act as \emph{catalog sources}
+and the third as the \emph{evaluation source}. The catalog and HNSW indexes are
+constructed from all rows in the two catalog sources. For each row in the
+evaluation source, IE is first run to extract a candidate value $\hat{a}_j$ for
+each open-domain attribute. That candidate is embedded as
+$\mathbf{e}_j = \text{Encode}(\text{attr}\colon \hat{a}_j)$ and queried against the
+attribute-specific HNSW index. Success is defined as the correct canonical value,
+taken from the structured column of the evaluation-source row, appearing among
+the top-$k$ retrieved candidates. Ground truth is derived directly from
+structured columns and does not require LLM annotation. We sample 100 queries
+per (attribute, evaluation source) pair, stratified across the canonical value
+distribution of that attribute.
+
+\textbf{Entity Resolution.} ER follows the same leave-one-source-out rotation.
+For each evaluation configuration, we construct a labeled set of candidate pairs
+drawn entirely from the evaluation source. Positive pairs are formed by sampling
+surface-form variants of the same canonical entity (e.g., rows where the brand
+field contains \textit{mercedes} alongside rows containing
+\textit{mercedes-benz}). Negative pairs include random non-matching entities and
+hard negatives drawn from adjacent model numbers, parent brand names, and trim
+levels differing by a single qualifier. We target 100 labeled pairs per (attribute, evaluation source) combination,
+with positive and negative pairs balanced and stratified to cover diverse
+surface-form variants and hard negatives. The few-shot resolution prompt used
+by the pipeline is drawn exclusively from the catalog sources and is distinct
+from the annotator prompts.
+
+\subsection{Evaluation Metrics}
+
+\textbf{Extraction.} For categorical and integer fields we report per-field
+accuracy as the fraction of examples for which the predicted value exactly matches
+the annotation. For numeric fields with continuous values (engine displacement,
+mileage) we apply a $\pm 10\%$ relative tolerance. For the equipment field, which
+is a set-valued output, we report set-level precision, recall, and F1 score. A
+macro-average accuracy is reported across all non-set fields.
+
+\textbf{Retrieval.} We report Recall@$k$ for $k \in \{1, 3, 5\}$, defined as the
+fraction of (query, attribute) pairs for which the correct canonical value appears
+among the top-$k$ retrieved candidates. Because retrieval feeds directly into the
+resolution step, a miss at retrieval silently prevents the correct canonical from
+ever being considered, making recall the primary concern.
+
+\textbf{Entity Resolution.} We report precision, recall, F1 score, and accuracy
+for the binary match/no-match decision, broken down by attribute. Precision is the
+primary metric of interest, as a false positive permanently merges two distinct
+entities in the catalog and is difficult to detect post-hoc.
+
+\textbf{Inter-annotator agreement.} We report Fleiss' $\kappa$ and the pairwise
+raw agreement rate $P_A$ for both IE and ER annotation rounds as a
+measure of label reliability. A $\kappa \geq 0.80$ indicates near-perfect
+agreement~\cite{landis1977kappa}; fields or pairs falling below $\kappa = 0.60$
+are flagged and analyzed separately.
+
+\subsection{Results}
+
+\section{Discussion}
+
+\section{Conclusion}
+
+\section*{Acknowledgment}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\appendix
+
+\section{Annotation Prompts}
+\label{app:prompts}
+
+[Prompts to be included here.]
+
+\end{document}
