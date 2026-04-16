@@ -11,7 +11,7 @@
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{arrows.meta, positioning, calc}
+\usetikzlibrary{arrows.meta, positioning, calc, fit}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
@@ -115,7 +115,7 @@ into two types:
 A \textit{closed-domain} attribute has a domain that is fully specified
 in advance and does not change during normalization. This includes both
 finite categorical sets (e.g., fuel type
-$\in \{\text{petrol, diesel, electric, hybrid}\}$) and numerical ranges
+$\in \{\text{petrol, diesel, lpg, hydrogen}\}$) and numerical ranges
 (e.g., mileage $\in \mathbb{R}^+$). An \textit{open-domain} attribute
 (e.g., brand, model) has a domain that grows as the system encounters
 previously unseen entities.
@@ -162,7 +162,23 @@ OpenAI's \textit{text-embedding-3-small}.
     llm/.style={draw, rounded corners=2pt, fill=blue!6, 
                 draw=blue!40, thick, minimum height=0.45cm,
                 minimum width=1.7cm, inner sep=1.5pt, align=center},
-    dat/.style={align=center, inner sep=0.5pt},
+    sel/.style={draw, rounded corners=2pt, fill=green!6,
+                draw=green!50, thick, minimum height=0.45cm,
+                minimum width=1.7cm, inner sep=1.5pt, align=center},
+    ops/.style={draw, rounded corners=2pt, fill=gray!8, 
+                draw=gray!60, thick, minimum height=0.45cm,
+                minimum width=1.7cm, inner sep=1.5pt},
+    llms/.style={draw, rounded corners=2pt, fill=blue!6, 
+                 draw=blue!40, thick, minimum height=0.65cm,
+                 minimum width=1.7cm, inner sep=1.5pt},
+    sels/.style={draw, rounded corners=2pt, fill=green!6,
+                 draw=green!50, thick, minimum height=0.45cm,
+                 minimum width=1.7cm, inner sep=1.5pt},
+    cats/.style={draw, rounded corners=2pt, fill=yellow!8, 
+                 draw=yellow!60, thick, minimum width=1.4cm,
+                 minimum height=0.85cm, inner sep=1.5pt},
+    dat/.style={align=center, inner sep=0.5pt, 
+                text height=1.6ex, text depth=0.5ex},
     cat/.style={draw, rounded corners=2pt, fill=yellow!8, 
                 draw=yellow!60, thick, minimum width=1.4cm,
                 minimum height=0.85cm, inner sep=1.5pt, align=center},
@@ -173,116 +189,167 @@ OpenAI's \textit{text-embedding-3-small}.
     arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
     darr/.style={-{Stealth[length=2.5pt]}, gray!45, dashed},
     lb/.style={font=\scriptsize, text=gray!55},
+    loopbox/.style={draw=gray!40, dashed, rounded corners=4pt, inner sep=5pt},
+    soff/.style={xshift=3pt, yshift=3pt},
+    soff2/.style={xshift=6pt, yshift=6pt},
 ]
- 
-% Main vertical flow
+
+% Standard gaps:
+%   text label between arrows: 0.25cm above and below
+%   block to block (no text):  0.3cm
+%   block to stacked block:    same 0.3cm (shadows use same position)
+
+% ===== TOP: shared pipeline =====
 \node[dat] (x) {$\mathbf{x}$};
-\node[dm, right=0.06cm of x] {$1 \times d$};
- 
-\node[op, below=of x] (ser) {Serialize};
+
+\node[op, below=0.4cm of x] (ser) {Serialize};
 \draw[arr] (x) -- (ser);
- 
-\node[dat, below=0.14cm of ser] (s) {$s \in \Sigma^+$};
+
+\node[dat, below=0.4cm of ser] (s) {$s \in \Sigma^+$};
 \draw[arr] (ser) -- (s);
- 
-\node[llm, below=of s] (ie) 
+
+\node[llm, below=0.4cm of s] (ie) 
     {\textbf{IE}\\[-1pt] $\mathrm{LLM}(\mathrm{prompt}_{\mathrm{ext}}, s)$};
 \draw[arr] (s) -- (ie);
- 
-\node[dat, below=0.14cm of ie] (xhat) 
+
+\node[dat, below=0.4cm of ie] (xhat) 
     {$\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$};
 \draw[arr] (ie) -- (xhat);
- 
-\node[op, below=of xhat] (ser2) {Serialize};
+
+\node[op, below=0.4cm of xhat] (ser2) {Serialize};
 \draw[arr] (xhat) -- (ser2);
- 
-\node[dat, below=0.14cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
+
+\node[dat, below=0.4cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
 \draw[arr] (ser2) -- (shat);
- 
-\node[op, below=of shat] (enc) {Encode};
+
+% ===== OUTER STACKED SECTION =====
+
+% Encode (extra gap below shat for dashed box label)
+\node[ops, soff2, below=0.95cm of shat, opacity=0.3] (enc_s2) {};
+\node[ops, soff,  below=0.95cm of shat, opacity=0.5] (enc_s1) {};
+\node[op,         below=0.95cm of shat]              (enc)    {Encode};
 \draw[arr] (shat) -- (enc);
-\node[lb, anchor=west] at ([xshift=0.06cm]enc.east) {$j \in \mathcal{I}_{\mathrm{open}}$};
- 
-\node[op, below=of enc] (topk) {TopK};
-\draw[arr] (enc) -- (topk);
- 
-\node[dat, below=0.14cm of topk] (rj) 
+
+\node[dat, below=0.25cm of enc] (ej) 
+    {$\mathbf{e}_j = \mathrm{Encode}(\hat{a}_j)$};
+\draw[arr] (enc) -- (ej);
+
+% TopK
+\node[ops, soff2, below=0.25cm of ej, opacity=0.3] (topk_s2) {};
+\node[ops, soff,  below=0.25cm of ej, opacity=0.5] (topk_s1) {};
+\node[op,         below=0.25cm of ej]              (topk)    {TopK};
+\draw[arr] (ej) -- (topk);
+
+% Rj text splitting the arrow
+\node[dat, below=0.25cm of topk] (rj) 
     {$\mathcal{R}_j = (c_1, \dots, c_k)$};
 \draw[arr] (topk) -- (rj);
- 
-% Substitution + ER
-\node[op, below=of rj] (sub) 
-    {$\hat{s}_{j \to c_i}$};
+
+% ===== INNER SECTION =====
+
+\node[op,  below=0.25cm of rj] (sub) {$\hat{s}_{j \to c_i}$};
 \draw[arr] (rj) -- (sub);
- 
-\node[llm, below=of sub] (er) 
-    {\textbf{ER}\\[-1pt] $M(\hat{s}, \hat{s}_{j \to c_i})$};
+
+\node[llm, below=0.3cm of sub] (er) 
+    {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
+
+% Shadow blocks
+\node[ops,  soff2, opacity=0.3] at (sub) {};
+\node[ops,  soff,  opacity=0.5] at (sub) {};
+\node[llms, soff2, opacity=0.3] at (er) {};
+\node[llms, soff,  opacity=0.5] at (er) {};
+
+% Redraw front blocks on top
+\node[op]  at (sub) {$\hat{s}_{j \to c_i}$};
+\node[llm] at (er) {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
 \draw[arr] (sub) -- (er);
- 
-% shat feeds ER
+
+% Arrow from shat to sub block directly
 \draw[arr, rounded corners=2pt] 
-    (shat.west) -- ++(-0.4,0) |- (er.west);
- 
-% Decision
-\node[dat, below=0.14cm of er] (aj) {$a_j$};
-\draw[arr] (er) -- (aj);
- 
-% Match/novel annotation — right of a_j
-\node[dm, right=0.06cm of aj] 
-    {match: $c_{i^*}$ / novel: $\hat{a}_j$};
- 
-% Output
-\node[outnode, below=of aj] (output) 
-    {$\tilde{\mathbf{x}}$};
+    (shat.west) -- ++(-1.0,0) |- (sub.west);
+
+% ×k loop arrow
+\draw[arr, rounded corners=3pt]
+    (er.east) -| 
+    ([xshift=0.55cm]rj.east) --
+    (rj.east);
+
+% ×k badge
+\node[draw=gray!50, fill=white, semithick, rounded corners=2pt,
+      font=\scriptsize\bfseries, text=gray!60, inner sep=2pt,
+      minimum width=0.5cm, minimum height=0.35cm]
+    at ([xshift=0.55cm]rj.east |- sub) {$\times k$};
+
+% ===== SELECT (outer stacked) =====
+\node[sels, soff2, below=0.3cm of er, opacity=0.3] (sel_s2) {};
+\node[sels, soff,  below=0.3cm of er, opacity=0.5] (sel_s1) {};
+\node[sel,         below=0.3cm of er]              (select) 
+    {Select $i^*$};
+\draw[arr] (er) -- (select);
+
+% ===== Output =====
+% Combined label as a text-between-arrows node — vertically centered on the arrow
+\node[dat, below=0.4cm of select] (aj)
+    {$\tilde{a}_j = c_{i^*} / \hat{a}_j$};
+\draw[arr] (select) -- (aj);
+
+\node[outnode, below=0.4cm of aj] (output) 
+    {$\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$};
 \draw[arr] (aj) -- (output);
- 
-% Catalog (right side) — well separated
-\node[cat, right=2.0cm of topk] (catalog) 
-    {\textbf{Catalog} $\mathcal{K}_j$\\
-     $(c_i, \mathbf{e}_i)$\\
-     HNSW};
-\draw[arr] (catalog) -- (topk)
-    node[lb, above, midway] {$\mathrm{sim}(\mathbf{e}_j, \mathbf{e}_i)$};
- 
-% Encode annotation — aligned with catalog
-\node[dm, anchor=west] at (catalog.west |- enc) 
-    {$\hat{a}_j \to \mathbf{e}_j \in \mathbb{R}^d$};
- 
-% Catalog update — route from output.east
+
+% ===== Outer loop box (aj is OUTSIDE) =====
+\node[loopbox, 
+      fit=(enc)(enc_s2)(ej)(rj)(sub)(er)(select)(sel_s2),
+      inner xsep=6pt, inner ysep=8pt] (outerloop) {};
+
+\node[lb, anchor=south east] at ([xshift=0.35cm]outerloop.north east)
+    {$j \in \mathcal{I}_{\mathrm{open}}$};
+
+% ===== Catalog =====
+\node[cats, soff2, right=2.0cm of topk, opacity=0.3] (cat_s2) {};
+\node[cats, soff,  right=2.0cm of topk, opacity=0.5] (cat_s1) {};
+\node[cat,         right=2.0cm of topk]              (catalog) 
+    {$\mathcal{K}_j$\\
+     $(c_i, \mathbf{e}_i)$};
+\draw[arr] (catalog) -- (topk);
+
 \draw[darr, rounded corners=2pt] 
     (output.east) -| (catalog.south)
-    node[lb, right, pos=0.65] 
+    node[lb, left, pos=0.65] 
     {update $\mathcal{K}_j$};
- 
-% Closed-domain bypass
-\draw[darr, rounded corners=2pt] 
-    (xhat.west) -- ++(-0.5,0) |- (output.west)
-    node[lb, left, pos=0.15] 
-    {$j \in \mathcal{I}_{\mathrm{closed}}$}
-    node[lb, left, pos=0.5] 
-    {$a_j = \hat{a}_j$};
- 
-\end{tikzpicture}%
+
+% ===== Closed-domain bypass: solid gray arrow into aj from the left =====
+\draw[arr, rounded corners=2pt] 
+    (xhat.west) -- ++(-1.2,0) |- (aj.west);
+\node[lb, anchor=south east] at ([xshift=-0cm, yshift=0cm]xhat.west)
+    {$j \in \mathcal{I}_{\mathrm{closed}}$};
+
+\end{tikzpicture}
+%
 }
 \caption{Vehicle normalization pipeline. The raw record $\mathbf{x}$ is 
 serialized and passed to the LLM for attribute extraction (IE). 
-Closed-domain attributes (dashed bypass) are assigned directly. 
-Open-domain attributes are embedded, matched against a knowledge 
-catalog $\mathcal{K}_j$ via HNSW, and resolved (ER) by comparing 
-serialized vehicle descriptions. Novel entities expand the catalog.}
+For each open-domain attribute (outer loop, dashed box; stacked blocks 
+indicate per-attribute instances), the candidate $\hat{a}_j$ is embedded 
+and matched against its catalog $\mathcal{K}_j$ via HNSW, retrieving 
+top-$k$ candidates $\mathcal{R}_j$. For each candidate $c_i$ ($\times k$ 
+return arrow), the pipeline substitutes $c_i$ into the serialized 
+description and evaluates an ER match $M(\hat{s}, \hat{s}_{j \to c_i})$. 
+A selection step returns the first match $c_{i^*}$ or falls back to 
+$\hat{a}_j$. Closed-domain attributes bypass the loop and feed 
+$\hat{a}_j$ directly into the assembly. Novel entities expand the catalog.}
 \label{fig:pipeline}
 \end{figure}
 
-
 \paragraph{Information extraction.}
-Given a serialized description $s$, a single LLM call extracts
+Given a serialized vehicle description $s$, a single LLM call extracts
 candidate values for all attributes simultaneously:
 \begin{equation}
 \hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m) =
 \text{LLM}(\text{prompt}_{\text{ext}}, s).
 \end{equation}
 For closed-domain attributes, the extracted value is used directly as
-$a_j = \hat{a}_j$, since the prompt constrains the output to
+$\tilde{a}_j = \hat{a}_j$, since the prompt constrains the LLM output to
 $\mathcal{V}_j^{\text{closed}}$. For open-domain attributes, the
 candidate $\hat{a}_j$ is passed to the retrieval and resolution steps
 described below.
@@ -327,7 +394,7 @@ The iteration proceeds in similarity-ranked order and stops at the
 first match; let $i^* = \min\{i : M(\hat{s},\,\hat{s}_{j \to c_i}) = 1\}$
 denote the rank of that match. The normalized value is:
 \begin{equation}
-a_j =
+\tilde{a}_j =
 \begin{cases}
 c_{i^*} & \text{if a match exists,} \\[4pt]
 \hat{a}_j & \text{otherwise (novel entity).}
@@ -346,7 +413,7 @@ Algorithm~\ref{algo:normalization} summarizes the complete pipeline.
 \Require Raw vehicle record $\mathbf{x}$,
 Catalogs $\{\mathcal{K}_j\}_{j \in \mathcal{I}_{\text{open}}}$
 \Ensure Normalized representation
-$\tilde{\mathbf{x}} = (a_1, \dots, a_m)$
+$\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$
 
 \State $s \gets \text{Serialize}(\mathbf{x})$
 \State $\hat{\mathbf{x}} \gets
@@ -354,7 +421,7 @@ $\tilde{\mathbf{x}} = (a_1, \dots, a_m)$
 \State $\hat{s} \gets \text{Serialize}(\hat{\mathbf{x}})$
 
 \For{$j \in \mathcal{I}_{\text{closed}}$}
-    \State $a_j \gets \hat{a}_j$
+    \State $\tilde{a}_j \gets \hat{a}_j$
 \EndFor
 
 \For{$j \in \mathcal{I}_{\text{open}}$}
@@ -362,23 +429,23 @@ $\tilde{\mathbf{x}} = (a_1, \dots, a_m)$
     \State $\mathcal{R}_j \gets
     \operatorname{TopK}_{(c_i, \mathbf{e}_i) \in \mathcal{K}_j}
     \text{sim}(\mathbf{e}_j, \mathbf{e}_i)$
-    \State $a_j \gets \hat{a}_j$
+    \State $\tilde{a}_j \gets \hat{a}_j$
     \Comment{default: novel entity}
     \For{$c_i \in \mathcal{R}_j$ in ranked order}
         \State $\hat{s}_{j \to c_i} \gets
         \text{Serialize}(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$
         \If{$M(\hat{s},\, \hat{s}_{j \to c_i}) = 1$}
-            \State $a_j \gets c_i$
+            \State $\tilde{a}_j \gets c_i$
             \State \textbf{break}
         \EndIf
     \EndFor
-    \If{$a_j = \hat{a}_j$}
+    \If{$\tilde{a}_j = \hat{a}_j$}
         \State $\mathcal{K}_j \leftarrow \mathcal{K}_j \cup
         \{(\hat{a}_j, \text{Encode}(\hat{a}_j))\}$
     \EndIf
 \EndFor
 
-\State \Return $\tilde{\mathbf{x}} = (a_1, \dots, a_m)$
+\State \Return $\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$
 \end{algorithmic}
 \end{algorithm}
 
