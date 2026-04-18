@@ -101,54 +101,19 @@ On the efficiency front, Zhang et al.~\cite{zhang2024anymatch} showed that a fin
 \section{Method}
 \label{sec:method}
 
-Let the normalized vehicle schema consist of $m$ attributes
-$A_1, A_2, \dots, A_m$, where each attribute $A_j$ is associated with a
-domain $\mathcal{V}_j$ of valid values. Attribute domains are partitioned
-into two types:
-\begin{equation}
-\mathcal{V}_j =
-\begin{cases}
-\mathcal{V}_j^{\text{closed}} & \text{if } j \in \mathcal{I}_{\text{closed}}, \\[4pt]
-\mathcal{V}_j^{\text{open}} & \text{if } j \in \mathcal{I}_{\text{open}}.
-\end{cases}
-\end{equation}
-A \textit{closed-domain} attribute has a domain that is fully specified
-in advance and does not change during normalization. This includes both
-finite categorical sets (e.g., fuel type
-$\in \{\text{petrol, diesel, lpg, hydrogen}\}$) and numerical ranges
-(e.g., mileage $\in \mathbb{R}^+$). An \textit{open-domain} attribute
-(e.g., brand, model) has a domain that grows as the system encounters
-previously unseen entities.
-
-The normalized vehicle space is the Cartesian product of all attribute
-domains:
-\begin{equation}
-\tilde{\mathcal{X}} = \prod_{j=1}^{m} \mathcal{V}_j.
-\end{equation}
-Vehicle normalization is formulated as a mapping
-\begin{equation}
-\phi: \Sigma^+ \to \tilde{\mathcal{X}},
-\end{equation}
-that takes a serialized vehicle representation
-$s = \text{Serialize}(\mathbf{x}) \in \Sigma^+$, where $\mathbf{x}$ is
-the raw input record and $\Sigma$ denotes the character alphabet, and
-produces $\phi(s) = \tilde{\mathbf{x}} \in \tilde{\mathcal{X}}$. For
-tabular datasets, $\text{Serialize}$ concatenates column names with their
-values (e.g., \textit{col1: val1, col2: val2, \dots}); for free-text
-descriptions, the input is used directly.
-
-\paragraph{Knowledge catalog.}
-For each open-domain attribute $A_j$ with
-$j \in \mathcal{I}_{\text{open}}$, we maintain a knowledge catalog:
-\begin{equation}
-\mathcal{K}_j = \{(c_1, \mathbf{e}_1), \dots,
-(c_{|\mathcal{K}_j|}, \mathbf{e}_{|\mathcal{K}_j|})\},
-\end{equation}
-where each pair $(c_i, \mathbf{e}_i)$ consists of a canonical entity
-value $c_i \in \mathcal{V}_j^{\text{open}}$ and its embedding
-$\mathbf{e}_i = \text{Encode}(c_i) \in \mathbb{R}^{d}$. Any text
-encoder may serve as the encoding function; in this study we use
-OpenAI's \textit{text-embedding-3-small}.
+We frame vehicle normalization as a three-stage pipeline
+(Fig.~\ref{fig:pipeline}). A raw record $\mathbf{x}$ is first serialized
+and passed to an LLM that jointly extracts candidate attribute values
+$\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$ (\textit{information
+extraction}). Closed-domain attributes are emitted directly; each
+open-domain attribute $\hat{a}_j$ is then encoded and matched against a
+knowledge catalog $\mathcal{K}_j$ to retrieve its top-$k$ canonical
+candidates $\mathcal{R}_j$ (\textit{retrieval}). Finally, an LLM resolver
+decides whether any candidate $c_i \in \mathcal{R}_j$ refers to the same
+real-world entity as $\hat{a}_j$; if one does, it replaces $\hat{a}_j$,
+otherwise $\hat{a}_j$ is kept as a novel entity and appended to
+$\mathcal{K}_j$ (\textit{entity resolution}). The remainder of this
+section formalizes each stage.
 
 \begin{figure}[t]
 \centering
@@ -202,24 +167,24 @@ OpenAI's \textit{text-embedding-3-small}.
 % ===== TOP: shared pipeline =====
 \node[dat] (x) {$\mathbf{x}$};
 
-\node[op, below=0.4cm of x] (ser) {Serialize};
+\node[op, below=0.25cm of x] (ser) {Serialize};
 \draw[arr] (x) -- (ser);
 
-\node[dat, below=0.4cm of ser] (s) {$s \in \Sigma^+$};
+\node[dat, below=0.25cm of ser] (s) {$s \in \Sigma^+$};
 \draw[arr] (ser) -- (s);
 
-\node[llm, below=0.4cm of s] (ie) 
+\node[llm, below=0.25cm of s] (ie) 
     {\textbf{IE}\\[-1pt] $\mathrm{LLM}(\mathrm{prompt}_{\mathrm{ext}}, s)$};
 \draw[arr] (s) -- (ie);
 
-\node[dat, below=0.4cm of ie] (xhat) 
+\node[dat, below=0.25cm of ie] (xhat) 
     {$\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$};
 \draw[arr] (ie) -- (xhat);
 
-\node[op, below=0.4cm of xhat] (ser2) {Serialize};
+\node[op, below=0.25cm of xhat] (ser2) {Serialize};
 \draw[arr] (xhat) -- (ser2);
 
-\node[dat, below=0.4cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
+\node[dat, below=0.25cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
 \draw[arr] (ser2) -- (shat);
 
 % ===== OUTER STACKED SECTION =====
@@ -284,16 +249,16 @@ OpenAI's \textit{text-embedding-3-small}.
 \node[sels, soff2, below=0.3cm of er, opacity=0.3] (sel_s2) {};
 \node[sels, soff,  below=0.3cm of er, opacity=0.5] (sel_s1) {};
 \node[sel,         below=0.3cm of er]              (select) 
-    {Select $i^*$};
+    {Select $\tilde{a}_j$};
 \draw[arr] (er) -- (select);
 
 % ===== Output =====
 % Combined label as a text-between-arrows node — vertically centered on the arrow
-\node[dat, below=0.4cm of select] (aj)
-    {$\tilde{a}_j = c_{i^*} / \hat{a}_j$};
+\node[dat, below=0.25cm of select] (aj)
+    {$\tilde{a}_j$}; %
 \draw[arr] (select) -- (aj);
 
-\node[outnode, below=0.4cm of aj] (output) 
+\node[outnode, below=0.25cm of aj] (output) 
     {$\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$};
 \draw[arr] (aj) -- (output);
 
@@ -314,7 +279,7 @@ OpenAI's \textit{text-embedding-3-small}.
 \draw[arr] (catalog) -- (topk);
 
 \draw[darr, rounded corners=2pt] 
-    (output.east) -| (catalog.south)
+    (aj.east) -| (catalog.south)
     node[lb, left, pos=0.65] 
     {update $\mathcal{K}_j$};
 
@@ -325,21 +290,61 @@ OpenAI's \textit{text-embedding-3-small}.
     {$j \in \mathcal{I}_{\mathrm{closed}}$};
 
 \end{tikzpicture}
-%
 }
-\caption{Vehicle normalization pipeline. The raw record $\mathbf{x}$ is 
-serialized and passed to the LLM for attribute extraction (IE). 
-For each open-domain attribute (outer loop, dashed box; stacked blocks 
-indicate per-attribute instances), the candidate $\hat{a}_j$ is embedded 
-and matched against its catalog $\mathcal{K}_j$ via HNSW, retrieving 
-top-$k$ candidates $\mathcal{R}_j$. For each candidate $c_i$ ($\times k$ 
-return arrow), the pipeline substitutes $c_i$ into the serialized 
-description and evaluates an ER match $M(\hat{s}, \hat{s}_{j \to c_i})$. 
-A selection step returns the first match $c_{i^*}$ or falls back to 
-$\hat{a}_j$. Closed-domain attributes bypass the loop and feed 
-$\hat{a}_j$ directly into the assembly. Novel entities expand the catalog.}
+\caption{Vehicle normalization pipeline. A raw record $\mathbf{x}$ is serialized and fed to an LLM that jointly extracts candidate attribute values $\hat{\mathbf{x}}$ (IE). Closed-domain attributes ($\mathcal{I}_{\text{closed}}$) bypass the loop and are emitted as-is. Each open-domain attribute ($\mathcal{I}_{\text{open}}$, dashed box) is encoded into $\mathbf{e}_j$, its top-$k$ canonical candidates $\mathcal{R}_j$ are retrieved from catalog $\mathcal{K}_j$ via HNSW, and each candidate $c_i$ is substituted into $\hat{s}_{j \to c_i}$ and tested by an LLM entity resolver $M(\cdot,\cdot)$. Stacked blocks represent one instance per open-domain attribute, and the $\times k$ arrow indicates that for each retrieved value we repeat the substitution-and-resolution process within each block. Select returns the first matching $c_{i^*}$; otherwise $\hat{a}_j$ is kept as a novel entity and the catalog is expanded (dashed feedback). See Algorithm~\ref{algo:normalization}.}
 \label{fig:pipeline}
 \end{figure}
+
+
+Let the normalized vehicle schema consist of $m$ attributes
+$A_1, A_2, \dots, A_m$, where each attribute $A_j$ is associated with a
+domain $\mathcal{V}_j$ of valid values. Attribute domains are partitioned
+into two types:
+\begin{equation}
+\mathcal{V}_j =
+\begin{cases}
+\mathcal{V}_j^{\text{closed}} & \text{if } j \in \mathcal{I}_{\text{closed}}, \\[4pt]
+\mathcal{V}_j^{\text{open}} & \text{if } j \in \mathcal{I}_{\text{open}}.
+\end{cases}
+\end{equation}
+A \textit{closed-domain} attribute has a domain that is fully specified
+in advance and does not change during normalization. This includes both
+finite categorical sets (e.g., fuel type
+$\in \{\text{petrol, diesel, lpg, hydrogen}\}$) and numerical ranges
+(e.g., mileage $\in \mathbb{R}^+$). An \textit{open-domain} attribute
+(e.g., brand, model) has a domain that grows as the system encounters
+previously unseen entities.
+
+The normalized vehicle space is the Cartesian product of all attribute
+domains:
+\begin{equation}
+\tilde{\mathcal{X}} = \prod_{j=1}^{m} \mathcal{V}_j.
+\end{equation}
+Vehicle normalization is formulated as a mapping
+\begin{equation}
+\phi: \Sigma^+ \to \tilde{\mathcal{X}},
+\end{equation}
+that takes a serialized vehicle representation
+$s = \text{Serialize}(\mathbf{x}) \in \Sigma^+$, where $\mathbf{x}$ is
+the raw input record and $\Sigma$ denotes the character alphabet, and
+produces $\phi(s) = \tilde{\mathbf{x}} \in \tilde{\mathcal{X}}$. For
+tabular datasets, $\text{Serialize}$ concatenates column names with their
+values (e.g., \textit{col1: val1, col2: val2, \dots}); for free-text
+descriptions, the input is used directly.
+
+\paragraph{Knowledge catalog.}
+For each open-domain attribute $A_j$ with
+$j \in \mathcal{I}_{\text{open}}$, we maintain a knowledge catalog:
+\begin{equation}
+\mathcal{K}_j = \{(c_1, \mathbf{e}_1), \dots,
+(c_{|\mathcal{K}_j|}, \mathbf{e}_{|\mathcal{K}_j|})\},
+\end{equation}
+where each pair $(c_i, \mathbf{e}_i)$ consists of a canonical entity
+value $c_i \in \mathcal{V}_j^{\text{open}}$ and its embedding
+$\mathbf{e}_i = \text{Encode}(c_i) \in \mathbb{R}^{d}$. Any text
+encoder may serve as the encoding function; in this study we use
+OpenAI's \textit{text-embedding-3-small}.
+
 
 \paragraph{Information extraction.}
 Given a serialized vehicle description $s$, a single LLM call extracts
@@ -390,25 +395,24 @@ M(\hat{s},\, \hat{s}_{j \to c_i}) =
 \text{LLM}(\text{prompt}_{\text{res}},\, \hat{s},\,
 \hat{s}_{j \to c_i}) \in \{0, 1\}.
 \end{equation}
-The iteration proceeds in similarity-ranked order and stops at the
-first match; let $i^* = \min\{i : M(\hat{s},\,\hat{s}_{j \to c_i}) = 1\}$
-denote the rank of that match. The normalized value is:
+All $k$ candidates are evaluated and the normalized value is:
 \begin{equation}
 \tilde{a}_j =
 \begin{cases}
-c_{i^*} & \text{if a match exists,} \\[4pt]
-\hat{a}_j & \text{otherwise (novel entity).}
+c_{i^*}, & i^* = \min\{i : m_i = 1\}, \\[4pt]
+\hat{a}_j & \text{otherwise (novel entity),}
 \end{cases}
 \end{equation}
+where $m_i = M(\hat{s},\, \hat{s}_{j \to c_i})$.
 In the novel-entity case, the catalog is expanded:
 $\mathcal{K}_j \leftarrow \mathcal{K}_j \cup
 \{(\hat{a}_j, \text{Encode}(\hat{a}_j))\}$.
 
-
 Algorithm~\ref{algo:normalization} summarizes the complete pipeline.
 
 \begin{algorithm}
-\caption{\label{algo:normalization} Vehicle Normalization}
+\caption{Vehicle Normalization.}
+\label{algo:normalization}
 \begin{algorithmic}[1]
 \Require Raw vehicle record $\mathbf{x}$,
 Catalogs $\{\mathcal{K}_j\}_{j \in \mathcal{I}_{\text{open}}}$
@@ -418,28 +422,28 @@ $\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$
 \State $s \gets \text{Serialize}(\mathbf{x})$
 \State $\hat{\mathbf{x}} \gets
 \text{LLM}(\text{prompt}_{\text{ext}}, s)$
-\State $\hat{s} \gets \text{Serialize}(\hat{\mathbf{x}})$
 
 \For{$j \in \mathcal{I}_{\text{closed}}$}
     \State $\tilde{a}_j \gets \hat{a}_j$
 \EndFor
 
+\State $\hat{s} \gets \text{Serialize}(\hat{\mathbf{x}})$
 \For{$j \in \mathcal{I}_{\text{open}}$}
     \State $\mathbf{e}_j \gets \text{Encode}(\hat{a}_j)$
     \State $\mathcal{R}_j \gets
     \operatorname{TopK}_{(c_i, \mathbf{e}_i) \in \mathcal{K}_j}
     \text{sim}(\mathbf{e}_j, \mathbf{e}_i)$
-    \State $\tilde{a}_j \gets \hat{a}_j$
-    \Comment{default: novel entity}
     \For{$c_i \in \mathcal{R}_j$ in ranked order}
         \State $\hat{s}_{j \to c_i} \gets
         \text{Serialize}(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$
-        \If{$M(\hat{s},\, \hat{s}_{j \to c_i}) = 1$}
-            \State $\tilde{a}_j \gets c_i$
-            \State \textbf{break}
-        \EndIf
+        \State $m_i \gets M(\hat{s},\, \hat{s}_{j \to c_i})$
     \EndFor
-    \If{$\tilde{a}_j = \hat{a}_j$}
+    \If{$\exists\, i : m_i = 1$}
+        \State $i^* \gets \min\{i : m_i = 1\}$
+        \State $\tilde{a}_j \gets c_{i^*}$
+    \Else
+        \State $\tilde{a}_j \gets \hat{a}_j$
+        \Comment{novel entity}
         \State $\mathcal{K}_j \leftarrow \mathcal{K}_j \cup
         \{(\hat{a}_j, \text{Encode}(\hat{a}_j))\}$
     \EndIf
