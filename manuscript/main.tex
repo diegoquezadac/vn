@@ -16,7 +16,7 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{Vehicle Normalization Framework\\
+\title{An LLM-Based Framework for Cross-Market Vehicle Data Normalization\\
 \thanks{Identify applicable funding agency here. If none, delete this.}
 }
 
@@ -41,6 +41,7 @@ jnancu@inf.utfsm.cl}}
 \maketitle
 
 \begin{abstract}
+The global second-hand vehicle market, valued at approximately USD 1.9 trillion in 2024, is projected to grow at a 9.4\% compound annual growth rate, driven in part by the expansion of online platforms. This expansion has produced a proliferation of heterogeneous vehicle datasets: brand and model names follow no controlled vocabulary, equipment is described in free text across multiple languages, and attribute schemas vary across markets. As a result, most machine learning studies on vehicle data build an ad hoc preprocessing pipeline that does not transfer across sources. We propose a reusable vehicle normalization framework that is agnostic to source schema, language, and market. The framework decomposes normalization into three stages: (i) LLM-based information extraction that maps a raw record to a canonical attribute schema, (ii) dense retrieval of top candidates from a per-attribute knowledge catalog, and (iii) LLM-based entity resolution that either matches the extracted value to a canonical entity or appends it to the catalog as a novel entry. We evaluate each stage in isolation on three public datasets spanning Europe, North America, and North Africa, and conduct ablations over the key design choices at each stage. Finally, we assess the downstream utility of the framework on a used-car resale price prediction task, quantifying the gain from normalized granular attributes over raw inputs. The framework is released as an open-source tool to support reproducible preprocessing of vehicle data across markets.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -309,11 +310,84 @@ into two types:
 \end{equation}
 A \textit{closed-domain} attribute has a domain that is fully specified
 in advance and does not change during normalization. This includes both
-finite categorical sets (e.g., fuel type
-$\in \{\text{petrol, diesel, lpg, hydrogen}\}$) and numerical ranges
-(e.g., mileage $\in \mathbb{R}^+$). An \textit{open-domain} attribute
-(e.g., brand, model) has a domain that grows as the system encounters
-previously unseen entities.
+finite categorical sets and numerical ranges (e.g., mileage
+$\in \mathbb{R}^+$). An \textit{open-domain} attribute (e.g., brand,
+model) has a domain that grows as the system encounters previously
+unseen entities.
+
+Table~\ref{tab:schema} lists the $m = 19$ attributes of the schema
+used in this study, and Table~\ref{tab:catalog} specifies the domain
+$\mathcal{V}_j^{\text{closed}}$ of each closed-domain categorical
+attribute. The decomposition is designed to resolve the three axes
+of inconsistency identified in the introduction: the
+separation of \textit{energy source}, \textit{propulsion system},
+and \textit{fuel type} into distinct attributes addresses scope
+inconsistency, while the separation of \textit{transmission type},
+\textit{technology}, and \textit{gears} addresses granularity
+inconsistency. The schema is not fixed by the framework; practitioners
+may define alternative schemas to suit their application.
+
+\begin{table}[h]
+\caption{Proposed Normalized Schema}
+\label{tab:schema}
+\centering
+\footnotesize
+\begin{tabular}{ll}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+Brand & Vehicle manufacturer \\
+Model & Base vehicle model name \\
+Submodel & Specific variant of the vehicle model \\
+Trim level & Package of features, styling, and equipment \\
+Year & Model year of the vehicle \\
+Mileage & Total distance the vehicle has traveled \\
+Body type & Physical structure and shape of the vehicle \\
+Transmission type & Type of transmission system \\
+Transmission technology & Specific transmission mechanism \\
+Transmission gears & Number of gear ratios \\
+Energy source & Main energy source powering the vehicle \\
+Propulsion system & Configuration of the propulsion system \\
+Fuel type & Specific fuel used by the vehicle \\
+Drive type & Wheels receiving power from the drivetrain \\
+Engine size & Total volume of all cylinders \\
+Engine power & Maximum power output of the engine \\
+Engine aspiration & Air intake method \\
+Injection type & Fuel injection method \\
+Cylinders & Number of cylinders in the engine \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\caption{Domain of Closed-Domain Attributes}
+\label{tab:catalog}
+\centering
+\footnotesize
+\begin{tabular}{p{1.8cm}p{5.8cm}}
+\hline
+\textbf{Attribute} & \textbf{Domain} \\
+\hline
+Body type & sedan, hatchback, suv, crossover, coupe, convertible, wagon, pickup, van, minivan, roadster, other, unknown \\
+\hline
+Drive type & fwd, rwd, awd, 4wd, other, unknown \\
+\hline
+Transmission type & manual, automatic, semi-automatic, other, unknown \\
+\hline
+Transmission technology & tc, cvt, sct, dct, other, unknown \\
+\hline
+Energy source & fossil, hybrid, electric, other, unknown \\
+\hline
+Propulsion system & icev, ev, pev, bev, hev, mhv, phev, erev, fcev, pfcev, other, unknown \\
+\hline
+Fuel type & petrol, diesel, cng, lpg, lng, methanol, propane, hydrogen, other, unknown \\
+\hline
+Engine aspiration & natural, turbo, supercharger, other, unknown \\
+\hline
+Injection type & direct, indirect, dual, other, unknown \\
+\hline
+\end{tabular}
+\end{table}
 
 The normalized vehicle space is the Cartesian product of all attribute
 domains:
@@ -455,18 +529,20 @@ $\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$
 
 \section{Experiments}
 
+We evaluate each component (IE, IR, ER) in isolation, assembling a dedicated
+labeled dataset per task and reporting metrics appropriate to each.
+
 \subsection{Datasets}
 
 Our experiments draw on three publicly available automotive listing datasets
 covering distinct geographic markets, schema conventions, and languages,
-summarized in Table~\ref{tab:datasets}. AutoScout24 is a European dataset with structured fields and
-mileage reported in kilometers. Craigslist is a North American dataset
-characterized by informal free-text descriptions and mileage in miles; its
-29,667 nominal model values reflect raw seller input rather than a controlled
-vocabulary, and are expected to collapse substantially after normalization.
-MuCars is a Moroccan dataset with several market-specific attributes,
-including mileage reported as ranges and Fiscal Power as a tax-based engine
-category rather than a direct power measurement. The heterogeneity across markets, units, and naming conventions makes these three
+summarized in Table~\ref{tab:datasets}. AutoScout24 is a European dataset with
+fully structured fields. Craigslist is a North American dataset characterized
+by informal free-text descriptions, and its 29{,}667 nominal model values
+reflect raw seller input rather than a controlled vocabulary. MuCars is a
+Moroccan dataset with several market-specific attributes, including Fiscal
+Power as a tax-based engine category rather than a direct power measurement.
+The heterogeneity across markets and naming conventions makes these three
 sources well suited for evaluating the robustness of the normalization method.
 
 \begin{table}[h]
@@ -484,92 +560,39 @@ MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
 \end{tabular}
 \end{table}
 
-\subsection{Annotation Protocol}
-\label{sec:annotation}
+\subsection{Information Extraction}
+\label{sec:eval_ie}
 
-Ground truth for IE and ER is produced by a three-model LLM ensemble acting as
-independent annotators: \textbf{GPT-5.4} (OpenAI), \textbf{Claude Opus 4.6}
-(Anthropic), and \textbf{Gemini 3.1 Pro} (Google DeepMind). Each annotator is
-prompted zero-shot with the task instruction and the input example; the full
-prompts are provided in Appendix~\ref{app:prompts}.
+\textbf{Annotation protocol.} Ground truth for IE is produced by a three-model
+LLM ensemble acting as independent annotators: \textbf{GPT-5.4} (OpenAI),
+\textbf{Claude Opus 4.6} (Anthropic), and \textbf{Gemini 3.1 Pro} (Google
+DeepMind). Each annotator is prompted zero-shot with the task instruction and
+the input example; full prompts are in Appendix~\ref{app:prompts}. Labels are
+assigned field-by-field by majority vote (at least two of three annotators
+agree); fields on which all three disagree are marked \texttt{ABSTAIN} and
+excluded from evaluation. We collect 100 fully annotated examples per source,
+stratified across key attribute values (brand, fuel type, transmission type),
+yielding 300 evaluation instances.
 
-Labels are assigned by majority vote: a label is accepted when at least two of
-the three annotators agree. For IE, this criterion is applied field-by-field; a
-field for which all three annotators produce different values is marked
-\texttt{ABSTAIN} and excluded from evaluation. For ER, the decision is binary
-(match or no-match), so a majority always exists unless one annotator withholds
-judgment; such pairs are discarded and replaced by resampling. In both settings
-we process instances until 100 fully annotated examples are collected, sampling
-in a stratified manner to ensure coverage of the attribute value distribution.
+\textbf{Evaluation setup.} For AutoScout24 and MuCars, which contain no
+free-text field, the input is the serialized structured row (comma-separated
+\textit{col:\,value} pairs). For Craigslist, the raw free-text listing
+description is used directly.
 
-We report inter-annotator agreement (IAA) as a data quality indicator alongside
-the primary evaluation metrics: Fleiss' $\kappa$~\cite{fleiss1971kappa} over all
-three annotators and the pairwise raw agreement rate $P_A$, computed for each of
-the three annotator pairs and then averaged.
+\textbf{Metrics.} For categorical and integer fields we report per-field
+accuracy as the fraction of examples for which the predicted value exactly
+matches the annotation. For the equipment field, which is set-valued, we report set-level precision, recall,
+and F1. A macro-average accuracy is reported across all non-set fields. We
+additionally report Fleiss' $\kappa$~\cite{fleiss1971kappa} and the averaged
+pairwise raw agreement $P_A$ as data-quality indicators; fields falling below
+$\kappa = 0.60$ are flagged and analyzed separately, and
+$\kappa \geq 0.80$ indicates near-perfect agreement~\cite{landis1977kappa}.
 
-\subsection{Evaluation Setup}
-\label{sec:eval_setup}
+\subsection{Information Retrieval}
+\label{sec:eval_ir}
 
-\textbf{Information Extraction.} IE is evaluated on each of the three sources
-independently. For AutoScout24 and MuCars, which contain no free-text field, the
-input is the serialized structured row (comma-separated \textit{col:\,value}
-pairs). For Craigslist, the raw free-text listing description is used directly.
-We use 100 labeled examples per source, stratified across the distribution of
-key attribute values (brand, fuel type, transmission type), yielding 300
-evaluation instances in total.
-
-\textbf{Information Retrieval.} IR depends on a pre-populated catalog, so we
-adopt a leave-one-source-out rotation: two sources act as \emph{catalog sources}
-and the third as the \emph{evaluation source}. The catalog and HNSW indexes are
-constructed from all rows in the two catalog sources. For each row in the
-evaluation source, IE is first run to extract a candidate value $\hat{a}_j$ for
-each open-domain attribute. That candidate is embedded as
-$\mathbf{e}_j = \text{Encode}(\text{attr}\colon \hat{a}_j)$ and queried against the
-attribute-specific HNSW index. Success is defined as the correct canonical value,
-taken from the structured column of the evaluation-source row, appearing among
-the top-$k$ retrieved candidates. Ground truth is derived directly from
-structured columns and does not require LLM annotation. We sample 100 queries
-per (attribute, evaluation source) pair, stratified across the canonical value
-distribution of that attribute.
-
-\textbf{Entity Resolution.} ER follows the same leave-one-source-out rotation.
-For each evaluation configuration, we construct a labeled set of candidate pairs
-drawn entirely from the evaluation source. Positive pairs are formed by sampling
-surface-form variants of the same canonical entity (e.g., rows where the brand
-field contains \textit{mercedes} alongside rows containing
-\textit{mercedes-benz}). Negative pairs include random non-matching entities and
-hard negatives drawn from adjacent model numbers, parent brand names, and trim
-levels differing by a single qualifier. We target 100 labeled pairs per (attribute, evaluation source) combination,
-with positive and negative pairs balanced and stratified to cover diverse
-surface-form variants and hard negatives. The few-shot resolution prompt used
-by the pipeline is drawn exclusively from the catalog sources and is distinct
-from the annotator prompts.
-
-\subsection{Evaluation Metrics}
-
-\textbf{Extraction.} For categorical and integer fields we report per-field
-accuracy as the fraction of examples for which the predicted value exactly matches
-the annotation. For numeric fields with continuous values (engine displacement,
-mileage) we apply a $\pm 10\%$ relative tolerance. For the equipment field, which
-is a set-valued output, we report set-level precision, recall, and F1 score. A
-macro-average accuracy is reported across all non-set fields.
-
-\textbf{Retrieval.} We report Recall@$k$ for $k \in \{1, 3, 5\}$, defined as the
-fraction of (query, attribute) pairs for which the correct canonical value appears
-among the top-$k$ retrieved candidates. Because retrieval feeds directly into the
-resolution step, a miss at retrieval silently prevents the correct canonical from
-ever being considered, making recall the primary concern.
-
-\textbf{Entity Resolution.} We report precision, recall, F1 score, and accuracy
-for the binary match/no-match decision, broken down by attribute. Precision is the
-primary metric of interest, as a false positive permanently merges two distinct
-entities in the catalog and is difficult to detect post-hoc.
-
-\textbf{Inter-annotator agreement.} We report Fleiss' $\kappa$ and the pairwise
-raw agreement rate $P_A$ for both IE and ER annotation rounds as a
-measure of label reliability. A $\kappa \geq 0.80$ indicates near-perfect
-agreement~\cite{landis1977kappa}; fields or pairs falling below $\kappa = 0.60$
-are flagged and analyzed separately.
+\subsection{Entity Resolution}
+\label{sec:eval_er}
 
 \subsection{Results}
 
