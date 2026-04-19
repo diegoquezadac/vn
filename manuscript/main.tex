@@ -315,79 +315,6 @@ $\in \mathbb{R}^+$). An \textit{open-domain} attribute (e.g., brand,
 model) has a domain that grows as the system encounters previously
 unseen entities.
 
-Table~\ref{tab:schema} lists the $m = 19$ attributes of the schema
-used in this study, and Table~\ref{tab:catalog} specifies the domain
-$\mathcal{V}_j^{\text{closed}}$ of each closed-domain categorical
-attribute. The decomposition is designed to resolve the three axes
-of inconsistency identified in the introduction: the
-separation of \textit{energy source}, \textit{propulsion system},
-and \textit{fuel type} into distinct attributes addresses scope
-inconsistency, while the separation of \textit{transmission type},
-\textit{technology}, and \textit{gears} addresses granularity
-inconsistency. The schema is not fixed by the framework; practitioners
-may define alternative schemas to suit their application.
-
-\begin{table}[h]
-\caption{Proposed Normalized Schema}
-\label{tab:schema}
-\centering
-\footnotesize
-\begin{tabular}{ll}
-\hline
-\textbf{Attribute} & \textbf{Description} \\
-\hline
-Brand & Vehicle manufacturer \\
-Model & Base vehicle model name \\
-Submodel & Specific variant of the vehicle model \\
-Trim level & Package of features, styling, and equipment \\
-Year & Model year of the vehicle \\
-Mileage & Total distance the vehicle has traveled \\
-Body type & Physical structure and shape of the vehicle \\
-Transmission type & Type of transmission system \\
-Transmission technology & Specific transmission mechanism \\
-Transmission gears & Number of gear ratios \\
-Energy source & Main energy source powering the vehicle \\
-Propulsion system & Configuration of the propulsion system \\
-Fuel type & Specific fuel used by the vehicle \\
-Drive type & Wheels receiving power from the drivetrain \\
-Engine size & Total volume of all cylinders \\
-Engine power & Maximum power output of the engine \\
-Engine aspiration & Air intake method \\
-Injection type & Fuel injection method \\
-Cylinders & Number of cylinders in the engine \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\caption{Domain of Closed-Domain Attributes}
-\label{tab:catalog}
-\centering
-\footnotesize
-\begin{tabular}{p{1.8cm}p{5.8cm}}
-\hline
-\textbf{Attribute} & \textbf{Domain} \\
-\hline
-Body type & sedan, hatchback, suv, crossover, coupe, convertible, wagon, pickup, van, minivan, roadster, other, unknown \\
-\hline
-Drive type & fwd, rwd, awd, 4wd, other, unknown \\
-\hline
-Transmission type & manual, automatic, semi-automatic, other, unknown \\
-\hline
-Transmission technology & tc, cvt, sct, dct, other, unknown \\
-\hline
-Energy source & fossil, hybrid, electric, other, unknown \\
-\hline
-Propulsion system & icev, ev, pev, bev, hev, mhv, phev, erev, fcev, pfcev, other, unknown \\
-\hline
-Fuel type & petrol, diesel, cng, lpg, lng, methanol, propane, hydrogen, other, unknown \\
-\hline
-Engine aspiration & natural, turbo, supercharger, other, unknown \\
-\hline
-Injection type & direct, indirect, dual, other, unknown \\
-\hline
-\end{tabular}
-\end{table}
 
 The normalized vehicle space is the Cartesian product of all attribute
 domains:
@@ -416,8 +343,7 @@ $j \in \mathcal{I}_{\text{open}}$, we maintain a knowledge catalog:
 where each pair $(c_i, \mathbf{e}_i)$ consists of a canonical entity
 value $c_i \in \mathcal{V}_j^{\text{open}}$ and its embedding
 $\mathbf{e}_i = \text{Encode}(c_i) \in \mathbb{R}^{d}$. Any text
-encoder may serve as the encoding function; in this study we use
-OpenAI's \textit{text-embedding-3-small}.
+encoder may serve as the encoding function.
 
 
 \paragraph{Information extraction.}
@@ -532,6 +458,126 @@ $\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$
 We evaluate each component (IE, IR, ER) in isolation, assembling a dedicated
 labeled dataset per task and reporting metrics appropriate to each.
 
+\subsection{Experimental Setup}
+\label{sec:setup}
+
+\textbf{Schema.}
+Table~\ref{tab:schema} lists the $m = 28$ attributes of the schema used
+in this study, and Table~\ref{tab:catalog} specifies the domain
+$\mathcal{V}_j^{\text{closed}}$ of each closed-domain categorical
+attribute (numerical closed-domain attributes are omitted from the table;
+\textit{year} and \textit{doors} take integer values, while the remaining
+numerical attributes take positive real values). Of the 28 attributes, four are open-domain
+($|\mathcal{I}_{\text{open}}| = 4$): \textit{brand}, \textit{model},
+\textit{submodel}, and \textit{trim level}; the remaining 24 are
+closed-domain. Numerical attributes with a physical unit are represented
+as value/unit pairs (e.g.\ \textit{mileage} paired with \textit{mileage
+unit}), where the unit is itself a closed-domain attribute whose domain
+covers the conventions found across the target markets. The decomposition
+resolves the three inconsistency axes identified in the introduction: the
+separation of \textit{energy source}, \textit{propulsion system}, and
+\textit{fuel type} addresses scope inconsistency, while the separation of
+\textit{transmission type}, \textit{technology}, and \textit{gears}
+addresses granularity inconsistency.
+
+\begin{table}[htbp]
+\caption{Proposed Normalized Schema ($m = 28$)}
+\begin{center}
+\footnotesize
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Attribute} & \textbf{Description} \\
+\hline
+Brand$^\dagger$        & Vehicle manufacturer \\
+Model$^\dagger$        & Base vehicle model name \\
+Submodel$^\dagger$     & Specific variant of the vehicle model \\
+Trim level$^\dagger$   & Feature and styling package \\
+Year                   & Model year of the vehicle \\
+Mileage                & Numeric odometer reading \\
+Mileage unit           & Unit for mileage \\
+Body type              & Physical structure and shape \\
+Transmission type      & Type of transmission system \\
+Transmission tech.     & Specific transmission mechanism \\
+Transmission gears     & Number of gear ratios \\
+Energy source          & Main energy source powering the vehicle \\
+Propulsion system      & Configuration of the propulsion system \\
+Fuel type              & Specific fuel used by the vehicle \\
+Drive type             & Wheels receiving power from the drivetrain \\
+Engine size            & Numeric engine displacement value \\
+Engine size unit       & Unit for engine size \\
+Engine power           & Numeric maximum power output value \\
+Engine power unit      & Unit for engine power \\
+Engine aspiration      & Air intake method \\
+Injection type         & Fuel injection method \\
+Cylinders              & Number of cylinders in the engine \\
+Condition              & Vehicle condition as reported by the seller \\
+Color                  & Exterior body color \\
+Doors                  & Number of doors on the vehicle body \\
+Fuel consumption       & Numeric fuel efficiency value \\
+Fuel consumption unit  & Unit for fuel consumption \\
+Equipment              & Set of standardized features and equipment \\
+\hline
+\multicolumn{2}{l}{$^\dagger$Open-domain attribute.} \\
+\end{tabular}
+\label{tab:schema}
+\end{center}
+\end{table}
+
+\begin{table}[htbp]
+\caption{Domain of Closed-Domain Categorical Attributes}
+\begin{center}
+\footnotesize
+\begin{tabular}{|p{2.2cm}|p{5.4cm}|}
+\hline
+\textbf{Attribute} & \textbf{Domain} \\
+\hline
+Body type & sedan, hatchback, suv, crossover, coupe, convertible, wagon, pickup, van, minivan, roadster, other \\
+\hline
+Drive type & fwd, rwd, awd, 4wd, other \\
+\hline
+Transmission type & manual, automatic, semi-automatic \\
+\hline
+Transmission tech. & tc, cvt, sct, dct, other \\
+\hline
+Energy source & fossil, hybrid, electric, other \\
+\hline
+Propulsion system & icev, ev, pev, bev, hev, mhv, phev, erev, fcev, pfcev, other \\
+\hline
+Fuel type & petrol, diesel, cng, lpg, lng, methanol, propane, hydrogen, other \\
+\hline
+Engine aspiration & natural, turbo, supercharger, other \\
+\hline
+Injection type & direct, indirect, dual, other \\
+\hline
+Mileage unit & km, mi \\
+\hline
+Engine size unit & l, cc \\
+\hline
+Engine power unit & kw, ps, hp \\
+\hline
+Fuel cons. unit & l/100km, mpg, km/l \\
+\hline
+Condition & new, excellent, very good, good, fair, poor, salvage \\
+\hline
+Color & black, white, silver, grey, red, blue, green, yellow, orange, brown, beige, gold, purple, other \\
+\hline
+\end{tabular}
+\label{tab:catalog}
+\end{center}
+\end{table}
+
+\textbf{Retriever.}
+Open-domain attributes are indexed with FAISS HNSW ($M = 32$,
+$\mathit{ef}_{\mathrm{search}} = 64$). We set $k = 5$: since each
+retrieved candidate triggers one LLM call in the ER stage, $k$ directly
+controls cost, and $k = 5$ balances recall headroom against LLM call
+budget.
+
+\textbf{Models.}
+All extraction and entity resolution LLM calls use OpenAI's
+\textit{gpt-4.1-mini}. Candidate embeddings for open-domain attributes
+are computed with OpenAI's \textit{text-embedding-3-small} ($d = 1{,}536$).
+
 \subsection{Datasets}
 
 Our experiments draw on three publicly available automotive listing datasets
@@ -539,17 +585,16 @@ covering distinct geographic markets, schema conventions, and languages,
 summarized in Table~\ref{tab:datasets}. AutoScout24 is a European dataset with
 fully structured fields. Craigslist is a North American dataset characterized
 by informal free-text descriptions, and its 29{,}667 nominal model values
-reflect raw seller input rather than a controlled vocabulary. MuCars is a
+reflect raw seller input rather than a controlled vocabulary. MuCars~\cite{tabarnoust2024mucars} is a
 Moroccan dataset with several market-specific attributes, including Fiscal
 Power as a tax-based engine category rather than a direct power measurement.
 The heterogeneity across markets and naming conventions makes these three
 sources well suited for evaluating the robustness of the normalization method.
 
-\begin{table}[h]
+\begin{table}[htbp]
 \caption{Dataset Statistics}
-\label{tab:datasets}
-\centering
-\begin{tabular}{lrrrrl}
+\begin{center}
+\begin{tabular}{|l|r|r|r|r|l|}
 \hline
 \textbf{Dataset} & \textbf{Listings} & \textbf{Brands} & \textbf{Models} & \textbf{Cols} & \textbf{Region} \\
 \hline
@@ -558,10 +603,22 @@ Craigslist  & 426,880 & 42  & 29,667 & 26 & North America \\
 MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
 \hline
 \end{tabular}
+\label{tab:datasets}
+\end{center}
 \end{table}
 
 \subsection{Information Extraction}
 \label{sec:eval_ie}
+
+\textbf{Rationale.}
+Evaluating the extraction stage requires labeled pairs
+$(s, \hat{\mathbf{x}}^*)$ where $\hat{\mathbf{x}}^* = (\hat{a}_1^*, \dots,
+\hat{a}_m^*)$ is the correct extraction for description $s$. We use a
+three-model LLM ensemble as proxy annotators, resolving per-field
+disagreements by majority vote. This yields scalable annotation with
+explicit uncertainty quantification and avoids the single-model bias
+that would arise from evaluating against labels produced by the same
+model used for extraction.
 
 \textbf{Annotation protocol.} Ground truth for IE is produced by a three-model
 LLM ensemble acting as independent annotators: \textbf{GPT-5.4} (OpenAI),
@@ -573,11 +630,6 @@ agree); fields on which all three disagree are marked \texttt{ABSTAIN} and
 excluded from evaluation. We collect 100 fully annotated examples per source,
 stratified across key attribute values (brand, fuel type, transmission type),
 yielding 300 evaluation instances.
-
-\textbf{Evaluation setup.} For AutoScout24 and MuCars, which contain no
-free-text field, the input is the serialized structured row (comma-separated
-\textit{col:\,value} pairs). For Craigslist, the raw free-text listing
-description is used directly.
 
 \textbf{Metrics.} For categorical and integer fields we report per-field
 accuracy as the fraction of examples for which the predicted value exactly
@@ -591,8 +643,226 @@ $\kappa \geq 0.80$ indicates near-perfect agreement~\cite{landis1977kappa}.
 \subsection{Information Retrieval}
 \label{sec:eval_ir}
 
+\textbf{Rationale.}
+Evaluating the retrieval stage requires labeled triples
+$(q, \mathcal{K}_j, c^*)$ where $q$ is a query surface form,
+$\mathcal{K}_j$ is a fixed per-attribute catalog, and $c^* \in \mathcal{K}_j$
+is the correct canonical entity (or $\bot$ if $q$ refers to a novel entity).
+Unlike information extraction, IR labels can be assigned \emph{by
+construction} when queries are generated from a known catalog, removing
+the need for human annotation and eliminating annotator bias. We adopt
+this protocol: we fix a catalog, define a taxonomy of query perturbations
+motivated by the noise modes observed in real vehicle listings, and
+programmatically generate queries whose gold labels are determined by
+the generation process itself.
+
+\textbf{Catalog construction.}
+For each open-domain attribute $A_j \in \{\textit{brand}, \textit{model},
+\textit{submodel}, \textit{trim level}\}$, we build the reference catalog
+$\mathcal{K}_j$ from the \emph{unique values} observed in the MuCars
+dataset. MuCars is used as the catalog source for two reasons: (i) it is
+the smallest of the three datasets, making exhaustive enumeration
+tractable, and (ii) its values are drawn from a published, curated
+source, providing a stable reference vocabulary. AutoScout24 and
+Craigslist are reserved for the query side of the evaluation and are
+\emph{never} used to populate $\mathcal{K}_j$.
+
+\textbf{Perturbation taxonomy.}
+We identify eight perturbation classes that characterize the gap between
+canonical catalog entries and the surface forms a retriever encounters
+in practice. The taxonomy is summarized in Table~\ref{tab:pert_taxonomy}.
+Each class probes a distinct property of the retriever: tokenizer
+robustness, character-level noise tolerance, multilingual coverage, and
+fine-grained disambiguation among sibling entities. The \textit{alias}
+class is populated by mining surface-form variants from AutoScout24 and
+Craigslist that co-refer to MuCars catalog entries, using two signals:
+normalized lexical equality (case, punctuation, whitespace) and
+row-level co-occurrence of adjacent attributes (e.g., an AutoScout24
+record with \texttt{brand="VW"} and \texttt{model="Golf"} provides
+evidence that \textit{VW} aliases \textit{Volkswagen} in MuCars when
+MuCars also contains a \textit{Volkswagen Golf}). The \textit{novel}
+class consists of surface forms from AutoScout24 and Craigslist that
+match no catalog entry under any signal, exercising the out-of-catalog
+branch of the normalization algorithm (Algorithm~\ref{algo:normalization}).
+
+\begin{table}[htbp]
+\caption{Query Perturbation Taxonomy}
+\begin{center}
+\footnotesize
+\begin{tabular}{|p{1.9cm}|p{3.2cm}|p{2.2cm}|}
+\hline
+\textbf{Class} & \textbf{Example} & \textbf{Probes} \\
+\hline
+identity & \textit{Mazda} $\to$ \textit{Mazda} & Sanity \\
+\hline
+case & \textit{MAZDA}, \textit{mazda} & Tokenizer \\
+\hline
+punctuation & \textit{Mercedes Benz}, \textit{MercedesBenz} & Normalization \\
+\hline
+typo & \textit{Mercedez}, \textit{Tyota} & Character noise \\
+\hline
+truncation & \textit{Mercedes} $\to$ \textit{Mercedes-Benz} & Substring \\
+\hline
+alias & \textit{VW} $\to$ \textit{Volkswagen} & Cross-market vocabulary \\
+\hline
+distractor & \textit{A-Class} when \textit{C-Class}, \textit{E-Class} in $\mathcal{K}_j$ & Sibling disambiguation \\
+\hline
+novel & \textit{Rivian} with no match in $\mathcal{K}_j$ & Out-of-catalog rejection \\
+\hline
+\end{tabular}
+\label{tab:pert_taxonomy}
+\end{center}
+\end{table}
+
+\textbf{Dataset generation.}
+Queries are produced by a deterministic, seed-controlled procedure
+implemented as a standalone Python script and released alongside the
+framework. For each $(A_j, c \in \mathcal{K}_j)$ pair, the script
+generates a fixed number of queries per perturbation class (identity,
+case, punctuation, typo, truncation, distractor), samples alias and
+novel queries from the AutoScout24/Craigslist mining step, and records
+each as a tuple $(q, A_j, c^*, \text{class})$. Random seeds, edit
+distances, and per-class sample sizes are exposed as script parameters
+to support reproducibility and ablation. The resulting dataset contains
+$N$ queries per attribute, stratified across perturbation classes; exact
+counts per attribute and class are reported in Table~\ref{tab:ir_counts}
+(to be filled after generation).
+
+\textbf{Metrics.}
+We report Recall@$k$ for $k \in \{1, 5, 10\}$, mean reciprocal rank
+(MRR), and normalized discounted cumulative gain (nDCG@10). Recall@$k$
+at the operational $k$ used in Algorithm~\ref{algo:normalization} is the
+primary metric, as it upper-bounds the accuracy achievable by the
+downstream LLM resolver: any gold entity not retrieved at stage IR
+cannot be recovered at stage ER. For the \textit{novel} class, we
+instead report the false-match rate, defined as the fraction of novel
+queries for which the retriever's top-1 score exceeds the catalog's
+in-distribution threshold; this quantifies the pipeline's tendency to
+erroneously normalize truly new entities to existing catalog entries.
+All metrics are additionally broken down \emph{per perturbation class},
+yielding a diagnostic profile that isolates which noise modes a given
+retriever-embedding combination handles well and which it does not.
+
 \subsection{Entity Resolution}
 \label{sec:eval_er}
+
+\textbf{Rationale.}
+The entity resolution stage decides, for each retrieved candidate
+$c_i \in \mathcal{R}_j$, whether the serialized record $\hat{s}$ and its
+substituted variant $\hat{s}_{j \to c_i}$ refer to the same real-world
+vehicle. The evaluation unit is therefore a labeled triple
+$(\hat{s}, \hat{s}_{j \to c_i}, y)$ with $y \in \{0, 1\}$, mirroring the
+binary signature of $M(\cdot, \cdot)$ used in
+Algorithm~\ref{algo:normalization}. This aligns our protocol with the
+dominant convention in the LLM-for-entity-matching
+literature~\cite{peeters2023chatgpt_em, peeters2025matchgpt,
+narayan2022foundation}, which evaluates match/non-match decisions at the
+pair level rather than at the ranked-list level.
+
+\textbf{Pair construction.}
+Rather than sampling pairs randomly from the catalog, we exploit the
+fact that the retrieval stage itself is a natural hard-negative miner.
+Following the principle used in DPR~\cite{karpukhin2020dpr} and
+MatchGPT~\cite{peeters2025matchgpt}, we construct candidate pairs from
+the top-$k$ entities returned by the retriever: these are, by
+construction, the entries most likely to be confused with the query.
+For each sampled record, we additionally construct controlled pairs
+that probe specific failure modes, described below.
+
+\textbf{Difficulty taxonomy.}
+We define eight pair classes, summarized in
+Table~\ref{tab:er_taxonomy}. Classes \textit{identity} and \textit{alias}
+are expected positives; \textit{sibling}, \textit{cross\_brand},
+\textit{contradicted}, and \textit{unrelated} are expected negatives.
+The two hierarchy classes, \textit{hierarchy\_up} (query refers to a
+specific variant, candidate refers to its parent, e.g.\
+$\hat{a}_j = \textit{C220}$ and $c_i = \textit{C-Class}$) and
+\textit{hierarchy\_down} (the reverse direction), are treated as an
+\emph{open methodological decision}: whether a parent--child pair
+constitutes a match depends on the intended granularity of the
+normalized schema. We do not commit to a pre-specified label for these
+classes; instead, ensemble labels are reported separately and the
+observed inter-annotator disagreement on hierarchy pairs is treated as
+the empirical signal of how well the task itself is posed.
+
+\begin{table}[htbp]
+\caption{Entity Resolution Pair Taxonomy}
+\begin{center}
+\footnotesize
+\begin{tabular}{|p{2.0cm}|p{3.5cm}|p{1.8cm}|}
+\hline
+\textbf{Class} & \textbf{Construction} & \textbf{Expected $y$} \\
+\hline
+identity & $c_i = \hat{a}_j$ & 1 \\
+\hline
+alias & $c_i$ aliases $\hat{a}_j$ (e.g.\ \textit{VW} / \textit{Volkswagen}) & 1 \\
+\hline
+hierarchy\_up & $c_i$ is a parent of $\hat{a}_j$ & open \\
+\hline
+hierarchy\_down & $c_i$ is a child of $\hat{a}_j$ & open \\
+\hline
+sibling & $c_i$ is a near-miss sibling within the same family & 0 \\
+\hline
+cross\_brand & $c_i$ shares the model name but belongs to a different brand & 0 \\
+\hline
+contradicted & $c_i$ conflicts with other attributes of the record & 0 \\
+\hline
+unrelated & $c_i$ is a random catalog entry & 0 \\
+\hline
+\end{tabular}
+\label{tab:er_taxonomy}
+\end{center}
+\end{table}
+
+\textbf{Record sampling.}
+Query records are drawn from MuCars, AutoScout24, and Craigslist,
+stratified across brand and fuel type to preserve distributional
+heterogeneity. For each sampled record $\mathbf{x}$, we produce one
+pair per class (where applicable --- some records admit no \textit{sibling}
+or \textit{cross\_brand} candidate) by substituting the relevant
+open-domain attribute with a candidate drawn from the MuCars catalog
+$\mathcal{K}_j$. The substitution target is determined by the pair
+class: for \textit{sibling}, we select the closest non-matching catalog
+entry within the same brand family; for \textit{contradicted}, we
+select a catalog entry whose attested technical specifications (engine
+size, fuel type) conflict with those present in $\mathbf{x}$; for
+\textit{unrelated}, we draw uniformly from $\mathcal{K}_j$ after
+excluding sibling and cross-brand entries. All constructions are
+deterministic given a random seed.
+
+\textbf{Annotation protocol.}
+Following the protocol used for information extraction
+(Section~\ref{sec:eval_ie}), labels are assigned by a three-model LLM
+ensemble acting as independent annotators: \textbf{GPT-5.4} (OpenAI),
+\textbf{Claude Opus 4.6} (Anthropic), and \textbf{Gemini 3.1 Pro}
+(Google DeepMind). Each annotator receives the two serialized records
+$\hat{s}$ and $\hat{s}_{j \to c_i}$ together with the task instruction
+and returns $y \in \{0, 1\}$; full prompts are in
+Appendix~\ref{app:prompts}. Labels are assigned by majority vote; pairs
+on which all three annotators disagree are marked \texttt{ABSTAIN} and
+excluded from headline metrics but retained for qualitative analysis of
+inherently ambiguous cases. We target 100 annotated pairs per source
+$\times$ per class, yielding approximately 300 pairs per class (fewer
+for classes that cannot always be constructed) and a total on the order
+of 2,000 labeled pairs.
+
+\textbf{Metrics.}
+We report precision, recall, and F1 for the positive class (match),
+together with per-class accuracy broken out across the eight pair
+classes, yielding a diagnostic profile analogous to the per-perturbation
+breakdown in Section~\ref{sec:eval_ir}. As data-quality indicators, we
+report Fleiss' $\kappa$~\cite{fleiss1971kappa} and the averaged pairwise
+raw agreement $P_A$; classes with $\kappa < 0.60$ are flagged and
+discussed separately. We additionally report the \emph{unseen-entity F1},
+defined as F1 restricted to pairs whose gold canonical entity was not
+present in $\mathcal{K}_j$ at the time of record collection, directly
+probing the generalization setting that MatchGPT~\cite{peeters2025matchgpt}
+identifies as the principal advantage of LLM-based matchers over
+fine-tuned pre-trained models. Serialization format is treated as an
+ablation variable: we compare the attribute-value concatenation used by
+the main pipeline against the JSON-style and natural-language
+serializations evaluated by Peeters and Bizer~\cite{peeters2025matchgpt},
+and report the resulting F1 delta.
 
 \subsection{Results}
 
