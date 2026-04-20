@@ -41,7 +41,7 @@ jnancu@inf.utfsm.cl}}
 \maketitle
 
 \begin{abstract}
-The global second-hand vehicle market, valued at approximately USD 1.9 trillion in 2024, is projected to grow at a 9.4\% compound annual growth rate, driven in part by the expansion of online platforms. This expansion has produced a proliferation of heterogeneous vehicle datasets: brand and model names follow no controlled vocabulary, equipment is described in free text across multiple languages, and attribute schemas vary across markets. As a result, most machine learning studies on vehicle data build an ad hoc preprocessing pipeline that does not transfer across sources. We propose a reusable vehicle normalization framework that is agnostic to source schema, language, and market. The framework decomposes normalization into three stages: (i) LLM-based information extraction that maps a raw record to a canonical attribute schema, (ii) dense retrieval of top candidates from a per-attribute knowledge catalog, and (iii) LLM-based entity resolution that either matches the extracted value to a canonical entity or appends it to the catalog as a novel entry. We evaluate each stage in isolation on three public datasets spanning Europe, North America, and North Africa, and conduct ablations over the key design choices at each stage. Finally, we assess the downstream utility of the framework on a used-car resale price prediction task, quantifying the gain from normalized granular attributes over raw inputs. The framework is released as an open-source tool to support reproducible preprocessing of vehicle data across markets.
+The global second-hand vehicle market, valued at approximately USD 1.9 trillion in 2024, is projected to grow at a 9.4\% compound annual growth rate, driven in part by the expansion of online platforms. This expansion has produced a proliferation of heterogeneous vehicle datasets: brand and model names follow no controlled vocabulary, equipment is described in free text across multiple languages, and attribute schemas vary across markets. As a result, most machine learning studies on vehicle data build an ad hoc preprocessing pipeline that does not transfer across sources. We propose a reusable vehicle normalization framework that is agnostic to source schema, language, and market. The framework decomposes normalization into three components: (i) LLM-based information extraction that maps a raw record to a canonical attribute schema, (ii) dense retrieval of top candidates from a per-attribute knowledge catalog, and (iii) LLM-based entity resolution that either matches the extracted value to a canonical entity or appends it to the catalog as a novel entry. We evaluate each component in isolation on three public datasets spanning Europe, North America, and North Africa, and conduct ablations over the key design choices at each component. Finally, we assess the downstream utility of the framework on a used-car resale price prediction task, quantifying the gain from normalized granular attributes over raw inputs. The framework is released as an open-source tool to support reproducible preprocessing of vehicle data across markets.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -102,7 +102,7 @@ On the efficiency front, Zhang et al.~\cite{zhang2024anymatch} showed that a fin
 \section{Method}
 \label{sec:method}
 
-We frame vehicle normalization as a three-stage pipeline
+We frame vehicle normalization as a three-component pipeline
 (Fig.~\ref{fig:pipeline}). A raw record $\mathbf{x}$ is first serialized
 and passed to an LLM that jointly extracts candidate attribute values
 $\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$ (\textit{information
@@ -114,7 +114,7 @@ decides whether any candidate $c_i \in \mathcal{R}_j$ refers to the same
 real-world entity as $\hat{a}_j$; if one does, it replaces $\hat{a}_j$,
 otherwise $\hat{a}_j$ is kept as a novel entity and appended to
 $\mathcal{K}_j$ (\textit{entity resolution}). The remainder of this
-section formalizes each stage.
+section formalizes each component.
 
 \begin{figure}[t]
 \centering
@@ -606,21 +606,27 @@ MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
 \label{sec:eval_ie}
 
 \textbf{Rationale.}
-Evaluating the extraction stage requires labeled pairs
-$(s, \hat{\mathbf{x}}^*)$ where $\hat{\mathbf{x}}^* = (\hat{a}_1^*, \dots,
-\hat{a}_m^*)$ is the correct extraction for vehicle $s$. We use a
-three-model LLM ensemble as proxy annotators, resolving per-field
-disagreements by majority vote.
+Evaluating the extraction component requires labeled pairs
+$(s, \hat{\mathbf{x}}^*)$ where $s = \text{Serialize}(\mathbf{x})$ is the
+serialized form of a sampled record and
+$\hat{\mathbf{x}}^* = (\hat{a}_1^*, \dots, \hat{a}_m^*)$ is its
+ground-truth extraction. We obtain records via stratified sampling from
+each source and derive $\hat{\mathbf{x}}^*$ from a three-model LLM
+ensemble with per-field majority vote.
 
-\textbf{Annotation protocol.} Ground truth for IE is produced by a three-model
-LLM ensemble acting as independent annotators: \textbf{GPT-5.4} (OpenAI),
-\textbf{Claude Opus 4.6} (Anthropic), and \textbf{Gemini 3.1 Pro} (Google
-DeepMind). Each annotator is prompted zero-shot with the task instruction and
-the input example. Labels are assigned field-by-field by majority vote (at least two of three annotators
-agree); fields on which all three disagree are marked \texttt{ABSTAIN} and
-excluded from evaluation. We collect 100 fully annotated examples per source,
-stratified across key attribute values (brand, fuel type, transmission type),
-yielding 300 evaluation instances.
+\textbf{Record sampling.}
+We collect 100 records per source (AutoScout24, Craigslist, MuCars)
+stratified across brand, fuel type, and transmission type to preserve
+distributional heterogeneity, yielding 300 evaluation instances.
+
+\textbf{Annotation protocol.}
+Ground truth is produced by a three-model LLM ensemble acting as
+independent annotators: \textbf{GPT-5.4} (OpenAI), \textbf{Claude Opus
+4.6} (Anthropic), and \textbf{Gemini 3.1 Pro} (Google DeepMind). Each
+annotator is prompted zero-shot with the task instruction and the
+serialized input. Labels are assigned field-by-field by majority vote;
+fields on which all three annotators disagree are marked
+\texttt{ABSTAIN} and excluded from evaluation.
 
 \textbf{Metrics.} For categorical and integer fields we report per-field
 accuracy as the fraction of examples for which the predicted value exactly
@@ -635,48 +641,45 @@ $\kappa \geq 0.80$ indicates near-perfect agreement~\cite{landis1977kappa}.
 \label{sec:eval_ir}
 
 \textbf{Rationale.}
-Evaluating the retrieval stage requires labeled triples
-$(q, \mathcal{K}_j, c^*)$ where $q$ is a query surface form,
-$\mathcal{K}_j$ is a fixed per-attribute catalog, and $c^* \in \mathcal{K}_j$
-is the correct canonical entity (or $\bot$ if $q$ refers to a novel entity).
-Unlike information extraction, IR labels can be assigned \emph{by
-construction} when queries are generated from a known catalog. We adopt
-this protocol: we fix a catalog, define a taxonomy of query perturbations
-motivated by the noise modes observed in real vehicle listings, and
-programmatically generate queries whose gold labels are determined by
-the generation process itself.
+Evaluating the retrieval component requires labeled triples
+$(q, \mathcal{K}_j, c^*)$ where $q$ is an LLM-extracted candidate
+$\hat{a}_j$, $\mathcal{K}_j$ is a fixed per-attribute catalog, and
+$c^* \in \mathcal{K}_j$ is the correct canonical entity (or $\bot$ if
+$q$ refers to a novel entity). Unlike information extraction, IR labels
+can be assigned \emph{by construction} when queries are generated from
+a known catalog. We adopt this protocol: we fix a catalog, define a
+taxonomy of query perturbations motivated by the noise modes observed
+in real vehicle listings, and programmatically generate queries whose
+gold labels are determined by the generation process itself.
 
 \textbf{Catalog construction.}
 For each open-domain attribute $A_j \in \{\textit{brand}, \textit{model},
 \textit{submodel}, \textit{trim level}\}$, we build the reference catalog
 $\mathcal{K}_j$ from the \emph{unique values} observed in the MuCars
-dataset. MuCars is used as the catalog source for two reasons: (i) it is
-the smallest of the three datasets, making exhaustive enumeration
-tractable, and (ii) its values are drawn from a published, curated
-source, providing a stable reference vocabulary. AutoScout24 and
-Craigslist are reserved for the query side of the evaluation and are
-\emph{never} used to populate $\mathcal{K}_j$.
+dataset~\cite{tabarnoust2025mucars}. MuCars is used as the catalog
+source because it was collected from prominent online marketplaces to
+ensure market-wide representation and underwent rigorous post-collection
+preprocessing, yielding a standardized, curated, and peer-reviewed
+reference vocabulary. AutoScout24 and Craigslist are reserved for the
+query side of the evaluation.
 
 \textbf{Perturbation taxonomy.}
-We identify eight perturbation classes that characterize the gap between
-canonical catalog entries and the surface forms a retriever encounters
-in practice. The taxonomy is summarized in Table~\ref{tab:pert_taxonomy}.
+We identify seven perturbation classes that characterize the gap between
+canonical catalog entries and the values a retriever encounters in
+practice. The taxonomy is summarized in Table~\ref{tab:pert_taxonomy}.
 Each class probes a distinct property of the retriever: tokenizer
 robustness, character-level noise tolerance, multilingual coverage, and
 fine-grained disambiguation among sibling entities. The \textit{alias}
-class is populated by mining surface-form variants from AutoScout24 and
-Craigslist that co-refer to MuCars catalog entries, using two signals:
-normalized lexical equality (case, punctuation, whitespace) and
-row-level co-occurrence of adjacent attributes (e.g., an AutoScout24
-record with \texttt{brand="VW"} and \texttt{model="Golf"} provides
-evidence that \textit{VW} aliases \textit{Volkswagen} in MuCars when
-MuCars also contains a \textit{Volkswagen Golf}). The \textit{novel}
-class consists of surface forms from AutoScout24 and Craigslist that
-match no catalog entry under any signal, exercising the out-of-catalog
-branch of the normalization algorithm (Algorithm~\ref{algo:normalization}).
+class is populated by mining variants from AutoScout24 and Craigslist
+that co-refer to MuCars catalog entries, using two signals: normalized
+lexical equality (case, punctuation, whitespace) and row-level
+co-occurrence of adjacent attributes (e.g., an AutoScout24 record with
+\texttt{brand="VW"} and \texttt{model="Golf"} provides evidence that
+\textit{VW} aliases \textit{Volkswagen} in MuCars when MuCars also
+contains a \textit{Volkswagen Golf}).
 
 \begin{table}[htbp]
-\caption{Query Perturbation Taxonomy}
+\caption{Perturbation Taxonomy}
 \begin{center}
 \footnotesize
 \begin{tabular}{|p{1.9cm}|p{3.2cm}|p{2.2cm}|}
@@ -697,8 +700,6 @@ alias & \textit{VW} $\to$ \textit{Volkswagen} & Cross-market vocabulary \\
 \hline
 distractor & \textit{A-Class} when \textit{C-Class}, \textit{E-Class} in $\mathcal{K}_j$ & Sibling disambiguation \\
 \hline
-novel & \textit{Rivian} with no match in $\mathcal{K}_j$ & Out-of-catalog rejection \\
-\hline
 \end{tabular}
 \label{tab:pert_taxonomy}
 \end{center}
@@ -709,146 +710,74 @@ Queries are produced by a deterministic, seed-controlled procedure
 implemented as a standalone Python script and released alongside the
 framework. For each $(A_j, c \in \mathcal{K}_j)$ pair, the script
 generates a fixed number of queries per perturbation class (identity,
-case, punctuation, typo, truncation, distractor), samples alias and
-novel queries from the AutoScout24/Craigslist mining step, and records
-each as a tuple $(q, A_j, c^*, \text{class})$. Random seeds, edit
-distances, and per-class sample sizes are exposed as script parameters
-to support reproducibility and ablation. The resulting dataset contains
-$N$ queries per attribute, stratified across perturbation classes; exact
-counts per attribute and class are reported in Table~\ref{tab:ir_counts}
-(to be filled after generation).
+case, punctuation, typo, truncation, distractor) and samples alias
+queries from the AutoScout24/Craigslist mining step, recording each
+as a tuple $(q, A_j, c^*, \text{class})$. Random seeds, edit distances,
+and per-class sample sizes are exposed as script parameters to support
+reproducibility and ablation. The resulting dataset contains $N$ queries
+per attribute, stratified across perturbation classes; exact counts
+per attribute and class are reported in Table~\ref{tab:ir_counts} (to
+be filled after generation).
 
 \textbf{Metrics.}
 We report Recall@$k$ for $k \in \{1, 5, 10\}$, mean reciprocal rank
 (MRR), and normalized discounted cumulative gain (nDCG@10). Recall@$k$
 at the operational $k$ used in Algorithm~\ref{algo:normalization} is the
 primary metric, as it upper-bounds the accuracy achievable by the
-downstream LLM resolver: any gold entity not retrieved at stage IR
-cannot be recovered at stage ER. For the \textit{novel} class, we
-instead report the false-match rate, defined as the fraction of novel
-queries for which the retriever's top-1 score exceeds the catalog's
-in-distribution threshold; this quantifies the pipeline's tendency to
-erroneously normalize truly new entities to existing catalog entries.
-All metrics are additionally broken down \emph{per perturbation class},
-yielding a diagnostic profile that isolates which noise modes a given
+downstream LLM resolver: any gold entity not retrieved by the IR
+component cannot be recovered by the ER component. All metrics are
+additionally broken down \emph{per perturbation class}, yielding a
+diagnostic profile that isolates which noise modes a given
 retriever-embedding combination handles well and which it does not.
 
 \subsection{Entity Resolution}
 \label{sec:eval_er}
 
 \textbf{Rationale.}
-The entity resolution stage decides, for each retrieved candidate
-$c_i \in \mathcal{R}_j$, whether the serialized record $\hat{s}$ and its
-substituted variant $\hat{s}_{j \to c_i}$ refer to the same real-world
-vehicle. The evaluation unit is therefore a labeled triple
-$(\hat{s}, \hat{s}_{j \to c_i}, y)$ with $y \in \{0, 1\}$, mirroring the
-binary signature of $M(\cdot, \cdot)$ used in
-Algorithm~\ref{algo:normalization}.
-
-\textbf{Pair construction.}
-Rather than sampling pairs randomly from the catalog, we exploit the
-fact that the retrieval stage itself is a natural hard-negative miner.
-Following the principle used in DPR~\cite{karpukhin2020dpr} and
-MatchGPT~\cite{peeters2025matchgpt}, we construct candidate pairs from
-the top-$k$ entities returned by the retriever: these are, by
-construction, the entries most likely to be confused with the query.
-For each sampled record, we additionally construct controlled pairs
-that probe specific failure modes, described below.
-
-\textbf{Difficulty taxonomy.}
-We define eight pair classes, summarized in
-Table~\ref{tab:er_taxonomy}. Classes \textit{identity} and \textit{alias}
-are expected positives; \textit{sibling}, \textit{cross\_brand},
-\textit{contradicted}, and \textit{unrelated} are expected negatives.
-The two hierarchy classes, \textit{hierarchy\_up} (query refers to a
-specific variant, candidate refers to its parent, e.g.\
-$\hat{a}_j = \textit{C220}$ and $c_i = \textit{C-Class}$) and
-\textit{hierarchy\_down} (the reverse direction), are treated as an
-\emph{open methodological decision}: whether a parent--child pair
-constitutes a match depends on the intended granularity of the
-normalized schema. We do not commit to a pre-specified label for these
-classes; instead, ensemble labels are reported separately and the
-observed inter-annotator disagreement on hierarchy pairs is treated as
-the empirical signal of how well the task itself is posed.
-
-\begin{table}[htbp]
-\caption{Entity Resolution Pair Taxonomy}
-\begin{center}
-\footnotesize
-\begin{tabular}{|p{2.0cm}|p{3.5cm}|p{1.8cm}|}
-\hline
-\textbf{Class} & \textbf{Construction} & \textbf{Expected $y$} \\
-\hline
-identity & $c_i = \hat{a}_j$ & 1 \\
-\hline
-alias & $c_i$ aliases $\hat{a}_j$ (e.g.\ \textit{VW} / \textit{Volkswagen}) & 1 \\
-\hline
-hierarchy\_up & $c_i$ is a parent of $\hat{a}_j$ & open \\
-\hline
-hierarchy\_down & $c_i$ is a child of $\hat{a}_j$ & open \\
-\hline
-sibling & $c_i$ is a near-miss sibling within the same family & 0 \\
-\hline
-cross\_brand & $c_i$ shares the model name but belongs to a different brand & 0 \\
-\hline
-contradicted & $c_i$ conflicts with other attributes of the record & 0 \\
-\hline
-unrelated & $c_i$ is a random catalog entry & 0 \\
-\hline
-\end{tabular}
-\label{tab:er_taxonomy}
-\end{center}
-\end{table}
+Evaluating the entity resolution component requires labeled triples
+$(\hat{s}, \hat{s}_{j \to c_i}, y)$ with $y \in \{0, 1\}$. We synthesize
+pairs by applying the perturbation classes of
+Table~\ref{tab:pert_taxonomy} to records sampled from the three source
+datasets. Because ER is a record-level judgment, we obtain $y$ from the
+same three-model LLM ensemble used for information extraction
+(Section~\ref{sec:eval_ie}).
 
 \textbf{Record sampling.}
-Query records are drawn from MuCars, AutoScout24, and Craigslist,
-stratified across brand and fuel type to preserve distributional
-heterogeneity. For each sampled record $\mathbf{x}$, we produce one
-pair per class (where applicable --- some records admit no \textit{sibling}
-or \textit{cross\_brand} candidate) by substituting the relevant
-open-domain attribute with a candidate drawn from the MuCars catalog
-$\mathcal{K}_j$. The substitution target is determined by the pair
-class: for \textit{sibling}, we select the closest non-matching catalog
-entry within the same brand family; for \textit{contradicted}, we
-select a catalog entry whose attested technical specifications (engine
-size, fuel type) conflict with those present in $\mathbf{x}$; for
-\textit{unrelated}, we draw uniformly from $\mathcal{K}_j$ after
-excluding sibling and cross-brand entries. All constructions are
+Records are drawn from MuCars, AutoScout24, and Craigslist, stratified
+across brand and fuel type to preserve distributional heterogeneity.
+We target 100 annotated pairs per source $\times$ per perturbation
+class.
+
+\textbf{Dataset generation.}
+For each sampled record $\mathbf{x}$ and each open-domain attribute
+$A_j$, we construct synthetic pairs by reusing the perturbation classes
+of Table~\ref{tab:pert_taxonomy}. Given the extracted value
+$\hat{a}_j$, each perturbation class yields a candidate $c_i$ via the
+same construction rules used for IR query generation (e.g.\
+\textit{case}, \textit{typo}, and \textit{truncation} apply
+character-level transformations to $\hat{a}_j$; \textit{alias} draws
+from the mined alias table; \textit{distractor} selects a sibling entry
+from $\mathcal{K}_j$). Substituting $c_i$ for $\hat{a}_j$ in the
+serialized record yields $\hat{s}_{j \to c_i}$, which is paired with
+$\hat{s}$ to form the evaluation unit. All constructions are
 deterministic given a random seed.
 
 \textbf{Annotation protocol.}
-Following the protocol used for information extraction
-(Section~\ref{sec:eval_ie}), labels are assigned by a three-model LLM
-ensemble acting as independent annotators: \textbf{GPT-5.4} (OpenAI),
-\textbf{Claude Opus 4.6} (Anthropic), and \textbf{Gemini 3.1 Pro}
-(Google DeepMind). Each annotator receives the two serialized records
-$\hat{s}$ and $\hat{s}_{j \to c_i}$ together with the task instruction
-and returns $y \in \{0, 1\}$; full prompts are in
+Labels are assigned by the three-model LLM ensemble described in
+Section~\ref{sec:eval_ie}. Each annotator receives the two serialized
+records $\hat{s}$ and $\hat{s}_{j \to c_i}$ together with the task
+instruction and returns $y \in \{0, 1\}$; full prompts are in
 Appendix~\ref{app:prompts}. Labels are assigned by majority vote; pairs
 on which all three annotators disagree are marked \texttt{ABSTAIN} and
 excluded from headline metrics but retained for qualitative analysis of
-inherently ambiguous cases. We target 100 annotated pairs per source
-$\times$ per class, yielding approximately 300 pairs per class (fewer
-for classes that cannot always be constructed) and a total on the order
-of 2,000 labeled pairs.
+inherently ambiguous cases.
 
 \textbf{Metrics.}
 We report precision, recall, and F1 for the positive class (match),
-together with per-class accuracy broken out across the eight pair
-classes, yielding a diagnostic profile analogous to the per-perturbation
-breakdown in Section~\ref{sec:eval_ir}. As data-quality indicators, we
-report Fleiss' $\kappa$~\cite{fleiss1971kappa} and the averaged pairwise
-raw agreement $P_A$; classes with $\kappa < 0.60$ are flagged and
-discussed separately. We additionally report the \emph{unseen-entity F1},
-defined as F1 restricted to pairs whose gold canonical entity was not
-present in $\mathcal{K}_j$ at the time of record collection, directly
-probing the generalization setting that MatchGPT~\cite{peeters2025matchgpt}
-identifies as the principal advantage of LLM-based matchers over
-fine-tuned pre-trained models. Serialization format is treated as an
-ablation variable: we compare the attribute-value concatenation used by
-the main pipeline against the JSON-style and natural-language
-serializations evaluated by Peeters and Bizer~\cite{peeters2025matchgpt},
-and report the resulting F1 delta.
+with a per-class breakdown across the perturbation classes of
+Table~\ref{tab:pert_taxonomy}, and Fleiss' $\kappa$~\cite{fleiss1971kappa}
+together with the averaged pairwise raw agreement $P_A$ as data-quality
+indicators.
 
 \subsection{Results}
 
