@@ -467,14 +467,13 @@ in this study, and Table~\ref{tab:catalog} specifies the domain
 $\mathcal{V}_j^{\text{closed}}$ of each closed-domain categorical
 attribute (numerical closed-domain attributes are omitted from the table;
 \textit{year} and \textit{doors} take integer values, while the remaining
-numerical attributes take positive real values). Of the 28 attributes, four are open-domain
-($|\mathcal{I}_{\text{open}}| = 4$): \textit{brand}, \textit{model},
-\textit{submodel}, and \textit{trim level}; the remaining 24 are
+numerical attributes take positive real values). Of the 28 attributes, four are open-domain:
+\textit{brand}, \textit{model}, \textit{submodel}, and \textit{trim level}; the remaining 24 are
 closed-domain. Numerical attributes with a physical unit are represented
 as value/unit pairs (e.g.\ \textit{mileage} paired with \textit{mileage
 unit}), where the unit is itself a closed-domain attribute whose domain
 covers the conventions found across the target markets. The decomposition
-resolves the three inconsistency axes identified in the introduction: the
+addresses the three inconsistency axes identified in the introduction: the
 separation of \textit{energy source}, \textit{propulsion system}, and
 \textit{fuel type} addresses scope inconsistency, while the separation of
 \textit{transmission type}, \textit{technology}, and \textit{gears}
@@ -568,10 +567,7 @@ Color & black, white, silver, grey, red, blue, green, yellow, orange, brown, bei
 
 \textbf{Retriever.}
 Open-domain attributes are indexed with FAISS HNSW ($M = 32$,
-$\mathit{ef}_{\mathrm{search}} = 64$). We set $k = 5$: since each
-retrieved candidate triggers one LLM call in the ER stage, $k$ directly
-controls cost, and $k = 5$ balances recall headroom against LLM call
-budget.
+$\mathit{ef}_{\mathrm{search}} = 64$, $k = 5$).
 
 \textbf{Models.}
 All extraction and entity resolution LLM calls use OpenAI's
@@ -584,8 +580,7 @@ Our experiments draw on three publicly available automotive listing datasets
 covering distinct geographic markets, schema conventions, and languages,
 summarized in Table~\ref{tab:datasets}. AutoScout24 is a European dataset with
 fully structured fields. Craigslist is a North American dataset characterized
-by informal free-text descriptions, and its 29{,}667 nominal model values
-reflect raw seller input rather than a controlled vocabulary. MuCars~\cite{tabarnoust2024mucars} is a
+by informal free-text descriptions. MuCars~\cite{tabarnoust2024mucars} is a
 Moroccan dataset with several market-specific attributes, including Fiscal
 Power as a tax-based engine category rather than a direct power measurement.
 The heterogeneity across markets and naming conventions makes these three
@@ -613,19 +608,15 @@ MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
 \textbf{Rationale.}
 Evaluating the extraction stage requires labeled pairs
 $(s, \hat{\mathbf{x}}^*)$ where $\hat{\mathbf{x}}^* = (\hat{a}_1^*, \dots,
-\hat{a}_m^*)$ is the correct extraction for description $s$. We use a
+\hat{a}_m^*)$ is the correct extraction for vehicle $s$. We use a
 three-model LLM ensemble as proxy annotators, resolving per-field
-disagreements by majority vote. This yields scalable annotation with
-explicit uncertainty quantification and avoids the single-model bias
-that would arise from evaluating against labels produced by the same
-model used for extraction.
+disagreements by majority vote.
 
 \textbf{Annotation protocol.} Ground truth for IE is produced by a three-model
 LLM ensemble acting as independent annotators: \textbf{GPT-5.4} (OpenAI),
 \textbf{Claude Opus 4.6} (Anthropic), and \textbf{Gemini 3.1 Pro} (Google
 DeepMind). Each annotator is prompted zero-shot with the task instruction and
-the input example; full prompts are in Appendix~\ref{app:prompts}. Labels are
-assigned field-by-field by majority vote (at least two of three annotators
+the input example. Labels are assigned field-by-field by majority vote (at least two of three annotators
 agree); fields on which all three disagree are marked \texttt{ABSTAIN} and
 excluded from evaluation. We collect 100 fully annotated examples per source,
 stratified across key attribute values (brand, fuel type, transmission type),
@@ -649,8 +640,7 @@ $(q, \mathcal{K}_j, c^*)$ where $q$ is a query surface form,
 $\mathcal{K}_j$ is a fixed per-attribute catalog, and $c^* \in \mathcal{K}_j$
 is the correct canonical entity (or $\bot$ if $q$ refers to a novel entity).
 Unlike information extraction, IR labels can be assigned \emph{by
-construction} when queries are generated from a known catalog, removing
-the need for human annotation and eliminating annotator bias. We adopt
+construction} when queries are generated from a known catalog. We adopt
 this protocol: we fix a catalog, define a taxonomy of query perturbations
 motivated by the noise modes observed in real vehicle listings, and
 programmatically generate queries whose gold labels are determined by
@@ -753,11 +743,7 @@ substituted variant $\hat{s}_{j \to c_i}$ refer to the same real-world
 vehicle. The evaluation unit is therefore a labeled triple
 $(\hat{s}, \hat{s}_{j \to c_i}, y)$ with $y \in \{0, 1\}$, mirroring the
 binary signature of $M(\cdot, \cdot)$ used in
-Algorithm~\ref{algo:normalization}. This aligns our protocol with the
-dominant convention in the LLM-for-entity-matching
-literature~\cite{peeters2023chatgpt_em, peeters2025matchgpt,
-narayan2022foundation}, which evaluates match/non-match decisions at the
-pair level rather than at the ranked-list level.
+Algorithm~\ref{algo:normalization}.
 
 \textbf{Pair construction.}
 Rather than sampling pairs randomly from the catalog, we exploit the
