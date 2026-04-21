@@ -41,7 +41,6 @@ jnancu@inf.utfsm.cl}}
 \maketitle
 
 \begin{abstract}
-The global second-hand vehicle market, valued at approximately USD 1.9 trillion in 2024, is projected to grow at a 9.4\% compound annual growth rate, driven in part by the expansion of online platforms. This expansion has produced a proliferation of heterogeneous vehicle datasets: brand and model names follow no controlled vocabulary, equipment is described in free text across multiple languages, and attribute schemas vary across markets. As a result, most machine learning studies on vehicle data build an ad hoc preprocessing pipeline that does not transfer across sources. We propose a reusable vehicle normalization framework that is agnostic to source schema, language, and market. The framework decomposes normalization into three components: (i) LLM-based information extraction that maps a raw record to a canonical attribute schema, (ii) dense retrieval of top candidates from a per-attribute knowledge catalog, and (iii) LLM-based entity resolution that either matches the extracted value to a canonical entity or appends it to the catalog as a novel entry. We evaluate each component in isolation on three public datasets spanning Europe, North America, and North Africa, and conduct ablations over the key design choices at each component. Finally, we assess the downstream utility of the framework on a used-car resale price prediction task, quantifying the gain from normalized granular attributes over raw inputs. The framework is released as an open-source tool to support reproducible preprocessing of vehicle data across markets.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -327,11 +326,10 @@ Vehicle normalization is formulated as a mapping
 \end{equation}
 that takes a serialized vehicle representation
 $s = \text{Serialize}(\mathbf{x}) \in \Sigma^+$, where $\mathbf{x}$ is
-the raw input record and $\Sigma$ denotes the character alphabet, and
-produces $\phi(s) = \tilde{\mathbf{x}} \in \tilde{\mathcal{X}}$. For
-tabular datasets, $\text{Serialize}$ concatenates column names with their
-values (e.g., \textit{col1: val1, col2: val2, \dots}); for free-text
-descriptions, the input is used directly.
+the raw input record, $\Sigma$ denotes the character alphabet, and
+$\text{Serialize}: \mathcal{X} \to \Sigma^+$ renders a vehicle
+representation as a string. The mapping produces
+$\phi(s) = \tilde{\mathbf{x}} \in \tilde{\mathcal{X}}$.
 
 \paragraph{Knowledge catalog.}
 For each open-domain attribute $A_j$ with
@@ -455,32 +453,20 @@ $\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$
 
 \section{Experiments}
 
-We evaluate each component (IE, IR, ER) in isolation, assembling a dedicated
-labeled dataset per task and reporting metrics appropriate to each.
+We evaluate the pipeline end-to-end by comparing its normalized output
+to human-annotated ground truth on real listings.
 
 \subsection{Experimental Setup}
 \label{sec:setup}
 
 \textbf{Schema.}
-Table~\ref{tab:schema} lists the $m = 28$ attributes of the schema used
-in this study, and Table~\ref{tab:catalog} specifies the domain
-$\mathcal{V}_j^{\text{closed}}$ of each closed-domain categorical
-attribute (numerical closed-domain attributes are omitted from the table;
-\textit{year} and \textit{doors} take integer values, while the remaining
-numerical attributes take positive real values). Of the 28 attributes, four are open-domain:
-\textit{brand}, \textit{model}, \textit{submodel}, and \textit{trim level}; the remaining 24 are
-closed-domain. Numerical attributes with a physical unit are represented
-as value/unit pairs (e.g.\ \textit{mileage} paired with \textit{mileage
-unit}), where the unit is itself a closed-domain attribute whose domain
-covers the conventions found across the target markets. The decomposition
-addresses the three inconsistency axes identified in the introduction: the
-separation of \textit{energy source}, \textit{propulsion system}, and
-\textit{fuel type} addresses scope inconsistency, while the separation of
-\textit{transmission type}, \textit{technology}, and \textit{gears}
-addresses granularity inconsistency.
+Table~\ref{tab:schema} lists the $m = 26$ attributes of the normalized
+schema. Two attributes (\textit{brand}, \textit{model}) are open-domain;
+the remaining 24 are closed-domain, with domains given in
+Table~\ref{tab:catalog}.
 
 \begin{table}[htbp]
-\caption{Proposed Normalized Schema ($m = 28$)}
+\caption{Normalized Schema ($m = 26$)}
 \begin{center}
 \footnotesize
 \begin{tabular}{|l|l|}
@@ -489,8 +475,6 @@ addresses granularity inconsistency.
 \hline
 Brand$^\dagger$        & Vehicle manufacturer \\
 Model$^\dagger$        & Base vehicle model name \\
-Submodel$^\dagger$     & Specific variant of the vehicle model \\
-Trim level$^\dagger$   & Feature and styling package \\
 Year                   & Model year of the vehicle \\
 Mileage                & Numeric odometer reading \\
 Mileage unit           & Unit for mileage \\
@@ -565,223 +549,274 @@ Color & black, white, silver, grey, red, blue, green, yellow, orange, brown, bei
 \end{center}
 \end{table}
 
-\textbf{Retriever.}
+\textbf{Models.}
+All extraction and entity resolution LLM calls use OpenAI's
+\textit{gpt-4.1-mini}. Candidate embeddings for open-domain attributes are
+computed with OpenAI's \textit{text-embedding-3-small}.
+
+\textbf{Retrieval configuration.}
 Open-domain attributes are indexed with FAISS HNSW ($M = 32$,
 $\mathit{ef}_{\mathrm{search}} = 64$, $k = 5$).
 
-\textbf{Models.}
-All extraction and entity resolution LLM calls use OpenAI's
-\textit{gpt-4.1-mini}. Candidate embeddings for open-domain attributes
-are computed with OpenAI's \textit{text-embedding-3-small} ($d = 1{,}536$).
+\textbf{Serialization.}
+For the three tabular datasets, $\text{Serialize}(\mathbf{x})$
+concatenates column names with their values
+(e.g.\ \textit{col1: val1, col2: val2, \dots}); for free-text listings
+the input is used directly. The same operator renders extracted
+representations $\hat{\mathbf{x}}$ and candidate replacements
+$(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$ in the entity-resolution
+step.
+
+\textbf{Baselines.}
+We compare the full pipeline (\textbf{IE+IR+ER}) against two baselines
+(Fig.~\ref{fig:baselines}).
+\textbf{IE} sets $\tilde{a}_j = \hat{a}_j$ for all $j$, isolating the
+gain from retrieval and resolution. \textbf{IE+IR} keeps $\tilde{a}_j =
+\hat{a}_j$ for $j \in \mathcal{I}_{\text{closed}}$ and, for $j \in
+\mathcal{I}_{\text{open}}$, sets $\tilde{a}_j = c_1$ when
+$\text{sim}(\mathbf{e}_j, \mathbf{e}_{c_1}) \geq \tau$ and $\tilde{a}_j
+= \hat{a}_j$ otherwise, isolating the gain from the LLM resolver $M$.
+
+\begin{figure*}[t]
+\centering
+\begin{tikzpicture}[
+    node distance=0.25cm,
+    every node/.style={font=\scriptsize},
+    op/.style={draw, rounded corners=2pt, fill=gray!8, draw=gray!60, thick,
+               minimum height=0.45cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
+    llm/.style={draw, rounded corners=2pt, fill=blue!6, draw=blue!40, thick,
+                minimum height=0.45cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
+    sel/.style={draw, rounded corners=2pt, fill=green!6, draw=green!50, thick,
+                minimum height=0.45cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
+    cat/.style={draw, rounded corners=2pt, fill=yellow!8, draw=yellow!60, thick,
+                minimum width=1.2cm, minimum height=0.7cm, inner sep=1.5pt, align=center},
+    outnode/.style={draw, rounded corners=2pt, fill=teal!8, draw=teal!50, thick,
+                    minimum height=0.45cm, minimum width=2.3cm, inner sep=1.5pt, align=center},
+    dat/.style={align=center, inner sep=0.5pt, text height=1.6ex, text depth=0.5ex},
+    arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
+    darr/.style={-{Stealth[length=2.5pt]}, gray!45, dashed},
+    lb/.style={font=\scriptsize, text=gray!55},
+    llms/.style={draw, rounded corners=2pt, fill=blue!6, draw=blue!40, thick,
+                 minimum height=0.65cm, minimum width=1.9cm, inner sep=1.5pt},
+    soff/.style={xshift=3pt, yshift=3pt},
+    soff2/.style={xshift=6pt, yshift=6pt},
+    ptitle/.style={font=\small\bfseries},
+]
+
+% ===== Panel (c): IE+IR+ER (drawn first to anchor output row) =====
+\node[ptitle] (c_title) at (11, 0) {(c) IE+IR+ER (full)};
+\node[dat, below=0.3cm of c_title] (c_in) {$\hat{a}_j$};
+\node[op, below=0.25cm of c_in] (c_enc) {Encode};
+\draw[arr] (c_in) -- (c_enc);
+\node[dat, below=0.25cm of c_enc] (c_ej) {$\mathbf{e}_j$};
+\draw[arr] (c_enc) -- (c_ej);
+\node[op, below=0.25cm of c_ej] (c_topk) {Top-$k$};
+\draw[arr] (c_ej) -- (c_topk);
+\node[dat, below=0.25cm of c_topk] (c_rj) {$\mathcal{R}_j = (c_1, \dots, c_k)$};
+\draw[arr] (c_topk) -- (c_rj);
+\node[llm, below=0.25cm of c_rj] (c_er) {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
+\node[llms, soff2, opacity=0.3] at (c_er) {};
+\node[llms, soff, opacity=0.5] at (c_er) {};
+\node[llm] at (c_er) {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
+\draw[arr] (c_rj) -- (c_er);
+\draw[arr, rounded corners=3pt]
+    (c_er.east) -| ([xshift=0.5cm]c_rj.east) -- (c_rj.east);
+\node[draw=gray!50, fill=white, semithick, rounded corners=2pt,
+      font=\scriptsize\bfseries, text=gray!60, inner sep=2pt,
+      minimum width=0.5cm, minimum height=0.35cm]
+    at ([xshift=0.5cm]c_rj.east |- c_er) {$\times k$};
+\node[sel, below=0.3cm of c_er] (c_sel) {Select};
+\draw[arr] (c_er) -- (c_sel);
+\node[outnode, below=0.25cm of c_sel] (c_out) {$\tilde{a}_j = c_{i^*}$ or $\hat{a}_j$};
+\draw[arr] (c_sel) -- (c_out);
+\node[cat, right=0.5cm of c_topk] (c_cat) {$\mathcal{K}_j$};
+\draw[arr] (c_cat) -- (c_topk);
+\draw[darr, rounded corners=2pt] (c_out.east) -| (c_cat.south)
+    node[lb, left, pos=0.78] {update};
+
+% ===== Panel (b): IE+IR =====
+\node[ptitle] (b_title) at (5.5, 0) {(b) IE+IR};
+\node[dat, below=0.3cm of b_title] (b_in) {$\hat{a}_j$};
+\node[op, below=0.25cm of b_in] (b_enc) {Encode};
+\draw[arr] (b_in) -- (b_enc);
+\node[dat, below=0.25cm of b_enc] (b_ej) {$\mathbf{e}_j$};
+\draw[arr] (b_enc) -- (b_ej);
+\node[op, below=0.25cm of b_ej] (b_topk) {Top-1};
+\draw[arr] (b_ej) -- (b_topk);
+\node[dat, below=0.25cm of b_topk] (b_c1) {$c_1,\; \text{sim}_1$};
+\draw[arr] (b_topk) -- (b_c1);
+\node[sel, below=0.25cm of b_c1] (b_sel) {$\text{sim}_1 \geq \tau$?};
+\draw[arr] (b_c1) -- (b_sel);
+\node[outnode] (b_out) at (b_sel |- c_out) {$\tilde{a}_j = c_1$ or $\hat{a}_j$};
+\draw[arr] (b_sel) -- (b_out);
+\node[cat, right=0.5cm of b_topk] (b_cat) {$\mathcal{K}_j$};
+\draw[arr] (b_cat) -- (b_topk);
+
+% ===== Panel (a): IE =====
+\node[ptitle] (a_title) at (0, 0) {(a) IE};
+\node[dat, below=0.3cm of a_title] (a_in) {$\hat{a}_j$};
+\node[outnode] (a_out) at (a_in |- c_out) {$\tilde{a}_j = \hat{a}_j$};
+\draw[arr] (a_in) -- (a_out);
+
+\end{tikzpicture}
+\caption{Open-domain attribute processing under each variant; shared
+components (serialization, IE, closed-domain bypass) are omitted (see
+Fig.~\ref{fig:pipeline}). (a) The IE baseline emits the extracted value
+as-is. (b) IE+IR retrieves the top-1 canonical candidate and accepts it
+when its cosine similarity to $\hat{a}_j$ exceeds threshold $\tau$,
+otherwise keeping the extracted value. (c) The full pipeline retrieves
+top-$k$ candidates, iterates the LLM entity resolver
+$M(\cdot,\cdot)$ over them in ranked order, selects the first match,
+and expands catalog $\mathcal{K}_j$ when no match is found.}
+\label{fig:baselines}
+\end{figure*}
 
 \subsection{Datasets}
 
-Our experiments draw on three publicly available automotive listing datasets
+Our experiments draw on four publicly available automotive listing datasets
 covering distinct geographic markets, schema conventions, and languages,
-summarized in Table~\ref{tab:datasets}. AutoScout24 is a European dataset with
-fully structured fields. Craigslist is a North American dataset characterized
-by informal free-text descriptions. MuCars~\cite{tabarnoust2024mucars} is a
-Moroccan dataset with several market-specific attributes, including Fiscal
-Power as a tax-based engine category rather than a direct power measurement.
-The heterogeneity across markets and naming conventions makes these three
-sources well suited for evaluating the robustness of the normalization method.
+summarized in Table~\ref{tab:datasets}. DVM-CAR~\cite{10020634} is a UK
+dataset collected from online classified advertising platforms.
+MuCars~\cite{tabarnoust2024mucars} is a Moroccan dataset with several
+market-specific attributes, including Fiscal Power as a tax-based engine
+category. AutoScout24~\cite{wspirat2023autoscout24} is a German dataset
+with fully structured fields. Craigslist~\cite{reese2021craigslist} is a
+US dataset characterized by informal free-text descriptions.
 
 \begin{table}[htbp]
 \caption{Dataset Statistics}
 \begin{center}
 \begin{tabular}{|l|r|r|r|r|l|}
 \hline
-\textbf{Dataset} & \textbf{Listings} & \textbf{Brands} & \textbf{Models} & \textbf{Cols} & \textbf{Region} \\
+\textbf{Dataset} & \textbf{Listings} & \textbf{Brands} & \textbf{Models} & \textbf{Cols} & \textbf{Country} \\
 \hline
-AutoScout24 & 251,079 & 47  & 1,312  & 15 & Europe \\
-Craigslist  & 426,880 & 42  & 29,667 & 26 & North America \\
+DVM-CAR     & 268,255 & 101 & 1,011  & 16 & UK \\
 MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
+AutoScout24 & 251,079 & 47  & 1,312  & 15 & Germany \\
+Craigslist  & 426,880 & 42  & 29,667 & 26 & USA \\
 \hline
 \end{tabular}
 \label{tab:datasets}
 \end{center}
 \end{table}
 
-\subsection{Information Extraction}
-\label{sec:eval_ie}
+\textbf{Knowledge catalog.}
+We instantiate the catalog $\mathcal{K}_j$ for the open-domain
+attributes (\textit{brand}, \textit{model}) from DVM-CAR, which has the
+broadest brand coverage in our pool (101 brands). The catalog is not
+assumed to be complete: it is expanded at inference time as novel
+entities are encountered.
 
-\textbf{Rationale.}
-Evaluating the extraction component requires labeled pairs
-$(s, \hat{\mathbf{x}}^*)$ where $s = \text{Serialize}(\mathbf{x})$ is the
-serialized form of a sampled record and
-$\hat{\mathbf{x}}^* = (\hat{a}_1^*, \dots, \hat{a}_m^*)$ is its
-ground-truth extraction. We obtain records via stratified sampling from
-each source and derive $\hat{\mathbf{x}}^*$ from a three-model LLM
-ensemble with per-field majority vote.
+\subsection{Evaluation Data}
 
 \textbf{Record sampling.}
-We collect 100 records per source (AutoScout24, Craigslist, MuCars)
-stratified across brand, fuel type, and transmission type to preserve
-distributional heterogeneity, yielding 300 evaluation instances.
+From MuCars, AutoScout24, and Craigslist we draw 200 listings each via
+proportional stratified sampling across brand $\times$ fuel type,
+yielding 600 evaluation records. Proportional allocation preserves the
+population distribution of each attribute in expectation, so
+dataset-level metrics estimated on the sample remain unbiased
+estimators of the corresponding population mean.
 
-\textbf{Annotation protocol.}
-Ground truth is produced by a three-model LLM ensemble acting as
-independent annotators: \textbf{GPT-5.4} (OpenAI), \textbf{Claude Opus
-4.6} (Anthropic), and \textbf{Gemini 3.1 Pro} (Google DeepMind). Each
-annotator is prompted zero-shot with the task instruction and the
-serialized input. Labels are assigned field-by-field by majority vote;
-fields on which all three annotators disagree are marked
-\texttt{ABSTAIN} and excluded from evaluation.
-
-\textbf{Metrics.} For categorical and integer fields we report per-field
-accuracy as the fraction of examples for which the predicted value exactly
-matches the annotation. For the equipment field, which is set-valued, we report set-level precision, recall,
-and F1. A macro-average accuracy is reported across all non-set fields. We
-additionally report Fleiss' $\kappa$~\cite{fleiss1971kappa} and the averaged
-pairwise raw agreement $P_A$ as data-quality indicators; fields falling below
-$\kappa = 0.60$ are flagged and analyzed separately, and
-$\kappa \geq 0.80$ indicates near-perfect agreement~\cite{landis1977kappa}.
-
-\subsection{Information Retrieval}
-\label{sec:eval_ir}
-
-\textbf{Rationale.}
-Evaluating the retrieval component requires labeled triples
-$(q, \mathcal{K}_j, c^*)$ where $q$ is an LLM-extracted candidate
-$\hat{a}_j$, $\mathcal{K}_j$ is a fixed per-attribute catalog, and
-$c^* \in \mathcal{K}_j$ is the correct canonical entity (or $\bot$ if
-$q$ refers to a novel entity). Unlike information extraction, IR labels
-can be assigned \emph{by construction} when queries are generated from
-a known catalog. We adopt this protocol: we fix a catalog, define a
-taxonomy of query perturbations motivated by the noise modes observed
-in real vehicle listings, and programmatically generate queries whose
-gold labels are determined by the generation process itself.
-
-\textbf{Catalog construction.}
-For each open-domain attribute $A_j \in \{\textit{brand}, \textit{model},
-\textit{submodel}, \textit{trim level}\}$, we build the reference catalog
-$\mathcal{K}_j$ from the \emph{unique values} observed in the MuCars
-dataset~\cite{tabarnoust2025mucars}. MuCars is used as the catalog
-source because it was collected from prominent online marketplaces to
-ensure market-wide representation and underwent rigorous post-collection
-preprocessing, yielding a standardized, curated, and peer-reviewed
-reference vocabulary. AutoScout24 and Craigslist are reserved for the
-query side of the evaluation.
-
-\textbf{Perturbation taxonomy.}
-We identify seven perturbation classes that characterize the gap between
-canonical catalog entries and the values a retriever encounters in
-practice. The taxonomy is summarized in Table~\ref{tab:pert_taxonomy}.
-Each class probes a distinct property of the retriever: tokenizer
-robustness, character-level noise tolerance, multilingual coverage, and
-fine-grained disambiguation among sibling entities. The \textit{alias}
-class is populated by mining variants from AutoScout24 and Craigslist
-that co-refer to MuCars catalog entries, using two signals: normalized
-lexical equality (case, punctuation, whitespace) and row-level
-co-occurrence of adjacent attributes (e.g., an AutoScout24 record with
-\texttt{brand="VW"} and \texttt{model="Golf"} provides evidence that
-\textit{VW} aliases \textit{Volkswagen} in MuCars when MuCars also
-contains a \textit{Volkswagen Golf}).
+As a descriptive diagnostic, Table~\ref{tab:sampling} reports the
+fraction of rows whose brand is in $\mathcal{K}_{\text{brand}}$
+(resp. whose model is in $\mathcal{K}_{\text{model}}$) after
+lowercasing and whitespace stripping, both in the full population and
+in the realized sample. Model strings prefixed with the brand (common
+in AutoScout24) have the prefix stripped before lookup, approximating
+what the IE step extracts at inference time.
 
 \begin{table}[htbp]
-\caption{Perturbation Taxonomy}
+\caption{Catalog coverage per dataset (population vs sample, $n = 200$)}
 \begin{center}
 \footnotesize
-\begin{tabular}{|p{1.9cm}|p{3.2cm}|p{2.2cm}|}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|l|r|r|r|r|}
 \hline
-\textbf{Class} & \textbf{Example} & \textbf{Probes} \\
+ & \multicolumn{2}{c|}{\textbf{Brand in $\mathcal{K}$}}
+ & \multicolumn{2}{c|}{\textbf{Model in $\mathcal{K}$}} \\
+\cline{2-5}
+\textbf{Dataset} & \textbf{Pop.} & \textbf{Sample}
+                 & \textbf{Pop.} & \textbf{Sample} \\
 \hline
-identity & \textit{Mazda} $\to$ \textit{Mazda} & Sanity \\
-\hline
-case & \textit{MAZDA}, \textit{mazda} & Tokenizer \\
-\hline
-punctuation & \textit{Mercedes Benz}, \textit{MercedesBenz} & Normalization \\
-\hline
-typo & \textit{Mercedez}, \textit{Tyota} & Character noise \\
-\hline
-truncation & \textit{Mercedes} $\to$ \textit{Mercedes-Benz} & Substring \\
-\hline
-alias & \textit{VW} $\to$ \textit{Volkswagen} & Cross-market vocabulary \\
-\hline
-distractor & \textit{A-Class} when \textit{C-Class}, \textit{E-Class} in $\mathcal{K}_j$ & Sibling disambiguation \\
+AutoScout24 & 98.0\% & 98.0\% & 71.2\% & 70.0\% \\
+Craigslist  & 92.8\% & 92.5\% & 25.0\% & 31.0\% \\
+MuCars      & 98.9\% & 99.5\% & 64.9\% & 64.0\% \\
 \hline
 \end{tabular}
-\label{tab:pert_taxonomy}
+\label{tab:sampling}
 \end{center}
 \end{table}
 
-\textbf{Dataset generation.}
-Queries are produced by a deterministic, seed-controlled procedure
-implemented as a standalone Python script and released alongside the
-framework. For each $(A_j, c \in \mathcal{K}_j)$ pair, the script
-generates a fixed number of queries per perturbation class (identity,
-case, punctuation, typo, truncation, distractor) and samples alias
-queries from the AutoScout24/Craigslist mining step, recording each
-as a tuple $(q, A_j, c^*, \text{class})$. Random seeds, edit distances,
-and per-class sample sizes are exposed as script parameters to support
-reproducibility and ablation. The resulting dataset contains $N$ queries
-per attribute, stratified across perturbation classes; exact counts
-per attribute and class are reported in Table~\ref{tab:ir_counts} (to
-be filled after generation).
+\textbf{Human annotation.}
+Three trained annotators independently label every record using a
+structured form backed by per-attribute data validation. For each record,
+the annotator reads the serialized listing and supplies a value for each
+of the 26 attributes, drawing from the closed-domain value lists or the
+DVM-CAR catalog where applicable. When the correct brand or model is not
+in the catalog, the annotator enters the value as written in the listing
+and flags it as \texttt{novel}. Attributes not mentioned in the listing
+are left blank. Each annotator completed a 20-record pilot round, after
+which instructions were revised to resolve systematic disagreements
+before the full annotation run.
 
-\textbf{Metrics.}
-We report Recall@$k$ for $k \in \{1, 5, 10\}$, mean reciprocal rank
-(MRR), and normalized discounted cumulative gain (nDCG@10). Recall@$k$
-at the operational $k$ used in Algorithm~\ref{algo:normalization} is the
-primary metric, as it upper-bounds the accuracy achievable by the
-downstream LLM resolver: any gold entity not retrieved by the IR
-component cannot be recovered by the ER component. All metrics are
-additionally broken down \emph{per perturbation class}, yielding a
-diagnostic profile that isolates which noise modes a given
-retriever-embedding combination handles well and which it does not.
+\textbf{Ground-truth construction.}
+The ground-truth value for each (record, attribute) cell is the majority
+vote across the three annotators. Cells on which all three annotators
+disagree are marked \texttt{ABSTAIN} and excluded from headline metrics but
+retained for qualitative analysis. Inter-annotator agreement is measured
+with Fleiss' $\kappa$~\cite{fleiss1971kappa} per attribute and pooled, and
+with averaged pairwise raw agreement $P_A$ as a secondary indicator.
+Attributes falling below $\kappa = 0.60$ are flagged and analyzed separately
+from the headline metrics~\cite{landis1977kappa}.
 
-\subsection{Entity Resolution}
-\label{sec:eval_er}
+\subsection{Metrics}
+\label{sec:metrics}
 
-\textbf{Rationale.}
-Evaluating the entity resolution component requires labeled triples
-$(\hat{s}, \hat{s}_{j \to c_i}, y)$ with $y \in \{0, 1\}$. We synthesize
-pairs by applying the perturbation classes of
-Table~\ref{tab:pert_taxonomy} to records sampled from the three source
-datasets. Because ER is a record-level judgment, we obtain $y$ from the
-same three-model LLM ensemble used for information extraction
-(Section~\ref{sec:eval_ie}).
+\textbf{Per-attribute accuracy.}
+For each attribute $A_j$ we report the fraction of records for which the
+pipeline's normalized value $\tilde{a}_j$ equals the human-annotated
+ground-truth value $\tilde{a}_j^*$ (exact match). For the set-valued
+\textit{equipment} attribute we report set-level precision, recall, and
+F1. Per-attribute accuracies are aggregated into two headline numbers,
+open-domain macro-accuracy (brand, model) and closed-domain
+macro-accuracy (24 attributes), each reported overall and broken down
+by source (AutoScout24, Craigslist, MuCars).
 
-\textbf{Record sampling.}
-Records are drawn from MuCars, AutoScout24, and Craigslist, stratified
-across brand and fuel type to preserve distributional heterogeneity.
-We target 100 annotated pairs per source $\times$ per perturbation
-class.
+\textbf{Novel-entity handling.}
+For brand and model we additionally report precision and recall of the
+pipeline's \textit{novel} decision, computed against the human-assigned
+novel flags. A false novel (the pipeline marks a record as novel when a
+catalog match exists) and a false non-novel (the pipeline matches to a
+canonical entity when the ground truth is novel) are both errors, and we
+track them separately. This directly evaluates the catalog-expansion
+mechanism (Algorithm~\ref{algo:normalization}, lines 16--19).
 
-\textbf{Dataset generation.}
-For each sampled record $\mathbf{x}$ and each open-domain attribute
-$A_j$, we construct synthetic pairs by reusing the perturbation classes
-of Table~\ref{tab:pert_taxonomy}. Given the extracted value
-$\hat{a}_j$, each perturbation class yields a candidate $c_i$ via the
-same construction rules used for IR query generation (e.g.\
-\textit{case}, \textit{typo}, and \textit{truncation} apply
-character-level transformations to $\hat{a}_j$; \textit{alias} draws
-from the mined alias table; \textit{distractor} selects a sibling entry
-from $\mathcal{K}_j$). Substituting $c_i$ for $\hat{a}_j$ in the
-serialized record yields $\hat{s}_{j \to c_i}$, which is paired with
-$\hat{s}$ to form the evaluation unit. All constructions are
-deterministic given a random seed.
+\textbf{Catalog dynamics.}
+We track two quantities that operationalize the ``imperfect catalog,
+growing through use'' claim. First, the \textit{catalog growth curve}:
+$|\mathcal{K}_j|$ as a function of the number of processed records, per
+attribute and per source. Second, \textit{second-pass accuracy}: for the
+subset of records in which the pipeline initially produced a novel-entity
+decision that was later resolved to a catalog entry (due to catalog
+expansion from subsequent records), we re-run the pipeline with the
+final catalog and report the change in accuracy. This quantifies the
+self-correcting behavior of the design.
 
-\textbf{Annotation protocol.}
-Labels are assigned by the three-model LLM ensemble described in
-Section~\ref{sec:eval_ie}. Each annotator receives the two serialized
-records $\hat{s}$ and $\hat{s}_{j \to c_i}$ together with the task
-instruction and returns $y \in \{0, 1\}$; full prompts are in
-Appendix~\ref{app:prompts}. Labels are assigned by majority vote; pairs
-on which all three annotators disagree are marked \texttt{ABSTAIN} and
-excluded from headline metrics but retained for qualitative analysis of
-inherently ambiguous cases.
+\textbf{Error decomposition.}
+For every record on which the pipeline disagrees with the ground truth, we
+classify the error into one of four categories: (i) extraction error, (ii)
+retrieval miss (gold entity not in top-$k$), (iii) resolver error
+(false-positive or false-negative match), and (iv) novel-entity
+misclassification.
 
-\textbf{Metrics.}
-We report precision, recall, and F1 for the positive class (match),
-with a per-class breakdown across the perturbation classes of
-Table~\ref{tab:pert_taxonomy}, and Fleiss' $\kappa$~\cite{fleiss1971kappa}
-together with the averaged pairwise raw agreement $P_A$ as data-quality
-indicators.
+\textbf{Uncertainty.}
+For all accuracy metrics we report 95\% bootstrap confidence intervals over
+2{,}000 resamples at the record level.
 
 \subsection{Results}
+\label{sec:results}
 
-\section{Discussion}
+[To be filled after experimentation.]
 
 \section{Conclusion}
 
