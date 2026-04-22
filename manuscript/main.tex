@@ -718,12 +718,14 @@ dataset-level metrics estimated on the sample remain unbiased
 estimators of the corresponding population mean.
 
 As a descriptive diagnostic, Table~\ref{tab:sampling} reports the
-fraction of rows whose brand is in $\mathcal{K}_{\text{brand}}$
-(resp. whose model is in $\mathcal{K}_{\text{model}}$) after
-lowercasing and whitespace stripping, both in the full population and
-in the realized sample. Model strings prefixed with the brand (common
-in AutoScout24) have the prefix stripped before lookup, approximating
-what the IE step extracts at inference time.
+fraction of rows whose brand is in $\mathcal{K}_{\text{brand}}$ and
+whose (brand, model) pair appears in the DVM-CAR catalog, both after
+lowercasing and whitespace stripping, in the full population and in
+the realized sample. Evaluating model membership at the pair level
+(rather than against a flat set of model names) avoids spurious hits
+from collisions across brands. Model strings prefixed with the brand
+(common in AutoScout24) have the prefix stripped before lookup,
+approximating what the IE step extracts at inference time.
 
 \begin{table}[htbp]
 \caption{Catalog coverage per dataset (population vs sample, $n = 200$)}
@@ -733,14 +735,14 @@ what the IE step extracts at inference time.
 \begin{tabular}{|l|r|r|r|r|}
 \hline
  & \multicolumn{2}{c|}{\textbf{Brand in $\mathcal{K}$}}
- & \multicolumn{2}{c|}{\textbf{Model in $\mathcal{K}$}} \\
+ & \multicolumn{2}{c|}{\textbf{(Brand, Model) pair}} \\
 \cline{2-5}
 \textbf{Dataset} & \textbf{Pop.} & \textbf{Sample}
                  & \textbf{Pop.} & \textbf{Sample} \\
 \hline
-AutoScout24 & 98.0\% & 98.0\% & 71.2\% & 70.0\% \\
-Craigslist  & 92.8\% & 92.5\% & 25.0\% & 31.0\% \\
-MuCars      & 98.9\% & 99.5\% & 64.9\% & 64.0\% \\
+AutoScout24 & 98.0\% & 98.0\% & 65.4\% & 65.0\% \\
+Craigslist  & 92.8\% & 92.5\% & 24.2\% & 28.5\% \\
+MuCars      & 98.9\% & 99.5\% & 63.6\% & 62.5\% \\
 \hline
 \end{tabular}
 \label{tab:sampling}
