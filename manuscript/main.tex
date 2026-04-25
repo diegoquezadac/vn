@@ -1120,28 +1120,84 @@ percentile bootstrap intervals with $500$ resamples.}
 \subsection{Downstream Utility}
 \label{sec:downstream}
 
-\begin{table}[htbp]
-\caption{Downstream price-prediction error on MuCars under raw vs
-normalized features. Lower is better.}
+We train three gradient-boosting regressors (CatBoost,
+XGBoost, LightGBM) with default library hyperparameters
+($\texttt{random\_state}=42$, early stopping at five rounds;
+no per-model tuning) to predict listing price on MuCars,
+averaging errors over ten random 20\% holdout splits per
+model. The \textit{raw} feature set uses the nine MuCars
+columns plus a 16-dimensional binary encoding of the
+per-listing equipment list parsed from its JSON-list string
+($25$ features). The \textit{normalized} feature set adds the
+16 LLM-imputed schema fields produced by the imputing variant
+of the IE step (Sec.~\ref{sec:method}: body type, drive type,
+propulsion system, energy source, cylinders, engine
+aspiration, injection type, transmission gears, etc.),
+bringing the total to $41$. Equipment one-hots are present in
+both sets, so the gap measures the marginal contribution of
+canonicalization plus imputation alone. Listings with
+implausible prices (outside $5{,}000$ to $5{,}000{,}000$~MAD)
+are excluded, leaving $75{,}733$ rows. Missing numeric and
+categorical values are imputed on each fold by (brand, model)
+group median or mode with brand-level and overall fallbacks.
+The MuCars catalog is seeded from DVM-CAR
+(Sec.~\ref{sec:setup}); $21.6\%$ of test rows have a model
+string that the IE+IR+ER pipeline rewrote into a different
+canonical (e.g., \texttt{golf 7} to \texttt{golf},
+\texttt{classe c} to \texttt{c class}, \texttt{220} to
+\texttt{c class}). We report results on the full test set and
+on this \textit{merged} subset separately.
+
+Table~\ref{tab:downstream} reports the results. Normalization
+reduces error on every metric, every model, and both slices.
+On the full test set MAPE falls by $2.7$ to $5.3\%$
+(CatBoost weakest, XGBoost largest) and MAE by
+$4.4$ to $6.4\%$ (LightGBM weakest, XGBoost largest). On the
+merged subset, where the LLM resolver pooled surface-form
+variants into shared canonical labels, the reduction
+concentrates: MAPE drops by $4.5$ to $5.1\%$, MdAPE by $6.5$
+to $8.3\%$, and MAE by $5.5$ to $8.7\%$, with CatBoost
+recording the largest MAE reduction at $-8.7\%$. The
+improvement is consistent in direction and comparable in
+magnitude across architectures, indicating that the canonical
+labels carry signal that is robust to the choice of downstream
+estimator rather than an artefact of any one model's inductive
+bias.
+
+\begin{table*}[htbp]
+\caption{Downstream price prediction on MuCars (10-seed
+average; lower is better). Each cell shows raw $\to$
+normalized followed by the relative delta in parentheses. The
+\textit{normalized} feature set adds 16 LLM-imputed schema
+fields on top of the raw 25-feature set; equipment one-hots
+appear in both. The \textit{merged} subset is the
+$21.6\%$ of test rows where the IE+IR+ER pipeline rewrote the
+raw model string into a different canonical (e.g.,
+\texttt{golf 7} to \texttt{golf}, \texttt{220} to
+\texttt{c class}).}
 \begin{center}
 \footnotesize
-\setlength{\tabcolsep}{5pt}
-\begin{tabular}{|l|cc|cc|}
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|l|c|c|c|}
 \hline
- & \multicolumn{2}{c|}{\textbf{Raw}}
- & \multicolumn{2}{c|}{\textbf{Normalized}} \\
-\cline{2-5}
-\textbf{Model} & \textit{MAE} & \textit{MAPE}
-               & \textit{MAE} & \textit{MAPE} \\
+\textbf{Model} & \textbf{MAPE} & \textbf{MdAPE} & \textbf{MAE} (MAD) \\
 \hline
-CatBoost  & -- & -- & -- & -- \\
-XGBoost   & -- & -- & -- & -- \\
-LightGBM  & -- & -- & -- & -- \\
+\multicolumn{4}{|l|}{\textit{Full test set} ($n \approx 15{,}147$ per fold)} \\
+\hline
+CatBoost & $0.197 \to \mathbf{0.192}$ ($-2.7\%$) & $0.093 \to \mathbf{0.089}$ ($-3.6\%$) & $26{,}676 \to \mathbf{25{,}260}$ ($-5.3\%$) \\
+XGBoost  & $0.201 \to \mathbf{0.190}$ ($-5.3\%$) & $0.105 \to \mathbf{0.096}$ ($-8.3\%$) & $27{,}602 \to \mathbf{25{,}847}$ ($-6.4\%$) \\
+LightGBM & $0.200 \to \mathbf{0.192}$ ($-4.3\%$) & $0.106 \to \mathbf{0.100}$ ($-5.9\%$) & $27{,}650 \to \mathbf{26{,}422}$ ($-4.4\%$) \\
+\hline
+\multicolumn{4}{|l|}{\textit{Merged-model rows} ($n \approx 3{,}272$ per fold, $21.6\%$ of test set)} \\
+\hline
+CatBoost & $0.192 \to \mathbf{0.183}$ ($-4.5\%$) & $0.103 \to \mathbf{0.096}$ ($-6.5\%$) & $33{,}668 \to \mathbf{30{,}747}$ ($-8.7\%$) \\
+XGBoost  & $0.200 \to \mathbf{0.190}$ ($-5.1\%$) & $0.113 \to \mathbf{0.103}$ ($-8.3\%$) & $33{,}596 \to \mathbf{31{,}017}$ ($-7.7\%$) \\
+LightGBM & $0.198 \to \mathbf{0.188}$ ($-4.9\%$) & $0.113 \to \mathbf{0.106}$ ($-6.8\%$) & $33{,}567 \to \mathbf{31{,}719}$ ($-5.5\%$) \\
 \hline
 \end{tabular}
 \label{tab:downstream}
 \end{center}
-\end{table}
+\end{table*}
 
 \section{Conclusion}
 
