@@ -189,9 +189,9 @@ section formalizes each component.
 % ===== OUTER STACKED SECTION =====
 
 % Encode (extra gap below shat for dashed box label)
-\node[ops, soff2, below=0.95cm of shat, opacity=0.3] (enc_s2) {};
-\node[ops, soff,  below=0.95cm of shat, opacity=0.5] (enc_s1) {};
-\node[op,         below=0.95cm of shat]              (enc)    {Encode};
+\node[ops, soff2, below=0.55cm of shat, opacity=0.3] (enc_s2) {};
+\node[ops, soff,  below=0.55cm of shat, opacity=0.5] (enc_s1) {};
+\node[op,         below=0.55cm of shat]              (enc)    {Encode};
 \draw[arr] (shat) -- (enc);
 
 \node[dat, below=0.25cm of enc] (ej) 
@@ -549,9 +549,10 @@ Color & black, white, silver, grey, red, blue, green, yellow, orange, brown, bei
 \end{table}
 
 \textbf{Models.}
-All extraction and entity resolution LLM calls use OpenAI's
-\textit{gpt-4.1-mini}. Candidate embeddings for open-domain attributes are
-computed with OpenAI's \textit{text-embedding-3-small}.
+Information extraction uses OpenAI's \textit{gpt-4.1-nano} and
+entity resolution uses OpenAI's \textit{gpt-4.1-mini}. Candidate
+embeddings for open-domain attributes are computed with
+OpenAI's \textit{text-embedding-3-small}.
 
 \textbf{Retrieval configuration.}
 Open-domain attributes are indexed with FAISS HNSW ($M = 32$,
@@ -1032,6 +1033,89 @@ doors                     & --    & --             & 0.924          & 0.924     
 
 \subsection{Ablation}
 \label{sec:ablation}
+
+\subsubsection{Cosine threshold $\tau$ for IE+IR}
+\label{sec:ablation_tau}
+
+We sweep $\tau \in \{0.50, 0.55, \dots, 0.95\}$ on both
+evaluation datasets, re-using the IE extractions of
+Section~\ref{sec:results} so that only the
+retrieval-and-thresholding stage varies. Confidence bands are
+95\% percentile bootstrap intervals with $500$ resamples
+(Fig.~\ref{fig:ablation_tau}).
+
+No single $\tau$ optimizes the three objectives jointly. Model
+macro F1 peaks in $\tau \in [0.85, 0.90]$ ($0.846$ on
+AutoScout24, $0.870$ on MuCars), where novelty F1 is near its
+minimum. Novelty F1 is maximized at lower thresholds ($0.588$
+near $\tau{=}0.50$ on AutoScout24; $0.795$ near $\tau{=}0.80$
+on MuCars), but the resulting high compression ($\geq 13\%$ on
+AutoScout24, $\geq 8\%$ on MuCars) is driven by merges with low
+novelty precision, reflecting spurious synonymy rather than
+genuine canonicalization. At every $\tau$ the variant remains
+below the full IE+IR+ER pipeline on both quality metrics
+(Table~\ref{tab:results}: model F1 $0.890 / 0.885$, novelty F1
+$0.623 / 0.878$), whose compression of $4.2\%$ and $5.6\%$ is
+concentrated on correct merges. The LLM resolver is therefore
+load-bearing rather than cosmetic over a well-tuned cosine
+cutoff.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/ablation_threshold.pdf}
+\caption{IE+IR sensitivity to the cosine threshold $\tau$.
+Rows: datasets (top: AutoScout24, bottom: MuCars). Columns:
+model normalization (accuracy and macro F1), novelty detection
+(precision, recall, F1), and catalog compression. Dashed lines
+mark the IE-only baseline; the vertical dotted line marks the
+$\tau = 0.85$ operating point of Table~\ref{tab:results}. Shaded
+bands are 95\% percentile bootstrap intervals with $500$
+resamples.}
+\label{fig:ablation_tau}
+\end{figure*}
+
+\subsubsection{Retrieval depth $k$ for IE+IR+ER}
+\label{sec:ablation_k}
+
+We sweep $k \in \{1, 3, 5, 10, 20\}$ on both datasets, re-using
+the IE extractions of Section~\ref{sec:results} so that only
+the retrieval depth and entity-resolution loop vary.
+Confidence bands are 95\% percentile bootstrap intervals with
+$500$ resamples (Fig.~\ref{fig:ablation_k}).
+
+Quality saturates by $k = 3$ to $5$ on both datasets: the
+largest jump is from $k{=}1$ to $k{=}3$ (model F1 $+3.3$
+percentage points on AutoScout24, $+2.1$ on MuCars), and
+beyond $k{=}5$ neither model F1 nor novelty F1 moves outside
+its bootstrap interval, except a slow drift in MuCars novelty
+F1 ($0.884$ at $k{=}5$ to $0.909$ at $k{=}20$). Catalog
+compression on AutoScout24 spikes at $k{=}1$ ($7.3\%$) before
+stabilizing near $5\%$ for $k \geq 3$, indicating that with a
+single candidate the resolver tends to over-merge; once it has
+at least three candidates to compare against, it becomes more
+selective. MuCars compression varies by less than $1$
+percentage point across the grid. ER cost grows close to
+linearly with $k$ above $k{=}3$, with $k{=}20$ requiring
+roughly twice the LLM calls per listing of $k{=}5$ on both
+datasets without quality return. The operating point $k{=}5$
+used in Section~\ref{sec:setup} therefore sits just past the
+quality saturation knee, where the resolver has enough
+candidates to avoid the $k{=}1$ over-merging regime while
+keeping cost bounded.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/ablation_k.pdf}
+\caption{Sensitivity of IE+IR+ER to retrieval depth $k$. Rows:
+datasets (top: AutoScout24, bottom: MuCars). Columns: model
+normalization (accuracy and macro F1), novelty detection
+(precision, recall, F1), and catalog compression for both the
+model and brand catalogs. Dashed lines mark the IE-only
+baseline; the vertical dotted line marks the $k = 5$ operating
+point of Table~\ref{tab:results}. Shaded bands are 95\%
+percentile bootstrap intervals with $500$ resamples.}
+\label{fig:ablation_k}
+\end{figure*}
 
 \subsection{Downstream Utility}
 \label{sec:downstream}
