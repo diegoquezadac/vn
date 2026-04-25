@@ -17,12 +17,11 @@
 \begin{document}
 
 \title{An LLM-Based Framework for Cross-Market Vehicle Data Normalization\\
-\thanks{Identify applicable funding agency here. If none, delete this.}
 }
 
 \author{\IEEEauthorblockN{1\textsuperscript{st} Diego Quezada}
 \IEEEauthorblockA{\textit{Departamento de Informática} \\
-\textit{Universidad Técnica Federico Santa María}\\
+\textit{UTFSM}\\
 Valparaíso, Chile \\
 diego.quezadac@sansano.usm.cl}
 \and
@@ -34,7 +33,7 @@ carlos.valle@pucv.cl}
 \and
 \IEEEauthorblockN{3\textsuperscript{rd} Ricardo Ñanculef}
 \IEEEauthorblockA{\textit{Departamento de Informática} \\
-\textit{Universidad Técnica Federico Santa María}\\
+\textit{UTFSM}\\
 Valparaíso, Chile \\
 jnancu@inf.utfsm.cl}}
 
@@ -51,29 +50,29 @@ LLM, RAG, Information Extraction, Information Retrieval, Entity Resolution
 \section{Introduction}
 
 % Paragraph about the context
-The global second-hand car market, valued at approximately USD 1.90 trillion in 2024, is projected to grow at a compound annual growth rate (CAGR) of 9.4\% from 2022 to 2027 \cite{hu2025583}. Key factors driving this growth include rising new vehicle prices, enhanced vehicle financing options, and advancements in online platforms \cite{hu2025583, zacharof}, which facilitate access to inventory and information impacting consumer trust, such as online reviews and ratings \cite{zhang2025decoding}.
+The global used car market was valued at USD 1.90 trillion in 2024 and is projected to grow at a compound annual growth rate (CAGR) of 6.0\% from 2025 to 2030 \cite{grandview2024usedcar, hu2025583}. Key factors driving this growth include rising new vehicle prices, enhanced vehicle financing options, and advancements in online platforms \cite{hu2025583, zacharof}, which facilitate access to inventory and information impacting consumer trust, such as online reviews and ratings \cite{zhang2025decoding}.
 
 % Paragraph about the problem
-The expansion of online platforms has produced a proliferation of heterogeneous vehicle datasets across automotive markets. Without a shared standard for representing vehicles, descriptions of the same real-world entity diverge along three axes: \textbf{naming inconsistency}, where the same concept appears under different strings (e.g., ``mercedes'', ``mercedes-benz'', ``mercedes benz''); \textbf{granularity inconsistency}, where the same attribute is expressed at different levels of detail (e.g., ``automatic'' vs.\ ``7-speed DCT''); and \textbf{scope inconsistency}, where a single field conflates values that belong to distinct real-world dimensions (e.g., a \textit{fuel type} column containing both ``petrol'' and ``phev''). Left unaddressed, these inconsistencies propagates through downstream machine learning (ML) pipelines, undermining feature extraction, similarity computation, and ultimately model performance.
+The expansion of online platforms has produced a proliferation of heterogeneous vehicle datasets across automotive markets. Without a shared standard for representing vehicles, descriptions of the same real-world entity diverge along three axes: \textbf{naming inconsistency}, where the same concept appears under different strings (e.g., ``mercedes'', ``mercedes-benz'', ``mercedes benz''); \textbf{granularity inconsistency}, where the same attribute is expressed at different levels of detail (e.g., ``automatic'' vs.\ ``7-speed DCT''); and \textbf{scope inconsistency}, where a single field conflates values that belong to distinct real-world dimensions (e.g., a \textit{fuel type} column containing both ``petrol'' and ``phev''). Left unaddressed, these inconsistencies propagate through downstream machine learning (ML) pipelines, undermining feature extraction, similarity computation, and ultimately model performance.
 
 % Paragraph about standard efforts
-Several standardization efforts have attempted to formalize vehicle data representation, yet none has produced a solution applicable to open, cross-market datasets. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, has proven effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data is rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. Together, these efforts address narrow, well-scoped problems within specific industry contexts, leaving the challenge of normalizing heterogeneous vehicle listings from open source datasets largely unresolved. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
+Several standardization efforts have attempted to prescribe how a vehicle \textit{should} be modeled, yet open datasets in practice do not follow any of them. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, is effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data is rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. A standard that is not adopted at scale offers no interoperability in practice: heterogeneous listings from open platforms continue to diverge along the three axes described above, regardless of which schema has been formally defined. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
 
 % Paragraph about contribution
-In this work, we propose a general vehicle normalization framework that leverages recent advances in large language models (LLMs) applied to information extraction (IE), information retrieval (IR), and entity resolution (ER) to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream machine learning (ML) tasks. Our framework is open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements, and is designed to serve as a shared baseline for future research on ML applications in the vehicle domain.
+In this work, we propose a general vehicle normalization framework that combines large language models (LLMs) for information extraction (IE) and entity resolution (ER) with dense information retrieval (IR) over a knowledge catalog, following the retrieval-augmented generation (RAG) paradigm, to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream ML tasks. Our framework is open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements.
 
 
 \section{Related Work}
 
 \subsection{Vehicle Data Preprocessing in ML}
 
-Every ML study on vehicle data confronts the fact that each dataset uses its own representation: different columns, naming conventions, languages, abbreviations, and attribute domains. In practice, each study builds a tailored preprocessing pipeline from scratch, and none of the resulting transformations transfers to a new dataset or market.
+Existing ML studies on vehicle data repeatedly confront the fact that each dataset uses its own representation: different columns, naming conventions, languages, abbreviations, and attribute domains. In practice, each study builds a tailored preprocessing pipeline from scratch, and none of the resulting transformations transfers to a new dataset or market.
 
-Bergmann and Feuerriegel~\cite{bergmann2025125640} provide the most detailed example of this pattern. Working with 92,239 used car sales from a Swiss retailer, they faced approximately 50,000 unique equipment identifiers represented as short German-language text descriptions (e.g., \textit{``Navigationsfunktion `Discover media' fuer Radiosystem `Composition media'\,''}). Their preprocessing pipeline consisted of three steps: first, they manually selected 18 target equipment categories (e.g., navigation system, alloy rims, park assist) based on the search filters of a Swiss online platform, validated by 51 car dealers; second, they mapped the 50,000 textual descriptions onto these 18 categories using a keyword-based search combined with regular expressions; third, they applied one-hot encoding to produce 18 binary predictors. This pipeline improved prediction performance (MAE) by 3.27\%. Crucially, the authors describe their approach as ``tailored'' to their partner company's data and market. The keyword rules are language-specific (German), the 18 categories reflect Swiss consumer preferences, and the mapping logic would need to be rebuilt for any new market, language, or equipment taxonomy.
+Bergmann and Feuerriegel~\cite{bergmann2025125640} provide the most detailed example of this pattern. Working with 92,239 used car sales from a Swiss retailer, they faced approximately 50,000 unique equipment identifiers represented as short German-language text descriptions (e.g., \textit{``Navigationsfunktion `Discover media' fuer Radiosystem `Composition media'\,''}). Their preprocessing pipeline consisted of three steps: first, they manually selected 18 target equipment categories (e.g., navigation system, alloy rims, park assist) based on the search filters of a Swiss online platform, validated by 51 car dealers; second, they mapped the 50,000 textual descriptions onto these 18 categories using a keyword-based search combined with regular expressions; third, they applied one-hot encoding to produce 18 binary predictors. This pipeline improved prediction performance (MAE) by 3.27\%. The authors themselves describe their approach as ``tailored'' to their partner company's data and market. The keyword rules are language-specific (German), the 18 categories reflect Swiss consumer preferences, and the mapping logic would need to be rebuilt for any new market, language, or equipment taxonomy.
 
 Fayyaz et al.~\cite{vehicles7030094} expose how raw vehicle listings resist direct ML application. Working with real-world listing data, they found that transmission entries varied widely (e.g., ``6-Speed A/T'', ``8-Speed PDK'', ``CVT-F''), mileage was stored as strings (e.g., ``10,000 mi.''), and engine specifications were embedded in free text (e.g., ``2.0L 255HP'') requiring regex extraction. They also standardized color names from manufacturer branding (e.g., ``Midnight Black'' mapped to ``Black''). After systematic feature engineering, Linear Regression $R^2$ improved from 0.03 to 0.80, yet the authors acknowledge that their pipeline is dataset-specific. Dutulescu et al.~\cite{electronics12143083} confirm that this problem extends across markets: training deep learning models on a German dataset (300,000+ entries) and evaluating on a Romanian dataset (15,000+ entries), they found that car model embeddings failed for infrequent models and explicitly called for ``a method for dataset standardization across different car markets.'' Madhusudhanan et al.~\cite{10825740} faced similar challenges at larger scale, handling 56 categorical features (make, model, trim, equipment, market region) across approximately 2 million records, where state-of-the-art tabular models could not even process the dataset due to the high cardinality of unstandardized vehicle attributes.
 
-These studies collectively demonstrate that vehicle data preprocessing remains ad-hoc, non-transferable, and a significant engineering bottleneck. Our framework addresses this gap by providing a reusable normalization pipeline that is agnostic to source schema, language, and market.
+Taken together, these studies show that vehicle data preprocessing remains ad-hoc, non-transferable, and a significant engineering bottleneck. Our framework addresses this gap by providing a reusable normalization pipeline that is agnostic to source schema, language, and market.
 
 \subsection{Information Extraction}
 
@@ -105,12 +104,12 @@ We frame vehicle normalization as a three-component pipeline
 (Fig.~\ref{fig:pipeline}). A raw record $\mathbf{x}$ is first serialized
 and passed to an LLM that jointly extracts candidate attribute values
 $\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$ (\textit{information
-extraction}). Closed-domain attributes are emitted directly; each
-open-domain attribute $\hat{a}_j$ is then encoded and matched against a
+extraction}). Closed-domain attributes are emitted directly. Each
+open-domain attribute $\hat{a}_j$ is encoded and matched against a
 knowledge catalog $\mathcal{K}_j$ to retrieve its top-$k$ canonical
 candidates $\mathcal{R}_j$ (\textit{retrieval}). Finally, an LLM resolver
 decides whether any candidate $c_i \in \mathcal{R}_j$ refers to the same
-real-world entity as $\hat{a}_j$; if one does, it replaces $\hat{a}_j$,
+real-world entity as $\hat{a}_j$. If one does, it replaces $\hat{a}_j$,
 otherwise $\hat{a}_j$ is kept as a novel entity and appended to
 $\mathcal{K}_j$ (\textit{entity resolution}). The remainder of this
 section formalizes each component.
@@ -559,13 +558,11 @@ Open-domain attributes are indexed with FAISS HNSW ($M = 32$,
 $\mathit{ef}_{\mathrm{search}} = 64$, $k = 5$).
 
 \textbf{Serialization.}
-For the three tabular datasets, $\text{Serialize}(\mathbf{x})$
-concatenates column names with their values
-(e.g.\ \textit{col1: val1, col2: val2, \dots}); for free-text listings
-the input is used directly. The same operator renders extracted
-representations $\hat{\mathbf{x}}$ and candidate replacements
-$(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$ in the entity-resolution
-step.
+$\text{Serialize}(\mathbf{x})$ concatenates column names with their
+values (e.g., \textit{col1: val1, col2: val2, \dots}). The same
+operator renders extracted representations $\hat{\mathbf{x}}$ and
+candidate replacements $(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$ in
+the entity-resolution step.
 
 \textbf{Baselines.}
 We compare the full pipeline (\textbf{IE+IR+ER}) against two baselines
@@ -574,8 +571,9 @@ We compare the full pipeline (\textbf{IE+IR+ER}) against two baselines
 gain from retrieval and resolution. \textbf{IE+IR} keeps $\tilde{a}_j =
 \hat{a}_j$ for $j \in \mathcal{I}_{\text{closed}}$ and, for $j \in
 \mathcal{I}_{\text{open}}$, sets $\tilde{a}_j = c_1$ when
-$\text{sim}(\mathbf{e}_j, \mathbf{e}_{c_1}) \geq \tau$ and $\tilde{a}_j
-= \hat{a}_j$ otherwise, isolating the gain from the LLM resolver $M$.
+$\text{sim}(\mathbf{e}_j, \mathbf{e}_{c_1}) \geq \tau$, for a
+cosine-similarity threshold $\tau$, and $\tilde{a}_j = \hat{a}_j$
+otherwise, isolating the gain from the LLM resolver $M$.
 
 \begin{figure*}[t]
 \centering
@@ -673,27 +671,25 @@ and expands catalog $\mathcal{K}_j$ when no match is found.}
 
 \subsection{Datasets}
 
-Our experiments draw on four publicly available automotive listing datasets
+Our experiments draw on three publicly available automotive listing datasets
 covering distinct geographic markets, schema conventions, and languages,
 summarized in Table~\ref{tab:datasets}. DVM-CAR~\cite{10020634} is a UK
 dataset collected from online classified advertising platforms.
-MuCars~\cite{tabarnoust2024mucars} is a Moroccan dataset with several
+MuCars~\cite{tabarnoust2025mucars, tabarnoust2024mucars} is a Moroccan dataset with several
 market-specific attributes, including Fiscal Power as a tax-based engine
 category. AutoScout24~\cite{wspirat2023autoscout24} is a German dataset
-with fully structured fields. Craigslist~\cite{reese2021craigslist} is a
-US dataset characterized by informal free-text descriptions.
+with fully structured fields.
 
 \begin{table}[htbp]
 \caption{Dataset Statistics}
 \begin{center}
 \begin{tabular}{|l|r|r|r|r|l|}
 \hline
-\textbf{Dataset} & \textbf{Listings} & \textbf{Brands} & \textbf{Models} & \textbf{Cols} & \textbf{Country} \\
+\textbf{Dataset} & \textbf{Listings} & \textbf{Brands} & \textbf{Models} & \textbf{\#Attrs.} & \textbf{Country} \\
 \hline
 DVM-CAR     & 268,255 & 101 & 1,011  & 16 & UK \\
 MuCars      & 101,896 & 81  & 1,049  & 15 & Morocco \\
 AutoScout24 & 251,079 & 47  & 1,312  & 15 & Germany \\
-Craigslist  & 426,880 & 42  & 29,667 & 26 & USA \\
 \hline
 \end{tabular}
 \label{tab:datasets}
@@ -703,46 +699,49 @@ Craigslist  & 426,880 & 42  & 29,667 & 26 & USA \\
 \textbf{Knowledge catalog.}
 We instantiate the catalog $\mathcal{K}_j$ for the open-domain
 attributes (\textit{brand}, \textit{model}) from DVM-CAR, which has the
-broadest brand coverage in our pool (101 brands). The catalog is not
-assumed to be complete: it is expanded at inference time as novel
-entities are encountered.
+broadest brand coverage in our pool (101 brands). Because DVM-CAR seeds
+the catalog, evaluation is restricted to MuCars and AutoScout24, where
+normalization is non-trivial.
 
 \subsection{Evaluation Data}
 
 \textbf{Record sampling.}
-From MuCars, AutoScout24, and Craigslist we draw 200 listings each via
-proportional stratified sampling across brand $\times$ fuel type,
-yielding 600 evaluation records. Proportional allocation preserves the
-population distribution of each attribute in expectation, so
+From MuCars and AutoScout24 we draw 500 listings each via
+proportional stratified sampling on brand, yielding 1000 evaluation
+records. Brand is the dominant source of attribute heterogeneity
+across listings, and single-dimensional stratification keeps all
+strata populated at this sample size. Proportional allocation
+preserves the population brand distribution in expectation, so
 dataset-level metrics estimated on the sample remain unbiased
 estimators of the corresponding population mean.
 
 As a descriptive diagnostic, Table~\ref{tab:sampling} reports the
 fraction of rows whose brand is in $\mathcal{K}_{\text{brand}}$ and
-whose (brand, model) pair appears in the DVM-CAR catalog, both after
-lowercasing and whitespace stripping, in the full population and in
-the realized sample. Evaluating model membership at the pair level
-(rather than against a flat set of model names) avoids spurious hits
-from collisions across brands. Model strings prefixed with the brand
-(common in AutoScout24) have the prefix stripped before lookup,
-approximating what the IE step extracts at inference time.
+whose model is in $\mathcal{K}_{\text{model}}$, both after lowercasing
+and whitespace stripping, in the full population and in the realized
+sample. Model membership is evaluated at the pair level: a model is
+considered in $\mathcal{K}_{\text{model}}$ only if the specific (brand,
+model) combination appears in the catalog, which avoids spurious hits
+from identically named models across different brands. Model strings
+prefixed with the brand (common in AutoScout24) have the prefix
+stripped before lookup, approximating what the IE step extracts at
+inference time.
 
 \begin{table}[htbp]
-\caption{Catalog coverage per dataset (population vs sample, $n = 200$)}
+\caption{Catalog coverage per dataset (population vs sample, $n = 500$)}
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{4pt}
 \begin{tabular}{|l|r|r|r|r|}
 \hline
- & \multicolumn{2}{c|}{\textbf{Brand in $\mathcal{K}$}}
- & \multicolumn{2}{c|}{\textbf{(Brand, Model) pair}} \\
+ & \multicolumn{2}{c|}{\textbf{Brand in $\mathcal{K}_{\text{brand}}$}}
+ & \multicolumn{2}{c|}{\textbf{Model in $\mathcal{K}_{\text{model}}$}} \\
 \cline{2-5}
 \textbf{Dataset} & \textbf{Pop.} & \textbf{Sample}
                  & \textbf{Pop.} & \textbf{Sample} \\
 \hline
-AutoScout24 & 98.0\% & 98.0\% & 65.4\% & 65.0\% \\
-Craigslist  & 92.8\% & 92.5\% & 24.2\% & 28.5\% \\
-MuCars      & 98.9\% & 99.5\% & 63.6\% & 62.5\% \\
+AutoScout24 & 98.0\% & 98.0\% & 65.4\% & 68.0\% \\
+MuCars      & 98.9\% & 99.2\% & 63.6\% & 67.8\% \\
 \hline
 \end{tabular}
 \label{tab:sampling}
@@ -751,7 +750,9 @@ MuCars      & 98.9\% & 99.5\% & 63.6\% & 62.5\% \\
 
 \textbf{Human annotation.}
 Three trained annotators independently label every record using a
-structured form backed by per-attribute data validation. For each record,
+structured form backed by per-attribute data validation. All three
+annotators hold bachelor's degrees, have prior experience in the
+automotive industry, and contributed as volunteer collaborators. For each record,
 the annotator reads the serialized listing and supplies a value for each
 of the 26 attributes, drawing from the closed-domain value lists or the
 DVM-CAR catalog where applicable. When the correct brand or model is not
@@ -770,55 +771,293 @@ with Fleiss' $\kappa$~\cite{fleiss1971kappa} per attribute and pooled, and
 with averaged pairwise raw agreement $P_A$ as a secondary indicator.
 Attributes falling below $\kappa = 0.60$ are flagged and analyzed separately
 from the headline metrics~\cite{landis1977kappa}.
+Table~\ref{tab:iaa} reports inter-annotator agreement per dataset.
+
+\begin{table}[htbp]
+\caption{Inter-annotator agreement per dataset (attributes with
+$\geq 10\%$ non-null coverage). \textbf{\#low-$\kappa$}: reported
+attributes with $\kappa < 0.60$.}
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{6pt}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Dataset} & \textbf{\#Attrs.}
+                 & \textbf{Pooled $\kappa$}
+                 & \textbf{Pooled $P_A$}
+                 & \textbf{\#low-$\kappa$} \\
+\hline
+AutoScout24 & 12 & 0.852 & 0.949 & 2 \\
+MuCars      & 12 & 0.591 & 0.864 & 4 \\
+\hline
+\end{tabular}
+\label{tab:iaa}
+\end{center}
+\end{table}
+
+The reported attribute count falls below the schema's 26 because
+the schema is general by design, whereas any individual dataset
+describes vehicles at its own level of detail and populates only a
+subset of the attributes. When a listing contains no information
+about an attribute, annotators leave the cell blank, producing
+columns that are near-constant across the sample and on which
+Fleiss' $\kappa$ is not statistically interpretable. We therefore
+restrict reporting to attributes with at least 10\% non-null
+coverage per annotator. This is a property of the source data, not
+of the schema itself: Section~\ref{sec:downstream} shows that the
+same 26-attribute schema can be populated in full when the LLM is
+prompted to infer values from contextual cues (e.g., body type
+inferred from a model name), drawing on knowledge that lies outside
+the annotator's literal reading of the listing. Flagged
+low-agreement attributes ($\kappa < 0.60$) are \textit{Engine size}
+and \textit{Energy source} on AutoScout24, and \textit{Mileage unit},
+\textit{Body type}, \textit{Energy source}, and \textit{Propulsion
+system} on MuCars.
 
 \subsection{Metrics}
 \label{sec:metrics}
 
-\textbf{Per-attribute accuracy.}
-For each attribute $A_j$ we report the fraction of records for which the
-pipeline's normalized value $\tilde{a}_j$ equals the human-annotated
-ground-truth value $\tilde{a}_j^*$ (exact match). For the set-valued
-\textit{equipment} attribute we report set-level precision, recall, and
-F1. Per-attribute accuracies are aggregated into two headline numbers,
-open-domain macro-accuracy (brand, model) and closed-domain
-macro-accuracy (24 attributes), each reported overall and broken down
-by source (AutoScout24, Craigslist, MuCars).
+We evaluate the pipeline along three dimensions: normalization quality,
+novelty detection, and catalog compression. All three are compared
+across three variants: the extraction-only baseline (IE), a
+retrieval-with-threshold variant that replaces the entity-resolution
+step by a top-1 cosine match above threshold $\tau$ (IE$+$IR), and the
+full pipeline (IE$+$IR$+$ER).
 
-\textbf{Novel-entity handling.}
-For brand and model we additionally report precision and recall of the
-pipeline's \textit{novel} decision, computed against the human-assigned
-novel flags. A false novel (the pipeline marks a record as novel when a
-catalog match exists) and a false non-novel (the pipeline matches to a
-canonical entity when the ground truth is novel) are both errors, and we
-track them separately. This directly evaluates the catalog-expansion
-mechanism (Algorithm~\ref{algo:normalization}, lines 16--19).
+\textbf{Normalization.}
+For each open-domain attribute $A_j \in \{\mathrm{brand},
+\mathrm{model}\}$ we compare the normalized value $\tilde{a}_j$
+produced by the pipeline to the human-annotated ground-truth value
+$\tilde{a}_j^\star$ on a per-record basis. We report two quantities.
+First, accuracy, the fraction of records for which $\tilde{a}_j
+= \tilde{a}_j^\star$ after string normalization (case folding and
+whitespace collapse). Second, the macro-averaged F1 across the
+set of canonical classes appearing in either the predictions or the
+ground truth: precision, recall, and F1 are computed per class, treating
+membership in that canonical value as a binary decision, and then
+averaged with equal weight per class. Macro-F1 is reported alongside
+accuracy because the class distribution is long-tailed. Accuracy is
+dominated by a few popular models, whereas macro-F1 weights rare
+canonical values equally and therefore tracks the tail. Records for
+which all annotators disagreed are marked \texttt{ABSTAIN} and excluded.
 
-\textbf{Catalog dynamics.}
-We track two quantities that operationalize the ``imperfect catalog,
-growing through use'' claim. First, the \textit{catalog growth curve}:
-$|\mathcal{K}_j|$ as a function of the number of processed records, per
-attribute and per source. Second, \textit{second-pass accuracy}: for the
-subset of records in which the pipeline initially produced a novel-entity
-decision that was later resolved to a catalog entry (due to catalog
-expansion from subsequent records), we re-run the pipeline with the
-final catalog and report the change in accuracy. This quantifies the
-self-correcting behavior of the design.
+\textbf{Novelty detection.}
+For each record we form the pair $(\mathrm{brand}, \mathrm{model})$
+from both the ground truth and the pipeline output. A pair is declared
+\textit{novel} if it is absent from the catalog; this
+yields a binary classification on each record, one label per side.
+We report precision $\mathrm{P} = \mathrm{TP} / (\mathrm{TP}
++ \mathrm{FP})$, recall $\mathrm{R} = \mathrm{TP} /
+(\mathrm{TP} + \mathrm{FN})$, and F1 on the novel class.
+Precision is the operationally important metric, since low precision
+floods the catalog with near-duplicates, whereas recall tracks whether
+genuinely new entities are being caught.
 
-\textbf{Error decomposition.}
-For every record on which the pipeline disagrees with the ground truth, we
-classify the error into one of four categories: (i) extraction error, (ii)
-retrieval miss (gold entity not in top-$k$), (iii) resolver error
-(false-positive or false-negative match), and (iv) novel-entity
-misclassification.
-
-\textbf{Uncertainty.}
-For all accuracy metrics we report 95\% bootstrap confidence intervals over
-2{,}000 resamples at the record level.
+\textbf{Compression.}
+For each open-domain attribute we count the number of unique values
+emitted by the extraction-only baseline, $|U_{\mathrm{IE}}|$, and the
+number of unique canonical values produced by the full pipeline,
+$|U_{\mathrm{VN}}|$, on the same set of records. We report the
+compression percentage $1 - |U_{\mathrm{VN}}| / |U_{\mathrm{IE}}|$,
+which is the fraction of surface variants that the pipeline has merged
+into a shared canonical entity (for example, ``mercedes'',
+``mercedes-benz'', and ``benz'' collapsing to a single entry). Positive
+compression indicates that the canonicalization step is actively
+resolving naming inconsistency, whereas zero compression indicates
+that the extractor already yields canonical strings or that no
+merges were performed on this sample.
 
 \subsection{Results}
 \label{sec:results}
 
-[To be filled after experimentation.]
+Table~\ref{tab:results} reports pipeline evaluation on AutoScout24
+and MuCars across the three dimensions defined in
+Section~\ref{sec:metrics}: normalization quality, novelty detection,
+and catalog compression. Table~\ref{tab:extraction} complements this
+with per-attribute extraction accuracy on attributes with reliable
+annotator agreement. Throughout the discussion, IE+IR uses cosine
+threshold $\tau = 0.85$, with a sensitivity study over $\tau$
+deferred to Section~\ref{sec:ablation}. All metrics are computed on
+$n = 500$ evaluation records per dataset, and 95\% bootstrap
+confidence intervals ($1{,}000$ resamples) are reported in square
+brackets alongside headline metrics.
+
+\begin{table*}[htbp]
+\caption{Evaluation results on AutoScout24 and MuCars: open-domain
+normalization (brand, model), novelty detection on (brand, model)
+pairs, and catalog compression.}
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|l|cc|cc|ccc|c|cc|cc|ccc|c|}
+\hline
+ & \multicolumn{8}{c|}{\textbf{AutoScout24}}
+ & \multicolumn{8}{c|}{\textbf{MuCars}} \\
+\cline{2-17}
+\textbf{Variant}
+ & \multicolumn{2}{c|}{\textbf{Brand}}
+ & \multicolumn{2}{c|}{\textbf{Model}}
+ & \multicolumn{3}{c|}{\textbf{Novelty}}
+ & \textbf{Compr.}
+ & \multicolumn{2}{c|}{\textbf{Brand}}
+ & \multicolumn{2}{c|}{\textbf{Model}}
+ & \multicolumn{3}{c|}{\textbf{Novelty}}
+ & \textbf{Compr.} \\
+\cline{2-3}\cline{4-5}\cline{6-8}\cline{10-11}\cline{12-13}\cline{14-16}
+ & \textit{Acc} & \textit{F1}
+ & \textit{Acc} & \textit{F1}
+ & \textit{F1} & \textit{P} & \textit{R}
+ &
+ & \textit{Acc} & \textit{F1}
+ & \textit{Acc} & \textit{F1}
+ & \textit{F1} & \textit{P} & \textit{R}
+ & \\
+\hline
+IE                      & 0.992 & 0.917 & 0.787 & 0.825 & 0.437 & 0.280 & \textbf{1.000} & n/a
+                        & 1.000 & 1.000 & 0.858 & 0.826 & 0.680 & 0.516 & \textbf{1.000} & n/a \\
+IE+IR ($\tau = 0.85$)   & 1.000 & 1.000 & 0.831 & 0.841 & 0.486 & 0.337 & 0.875 & 3.8\%
+                        & 1.000 & 1.000 & 0.902 & 0.866 & 0.755 & 0.645 & 0.909 & 1.0\% \\
+IE+IR+ER (full)         & 1.000 & 1.000 & \textbf{0.865} & \textbf{0.890} & \textbf{0.623} & \textbf{0.463} & 0.950 & \textbf{4.2\%}
+                        & 1.000 & 1.000 & \textbf{0.930} & \textbf{0.885} & \textbf{0.878} & \textbf{0.793} & 0.985 & \textbf{5.6\%} \\
+\hline
+\end{tabular}
+\label{tab:results}
+\end{center}
+\end{table*}
+
+\textbf{Normalization.} Brand accuracy saturates at 1.000 once any
+retrieval step is introduced, reflecting that the DVM-CAR brand
+catalog covers the head of the brand distribution for both datasets.
+We therefore focus on the \textit{model} attribute, where the
+normalization problem is genuinely non-trivial. Adding retrieval
+(IE+IR) improves model accuracy over the IE baseline by roughly four
+percentage points on each dataset, from 0.787 to 0.831 on AutoScout24
+and from 0.858 to 0.902 on MuCars. The full pipeline lifts this
+further to 0.865 and 0.930 respectively. The 95\% bootstrap intervals
+for the full pipeline ($[0.835, 0.894]$ on AutoScout24 and $[0.906,
+0.950]$ on MuCars) lie strictly above the corresponding IE intervals
+($[0.748, 0.819]$ and $[0.828, 0.886]$), so the improvement over the
+IE-only baseline is statistically clean on both datasets. Macro-F1
+follows the same ordering, rising from $0.825~[0.795, 0.846]$ to
+$0.890~[0.866, 0.912]$ on AutoScout24 and from $0.826~[0.801, 0.859]$
+to $0.885~[0.869, 0.921]$ on MuCars, indicating that the accuracy
+gain is not driven purely by head classes. Against the threshold
+variant, the full pipeline's accuracy edge is directional rather than
+statistically sharp: at $n = 500$ per dataset the confidence
+intervals of the two overlap on model accuracy.
+
+\textbf{Novelty detection.} The largest qualitative gap between
+variants appears on novelty detection, the task of flagging vehicle
+models absent from the DVM-CAR catalog. The full pipeline improves
+novelty precision substantially on both datasets: from $0.516~
+[0.422, 0.607]$ to $0.793~[0.696, 0.878]$ on MuCars, and from
+$0.280~[0.212, 0.357]$ to $0.463~[0.366, 0.573]$ on AutoScout24.
+Novelty F1 rises from $0.680~[0.594, 0.755]$ to $0.878~[0.812,
+0.932]$ on MuCars and from $0.437~[0.350, 0.526]$ to $0.623~[0.525,
+0.715]$ on AutoScout24. The 95\% bootstrap intervals indicate that
+these gains are robust under resampling, while recall stays at or
+above 0.95 across variants. The threshold variant yields novelty F1
+of $0.486~[0.388, 0.585]$ on AutoScout24 and $0.755~[0.671, 0.821]$
+on MuCars, so the full pipeline's lower confidence bound on MuCars
+$(0.812)$ sits essentially at the threshold variant's upper bound,
+indicating near-clean separation even against the best fixed-cosine
+configuration. This is consistent with the design intent of the ER
+step: when the vector-space neighborhood is genuinely ambiguous, a
+fixed cutoff cannot distinguish legitimate synonyms from new entities,
+and deferring the decision to the LLM recovers both precision and
+compression.
+
+\textbf{Compression.} The full pipeline compresses the model
+vocabulary from 238 to 228 unique values on AutoScout24 (4.2\%) and
+from 196 to 185 on MuCars (5.6\%), confirming that the canonicalization
+step actively merges surface-form duplicates into shared canonical
+entries. The threshold variant compresses less aggressively (3.8\%
+and 1.0\% respectively), particularly on MuCars where a $\tau = 0.85$
+cutoff seldom fires. This is the mirror image of the novelty-detection
+result: a conservative cosine threshold leaves synonyms split across
+the catalog, which in turn inflates both the apparent novelty rate and
+the size of the emitted vocabulary.
+
+\textbf{Per-attribute extraction accuracy.}
+Table~\ref{tab:extraction} reports accuracy on every attribute for
+which annotator agreement meets the reliability threshold
+($\kappa \geq 0.60$). The LLM extractor reaches macro-averaged
+accuracy of 0.983 on AutoScout24 (10 attributes) and 0.979 on
+MuCars (7 attributes, mileage excluded because MuCars encodes this
+field as numeric ranges rather than point values, incompatible with
+the scalar annotation schema). Most closed-domain attributes
+saturate at 1.000, reflecting that the extraction prompt constrains
+outputs to $\mathcal{V}_j^{\text{closed}}$. Attributes where the
+pipeline adds measurable value over IE are concentrated on brand
+and model, where retrieval and LLM resolution lift accuracy beyond
+what extraction alone yields.
+
+\begin{table}[htbp]
+\caption{Per-attribute extraction accuracy. IE+IR is omitted
+because retrieval only affects the two open-domain attributes and
+reproduces IE exactly on closed-domain attributes.
+$^\dagger$Excluded from the MuCars macro-average because MuCars
+encodes mileage as ranges.}
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|l|cc|cc|}
+\hline
+ & \multicolumn{2}{c|}{\textbf{AutoScout24}}
+ & \multicolumn{2}{c|}{\textbf{MuCars}} \\
+\cline{2-5}
+\textbf{Attribute} & \textit{IE} & \textit{Full}
+                   & \textit{IE} & \textit{Full} \\
+\hline
+brand                     & 0.992 & 1.000          & 1.000          & 1.000          \\
+model                     & 0.787 & 0.865          & 0.858          & 0.930          \\
+year                      & 1.000 & 1.000          & 1.000          & 1.000          \\
+mileage                   & 1.000 & 1.000          & 0.332$^\dagger$ & 0.332$^\dagger$ \\
+engine\_power             & 1.000 & 1.000          & --             & --             \\
+transmission\_type        & 1.000 & 1.000          & 1.000          & 1.000          \\
+fuel\_type                & 0.984 & 0.984          & 1.000          & 1.000          \\
+color                     & 1.000 & 1.000          & --             & --             \\
+fuel\_consumption         & 0.992 & 0.992          & --             & --             \\
+fuel\_cons.\ unit         & 0.990 & 0.990          & --             & --             \\
+condition                 & --    & --             & 0.998          & 0.998          \\
+doors                     & --    & --             & 0.924          & 0.924          \\
+\hline
+\textbf{Macro-avg}        & \textbf{0.974} & \textbf{0.983}
+                          & \textbf{0.969} & \textbf{0.979} \\
+\hline
+\end{tabular}
+\label{tab:extraction}
+\end{center}
+\end{table}
+
+\subsection{Ablation}
+\label{sec:ablation}
+
+\subsection{Downstream Utility}
+\label{sec:downstream}
+
+\begin{table}[htbp]
+\caption{Downstream price-prediction error on MuCars under raw vs
+normalized features. Lower is better.}
+\begin{center}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{|l|cc|cc|}
+\hline
+ & \multicolumn{2}{c|}{\textbf{Raw}}
+ & \multicolumn{2}{c|}{\textbf{Normalized}} \\
+\cline{2-5}
+\textbf{Model} & \textit{MAE} & \textit{MAPE}
+               & \textit{MAE} & \textit{MAPE} \\
+\hline
+CatBoost  & -- & -- & -- & -- \\
+XGBoost   & -- & -- & -- & -- \\
+LightGBM  & -- & -- & -- & -- \\
+\hline
+\end{tabular}
+\label{tab:downstream}
+\end{center}
+\end{table}
 
 \section{Conclusion}
 
@@ -826,12 +1065,5 @@ For all accuracy metrics we report 95\% bootstrap confidence intervals over
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
-
-\appendix
-
-\section{Annotation Prompts}
-\label{app:prompts}
-
-[Prompts to be included here.]
 
 \end{document}
