@@ -44,29 +44,29 @@ jnancu@inf.utfsm.cl}}
 
 \begin{abstract}
 Heterogeneous vehicle datasets across markets, languages, and
-platforms force every downstream ML pipeline to rebuild
-attribute normalization from scratch, a bottleneck repeatedly
-noted in the vehicle price prediction literature. Existing
+platforms force every downstream ML pipeline to engineer
+dataset-specific normalization from scratch, a bottleneck
+repeatedly noted in the vehicle price prediction literature. Existing
 standards (VIN, schema.org Automotive, COVESA VSS) see little
 adoption in open data, leaving listings to diverge along
 naming, granularity, and scope axes. We present a vehicle data
 normalization framework that maps a free-text listing to an
 extensible normalized schema by chaining three steps: extract
-attribute values, retrieve candidates from a self-growing
-catalog, and resolve matches at the record level. Our method
-achieves novelty F1 of $0.623$ and $0.878$
-on brand-model pairs across $1{,}000$ labeled listings from AutoScout24 (Germany)
-and MuCars (Morocco), respectively, with $95\%$ bootstrap intervals
+attribute values, retrieve candidates from self-growing
+per-attribute catalogs, and resolve matches at the record level. Our method
+achieves novelty F1 of 0.623 and 0.878
+on brand-model pairs across 1,000 labeled listings from AutoScout24 (Germany)
+and MuCars (Morocco), respectively, with 95\% bootstrap intervals
 above the extraction-only baseline.
 The utility of normalization extends downstream to
 vehicle price prediction, improving MAPE by
-$2.7$--$5.3\%$ on MuCars across CatBoost, XGBoost, and LightGBM,
+2.7--5.3\% on MuCars across CatBoost, XGBoost, and LightGBM,
 and is larger on listings with canonicalized models, where MAE
-improves by up to $8.7\%$.
-Ablations justify the LLM resolver: no fixed
-cosine-similarity threshold jointly achieves competitive
-model F1 and novelty F1, whereas resolving novelty at the
-record level surpasses every threshold on both metrics.
+improves by up to 8.7\%.
+Ablations show the record-level resolver achieves
+normalization quality and novelty-detection F1 unmatched by
+any cosine-similarity threshold tested, since no single
+cutoff can both merge synonyms and preserve novel entities.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -83,29 +83,29 @@ The global used car market was valued at USD 1.90 trillion in 2024 and is projec
 The expansion of online platforms has produced a proliferation of heterogeneous vehicle datasets across automotive markets. Without a shared standard for representing vehicles, descriptions of the same real-world entity diverge along three axes: \textit{naming inconsistency}, where the same concept appears under different strings (e.g., ``mercedes'', ``mercedes-benz'', ``mercedes benz''); \textit{granularity inconsistency}, where the same attribute is expressed at different levels of detail (e.g., ``automatic'' vs.\ ``7-speed DCT''); and \textit{scope inconsistency}, where a single field conflates values that belong to distinct real-world dimensions (e.g., a \textit{fuel type} column containing both ``petrol'' and ``phev''). Left unaddressed, these inconsistencies propagate through downstream machine learning (ML) pipelines, undermining feature extraction, similarity computation, and ultimately model performance.
 
 % Paragraph about standard efforts
-Several standardization efforts have attempted to prescribe how a vehicle \textit{should} be modeled, yet open datasets in practice do not follow any of them. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, is effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data is rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. A standard that is not adopted at scale offers no interoperability in practice: heterogeneous listings from open platforms continue to diverge along the three axes described above, regardless of which schema has been formally defined. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
+Several standardization efforts have attempted to prescribe how a vehicle \textit{should} be modeled, yet open datasets in practice do not follow any of them. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, is effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data are rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. A standard that is not adopted at scale offers no interoperability in practice: heterogeneous listings from open platforms continue to diverge along the three axes described above, regardless of which schema has been formally defined. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
 
 % Paragraph about contribution
-In this work, we propose a general vehicle normalization framework that combines large language models (LLMs) for information extraction (IE) and entity resolution (ER) with dense information retrieval (IR) over a knowledge catalog, following the retrieval-augmented generation (RAG) paradigm, to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream ML tasks. Our framework is open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements.
+In this work, we propose a general vehicle normalization framework that combines large language models (LLMs) for information extraction (IE) and entity resolution (ER) with dense information retrieval (IR) over a knowledge catalog, following the retrieval-augmented generation (RAG) paradigm, to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream ML tasks. Our framework is designed to be open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements.
 
 
 \section{Related Work}
 
 \subsection{Vehicle Data Preprocessing in ML}
 
-Existing ML studies on vehicle data each rebuild preprocessing from scratch, with no transfer across datasets, languages, or markets. Bergmann and Feuerriegel~\cite{bergmann2025125640} mapped roughly $50{,}000$ German equipment strings onto $18$ manually selected categories via keyword and regex rules co-designed with $51$ car dealers, reducing MAE by $3.27\%$ on $92{,}239$ Swiss listings; the authors describe the approach as ``tailored'' to their partner's market. Fayyaz et al.~\cite{vehicles7030094} relied on regex extraction and per-field standardization (transmission, mileage, engine, color) to increase Linear Regression $R^2$ from $0.03$ to $0.80$ on US listings, and acknowledge the recipe is dataset-specific. Dutulescu et al.~\cite{electronics12143083} trained on $300{,}000+$ German listings and tested on $15{,}000+$ Romanian ones, found that car-model embeddings failed to transfer for infrequent models, and explicitly called for ``a method for dataset standardization across different car markets.'' At larger scale, Madhusudhanan et al.~\cite{10825740} found that the high cardinality of $56$ unstandardized categorical features (make, model, trim, equipment, market region) prevented state-of-the-art tabular models from processing their $\sim$$2$M-record corpus.
+Existing ML studies on vehicle data each engineer dataset-specific preprocessing from scratch, with no transfer across datasets, languages, or markets. Bergmann and Feuerriegel~\cite{bergmann2025125640} mapped roughly $50{,}000$ German equipment strings onto $18$ manually selected categories via keyword and regex rules co-designed with $51$ car dealers, reducing MAE by $3.27\%$ on $92{,}239$ Swiss listings; the authors describe the approach as ``tailored'' to their partner's market. Fayyaz et al.~\cite{vehicles7030094} relied on regex extraction and per-field standardization (transmission, mileage, engine, color) to increase Linear Regression $R^2$ from $0.03$ to $0.80$ on US listings, and acknowledge the recipe is dataset-specific. Dutulescu et al.~\cite{electronics12143083} trained on $300{,}000+$ German listings and tested on $15{,}000+$ Romanian ones, found that car-model embeddings failed to transfer for infrequent models, and explicitly called for ``a method for dataset standardization across different car markets.'' At larger scale, Madhusudhanan et al.~\cite{10825740} found that the high cardinality of $56$ unstandardized categorical features (make, model, trim, equipment, market region) prevented state-of-the-art tabular models from processing their $\sim$$2$M-record corpus.
 
 \subsection{Information Extraction}
 
 IE from product descriptions has evolved from task-specific sequence taggers to general-purpose LLM-based extractors. OpenTag~\cite{zheng2018opentag} formalized product attribute value extraction (AVE) as sequence tagging with a BiLSTM-CRF architecture, achieving 83\% F1 with only 150 annotated samples. Wang et al.~\cite{wang2020aveqa} reformulated AVE as question answering, where each attribute becomes a query and the model identifies answer spans using a shared BERT encoder.
 
-The most relevant line of work for our framework comes from Brinkmann et al. Their initial study~\cite{brinkmann2023chatgpt_ie} showed that ChatGPT achieves performance comparable to fine-tuned pre-trained language models (PLMs) for product information extraction while requiring far less training data: a single few-shot example boosted open extraction F1 by approximately 33\%. Their follow-up, ExtractGPT~\cite{brinkmann2024extractgpt}, evaluated GPT-3.5, GPT-4, and Llama-3-70B on attribute-value extraction from unstructured product descriptions, with GPT-4 reaching 85\% F1 and outperforming BERT-based baselines. Most directly relevant to our work, Brinkmann et al.~\cite{brinkmann2024adbis} extended AVE to include \textit{normalization}, exploring GPT-3.5 and GPT-4 for both extracting and normalizing attribute values to a unified scale. On the WDC-PAVE benchmark, GPT-4 achieved 91\% F1 with 10 demonstrations, and the authors found LLMs to be especially strong at name expansion and string wrangling for normalization, which is precisely the capability our framework exploits for vehicle attribute extraction.
+The most relevant line of work for our framework comes from Brinkmann et al.\@ Their initial study~\cite{brinkmann2023chatgpt_ie} showed that ChatGPT achieves performance comparable to fine-tuned pre-trained language models (PLMs) for product information extraction while requiring far less training data: a single few-shot example boosted open extraction F1 by approximately 33\%. Their follow-up, ExtractGPT~\cite{brinkmann2024extractgpt}, evaluated GPT-3.5, GPT-4, and Llama-3-70B on attribute-value extraction from unstructured product descriptions, with GPT-4 reaching 85\% F1 and outperforming BERT-based baselines. Most directly relevant to our work, Brinkmann et al.~\cite{brinkmann2024adbis} extended AVE to include \textit{normalization}, exploring GPT-3.5 and GPT-4 for both extracting and normalizing attribute values to a unified scale. On the WDC-PAVE benchmark, GPT-4 achieved 91\% F1 with 10 demonstrations, and the authors found LLMs to be especially strong at name expansion and string wrangling for normalization, which is precisely the capability our framework exploits for vehicle attribute extraction.
 
 Beyond product-specific work, GoLLIE~\cite{sainz2024gollie} demonstrated that encoding annotation guidelines as Python class definitions with docstrings enables high-quality zero-shot IE, outperforming GPT-3.5 on NER tasks. This finding is directly relevant to our approach, where the vehicle attribute schema serves an analogous role as a structured extraction guide.
 
 \subsection{Information Retrieval}
 
-The RAG paradigm, introduced by Lewis et al.~\cite{lewis2020rag}, combines parametric (model weights) and non-parametric (retrieved documents) knowledge by coupling a seq2seq model with a dense vector index. For the retrieval component specifically, Karpukhin et al.~\cite{karpukhin2020dpr} established that learned dual-encoder embeddings (Dense Passage Retrieval) outperform BM25 by 9--19\% absolute in top-20 retrieval accuracy. Izacard et al.~\cite{izacard2022contriever} showed that fully unsupervised dense retrieval via contrastive learning matches BM25 without requiring labeled query-passage pairs, which is particularly relevant when labeled vehicle matching data is scarce.
+The RAG paradigm, introduced by Lewis et al.~\cite{lewis2020rag}, combines parametric (model weights) and non-parametric (retrieved documents) knowledge by coupling a seq2seq model with a dense vector index. For the retrieval component specifically, Karpukhin et al.~\cite{karpukhin2020dpr} established that learned dual-encoder embeddings (Dense Passage Retrieval) outperform BM25 by 9--19\% absolute in top-20 retrieval accuracy. Izacard et al.~\cite{izacard2022contriever} showed that fully unsupervised dense retrieval via contrastive learning matches BM25 without requiring labeled query-passage pairs, which is particularly relevant when labeled vehicle matching data are scarce.
 
 For efficient nearest-neighbor search over embedding spaces, the FAISS library~\cite{johnson2021faiss, douze2024faiss} provides GPU-optimized algorithms supporting brute-force, inverted file (IVF), product quantization (PQ), and hierarchical navigable small world (HNSW) indexing. On the embedding side, Sentence-BERT~\cite{reimers2019sbert} established the paradigm of pre-computed sentence embeddings for efficient similarity search, while recent models such as E5~\cite{wang2022e5} and BGE~\cite{xiao2024bge} have achieved state-of-the-art results on retrieval benchmarks. Our framework uses HNSW indexes built over sentence embeddings to retrieve candidate values for open-domain vehicle attributes.
 
@@ -590,12 +590,12 @@ the entity-resolution step.
 We compare the full pipeline (IE+IR+ER) against two baselines
 (Fig.~\ref{fig:baselines}).
 IE sets $\tilde{a}_j = \hat{a}_j$ for all $j$, isolating the
-gain from retrieval and resolution. IE+IR keeps $\tilde{a}_j =
+contribution of retrieval and resolution. IE+IR keeps $\tilde{a}_j =
 \hat{a}_j$ for $j \in \mathcal{I}_{\text{closed}}$ and, for $j \in
 \mathcal{I}_{\text{open}}$, sets $\tilde{a}_j = c_1$ when
 $\text{sim}(\mathbf{e}_j, \mathbf{e}_{c_1}) \geq \tau$, for a
 cosine-similarity threshold $\tau$, and $\tilde{a}_j = \hat{a}_j$
-otherwise, isolating the gain from the LLM resolver $M$.
+otherwise, isolating the contribution of the LLM resolver $M$.
 
 \begin{figure*}[t]
 \centering
@@ -826,19 +826,20 @@ prompted to infer values from contextual cues (e.g., body type
 inferred from a model name), drawing on knowledge that lies outside
 the annotator's literal reading of the listing.
 
-Flagged low-agreement attributes ($\kappa < 0.60$) are
-\textit{Engine size} and \textit{Energy source} on AutoScout24, and
-\textit{Mileage unit}, \textit{Body type}, \textit{Energy source},
-and \textit{Propulsion system} on MuCars. These attributes are
-rarely stated explicitly in their source listings (null fractions of
-$0.70$ to $0.88$), so annotators must either leave the field blank
-or infer market defaults (the platform's implicit \textit{km} unit;
-\textit{fossil} or \textit{icev} for older ICE-dominated MuCars
-listings); the resulting policy split is what drives the per-attribute
-$\kappa$ below zero on MuCars. The pooled $\kappa = 0.591$ reflects
-this mechanism on a larger fraction of attributes than AutoScout24,
-not uniform disagreement across the schema: on the remaining eight
-MuCars attributes all three annotators agree at $\kappa \geq 0.96$.
+The MuCars pooled $\kappa = 0.591$ is a coverage artifact rather
+than a signal of annotator disagreement. Four attributes
+(\textit{Mileage unit}, \textit{Body type}, \textit{Energy source},
+\textit{Propulsion system}) are blank in $70$--$88\%$ of records,
+leaving annotators to choose between marking the field unobservable
+or inferring a market default (the implicit \textit{km} unit;
+\textit{fossil} or \textit{icev} for older ICE-dominated listings);
+this policy split, not disagreement on extracted content, accounts
+for the negative per-attribute $\kappa$ on those four. On the eight
+MuCars attributes that listings actually populate, per-attribute
+$\kappa$ ranges from $0.962$ to $1.000$; on AutoScout24's ten
+populated attributes, from $0.918$ to $1.000$. Pooled $\kappa$
+averaged over a schema with several near-empty attributes therefore
+underestimates annotation reliability~\cite{artstein2008interagreement}.
 
 \subsection{Metrics}
 \label{sec:metrics}
@@ -958,7 +959,7 @@ IE+IR+ER (full)         & 1.000 & 1.000 & \textbf{0.865} & \textbf{0.890} & \tex
 \paragraph{Normalization}
 Brand accuracy saturates at 1.000 once any
 retrieval step is introduced, reflecting that the DVM-CAR brand
-catalog covers the head of the brand distribution for both datasets.
+catalog covers nearly every brand in both datasets.
 We therefore focus on the \textit{model} attribute, where the
 normalization problem is genuinely non-trivial. Adding retrieval
 (IE+IR) improves model accuracy over the IE baseline by roughly four
@@ -972,7 +973,7 @@ IE-only baseline is statistically clean on both datasets. Macro-F1
 follows the same ordering, rising from $0.822~[0.792, 0.842]$ to
 $0.890~[0.866, 0.912]$ on AutoScout24 and from $0.832~[0.804, 0.861]$
 to $0.885~[0.869, 0.921]$ on MuCars, indicating that the accuracy
-gain is not driven purely by head classes. Against the threshold
+improvement is not driven purely by popular classes. Against the threshold
 variant, the full pipeline's accuracy edge is directional rather than
 statistically sharp: at $n = 500$ per dataset the confidence
 intervals of the two overlap on model accuracy.
@@ -987,7 +988,7 @@ $0.280~[0.213, 0.355]$ to $0.463~[0.366, 0.573]$ on AutoScout24.
 Novelty F1 rises from $0.684~[0.597, 0.755]$ to $0.878~[0.812,
 0.932]$ on MuCars and from $0.437~[0.352, 0.524]$ to $0.623~[0.525,
 0.715]$ on AutoScout24. The 95\% bootstrap intervals indicate that
-these gains are robust under resampling, while recall stays at or
+these improvements are robust under resampling, while recall stays at or
 above 0.95 across variants. The threshold variant yields novelty F1
 of $0.504~[0.399, 0.597]$ on AutoScout24 and $0.795~[0.725, 0.854]$
 on MuCars, both below the full pipeline's $0.623$ and $0.878$.
@@ -1084,7 +1085,7 @@ noise from the predicted novel set, increasing novelty precision
 from $0.280$ to $0.443$ on AutoScout24 and from $0.520$ to
 $0.839$ on MuCars at $\tau{=}0.50$, but the same aggressive
 matching collapses some genuine novelties into catalog
-entries, dropping novelty recall to $0.875$ and $0.712$. The
+entries, reducing novelty recall to $0.875$ and $0.712$. The
 resulting compression at the lowest $\tau$ ($\sim$$13\%$ on
 AutoScout24, $\sim$$8\%$ on MuCars) therefore mixes correct
 synonym collapses with false matches against true novelties.
@@ -1181,10 +1182,10 @@ reduces error on every metric, every model, and both slices.
 On the full test set MAPE falls by $2.7$ to $5.3\%$
 (CatBoost weakest, XGBoost largest) and MAE by
 $4.4$ to $6.4\%$ (LightGBM weakest, XGBoost largest). On the
-canonicalized-models subset the reduction concentrates: MAPE drops
+canonicalized-models subset the reduction concentrates: MAPE decreases
 by $4.5$ to $5.1\%$, MdAPE by $6.5$ to $8.3\%$, and MAE by
 $5.5$ to $8.7\%$, with CatBoost recording the largest MAE
-reduction at $-8.7\%$. The
+reduction at $8.7\%$. The
 improvement is consistent in direction and comparable in
 magnitude across architectures, indicating that the canonical
 labels carry signal that is robust to the choice of downstream
@@ -1223,43 +1224,39 @@ LightGBM & $0.198 \to \mathbf{0.188}$ ($-4.9\%$) & $0.113 \to \mathbf{0.106}$ ($
 
 We presented a vehicle normalization framework that maps
 free-text listings to a 26-attribute schema by chaining LLM
-extraction, dense retrieval over a per-attribute catalog, and
-record-level LLM resolution. On $1{,}000$ human-annotated
+extraction, dense retrieval over self-growing per-attribute
+catalogs, and record-level LLM resolution. On $1{,}000$ human-annotated
 listings from AutoScout24 and MuCars, the full pipeline
-(IE$+$IR$+$ER) raises model accuracy over an extraction-only
-baseline (IE) from $0.783$ to $0.865$ on AutoScout24 and from
-$0.862$ to $0.930$ on MuCars, improves novelty F1 on (brand, model) pairs from $0.437$ to
-$0.623$ and from $0.684$ to $0.878$, and compresses the model
-vocabulary by $4.2\%$ and $5.6\%$. The benefits extend
-downstream: on MuCars price prediction, MAPE improves by
-$2.7$--$5.3\%$ and MAE by $4.4$--$6.4\%$ across CatBoost,
-XGBoost, and LightGBM on the full test set. The
-improvement is larger on the $21.6\%$ of listings whose model
-was canonicalized by the pipeline: on this subset,
-MAPE improves by $4.5$--$5.1\%$ and MAE by $5.5$--$8.7\%$ across
-the same three regressors, well above the full-set figures.
-The takeaway is that downstream regressors benefit mostly from
-variant pooling: a single canonical label lets the regressor
-treat as one input what the raw data splits into separate
-categories.
+improves model accuracy and novelty F1 over an extraction-only
+baseline on both datasets, and reduces price-prediction MAPE
+by $2.7$--$5.3\%$ on MuCars across CatBoost, XGBoost, and
+LightGBM. The downstream improvement concentrates on the
+$21.6\%$ of MuCars test rows whose model name was canonicalized
+by the pipeline: on this subset, MAE decreases by
+$5.5$--$8.7\%$, well above the full-set figure. Downstream
+regressors therefore benefit mostly from variant pooling: a
+single canonical label lets the regressor treat as one input
+what the raw data splits into separate categories.
 
-The empirical pattern reduces to a single observation: no fixed cosine threshold
-can jointly satisfy normalization and novelty detection, because the
-cutoff that merges synonyms also collapses new entities. The LLM
-resolver avoids this trade-off by deciding at the record level rather
-than at the embedding-distance level. The $k$ ablation confirms it:
-at $k = 1$ the resolver over-merges, and at $k \geq 3$ it turns
-selective at near-flat quality cost.
+This study has three main limitations. First, open-domain coverage
+is narrow: only \textit{brand} and \textit{model} exercise the full
+pipeline, and brand normalization saturates because the seed catalog
+already covers nearly every brand. Second, evaluation is restricted
+to OpenAI models, leaving cross-family generalization untested.
+Third, the $n = 1{,}000$ test sample is small relative to comparable
+normalization benchmarks and yields wide bootstrap intervals on
+novelty F1.
 
-Brand normalization already saturates because the seed catalog covers
-the brand head, so the measurable gains concentrate on model and
-novelty detection. Inter-annotator agreement is genuinely lower on
-attributes whose meaning is contested in source listings, and the
-schema reflects this rather than hides it. A direct next step
-follows from the merged subset, which is $21.6\%$ of MuCars listings
-and drives the largest downstream gains: seeding the catalog from a
-union of markets should widen this subset and test whether downstream
-improvement scales with cross-market catalog overlap.
+Considering this, future work follows several directions. Expanding
+the open-domain attribute set (e.g., \textit{submodel},
+\textit{trim level}) and seeding the catalog from a union of markets
+would deepen vehicle taxonomy coverage and widen the
+canonicalized-models subset. Replicating the pipeline with
+open-source LLMs (e.g., Llama, Mistral) would test cross-family
+generalization. Finally, extending the framework to general-purpose product
+normalization would enable evaluation on open-source benchmarks such as
+WDC-PAVE~\cite{brinkmann2024adbis} and expand its applicability
+beyond vehicles.
 
 Our code and evaluation data will be released as open source upon
 acceptance.
