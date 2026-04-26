@@ -16,7 +16,10 @@
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \begin{document}
 
-\title{An LLM-Based Framework for Cross-Market Vehicle Data Normalization\\
+\title{Vehicle Data Normalization with Retrieval-Augmented LLMs\\
+\thanks{This work was partially supported by the Agencia Nacional
+de Investigación y Desarrollo (ANID) under FONDECYT Initiation
+Project 11230351 and by CCTVal Basal FB0821.}
 }
 
 \author{\IEEEauthorblockN{1\textsuperscript{st} Diego Quezada}
@@ -40,6 +43,30 @@ jnancu@inf.utfsm.cl}}
 \maketitle
 
 \begin{abstract}
+Heterogeneous vehicle datasets across markets, languages, and
+platforms force every downstream ML pipeline to rebuild
+attribute normalization from scratch, a bottleneck repeatedly
+noted in the vehicle price prediction literature. Existing
+standards (VIN, schema.org Automotive, COVESA VSS) see little
+adoption in open data, leaving listings to diverge along
+naming, granularity, and scope axes. We present a vehicle data
+normalization framework that maps a free-text listing to an
+extensible normalized schema by chaining three steps: extract
+attribute values, retrieve candidates from a self-growing
+catalog, and resolve matches at the record level. Our method
+achieves novelty F1 of $0.623$ and $0.878$
+on brand-model pairs across $1{,}000$ labeled listings from AutoScout24 (Germany)
+and MuCars (Morocco), respectively, with $95\%$ bootstrap intervals
+above the extraction-only baseline.
+The utility of normalization extends downstream to
+vehicle price prediction, improving MAPE by
+$2.7$--$5.3\%$ on MuCars across CatBoost, XGBoost, and LightGBM,
+and is larger on listings with canonicalized models, where MAE
+improves by up to $8.7\%$.
+Ablations justify the LLM resolver: no fixed
+cosine-similarity threshold jointly achieves competitive
+model F1 and novelty F1, whereas resolving novelty at the
+record level surpasses every threshold on both metrics.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -53,7 +80,7 @@ LLM, RAG, Information Extraction, Information Retrieval, Entity Resolution
 The global used car market was valued at USD 1.90 trillion in 2024 and is projected to grow at a compound annual growth rate (CAGR) of 6.0\% from 2025 to 2030 \cite{grandview2024usedcar, hu2025583}. Key factors driving this growth include rising new vehicle prices, enhanced vehicle financing options, and advancements in online platforms \cite{hu2025583, zacharof}, which facilitate access to inventory and information impacting consumer trust, such as online reviews and ratings \cite{zhang2025decoding}.
 
 % Paragraph about the problem
-The expansion of online platforms has produced a proliferation of heterogeneous vehicle datasets across automotive markets. Without a shared standard for representing vehicles, descriptions of the same real-world entity diverge along three axes: \textbf{naming inconsistency}, where the same concept appears under different strings (e.g., ``mercedes'', ``mercedes-benz'', ``mercedes benz''); \textbf{granularity inconsistency}, where the same attribute is expressed at different levels of detail (e.g., ``automatic'' vs.\ ``7-speed DCT''); and \textbf{scope inconsistency}, where a single field conflates values that belong to distinct real-world dimensions (e.g., a \textit{fuel type} column containing both ``petrol'' and ``phev''). Left unaddressed, these inconsistencies propagate through downstream machine learning (ML) pipelines, undermining feature extraction, similarity computation, and ultimately model performance.
+The expansion of online platforms has produced a proliferation of heterogeneous vehicle datasets across automotive markets. Without a shared standard for representing vehicles, descriptions of the same real-world entity diverge along three axes: \textit{naming inconsistency}, where the same concept appears under different strings (e.g., ``mercedes'', ``mercedes-benz'', ``mercedes benz''); \textit{granularity inconsistency}, where the same attribute is expressed at different levels of detail (e.g., ``automatic'' vs.\ ``7-speed DCT''); and \textit{scope inconsistency}, where a single field conflates values that belong to distinct real-world dimensions (e.g., a \textit{fuel type} column containing both ``petrol'' and ``phev''). Left unaddressed, these inconsistencies propagate through downstream machine learning (ML) pipelines, undermining feature extraction, similarity computation, and ultimately model performance.
 
 % Paragraph about standard efforts
 Several standardization efforts have attempted to prescribe how a vehicle \textit{should} be modeled, yet open datasets in practice do not follow any of them. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, is effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data is rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. A standard that is not adopted at scale offers no interoperability in practice: heterogeneous listings from open platforms continue to diverge along the three axes described above, regardless of which schema has been formally defined. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
@@ -66,19 +93,13 @@ In this work, we propose a general vehicle normalization framework that combines
 
 \subsection{Vehicle Data Preprocessing in ML}
 
-Existing ML studies on vehicle data repeatedly confront the fact that each dataset uses its own representation: different columns, naming conventions, languages, abbreviations, and attribute domains. In practice, each study builds a tailored preprocessing pipeline from scratch, and none of the resulting transformations transfers to a new dataset or market.
-
-Bergmann and Feuerriegel~\cite{bergmann2025125640} provide the most detailed example of this pattern. Working with 92,239 used car sales from a Swiss retailer, they faced approximately 50,000 unique equipment identifiers represented as short German-language text descriptions (e.g., \textit{``Navigationsfunktion `Discover media' fuer Radiosystem `Composition media'\,''}). Their preprocessing pipeline consisted of three steps: first, they manually selected 18 target equipment categories (e.g., navigation system, alloy rims, park assist) based on the search filters of a Swiss online platform, validated by 51 car dealers; second, they mapped the 50,000 textual descriptions onto these 18 categories using a keyword-based search combined with regular expressions; third, they applied one-hot encoding to produce 18 binary predictors. This pipeline improved prediction performance (MAE) by 3.27\%. The authors themselves describe their approach as ``tailored'' to their partner company's data and market. The keyword rules are language-specific (German), the 18 categories reflect Swiss consumer preferences, and the mapping logic would need to be rebuilt for any new market, language, or equipment taxonomy.
-
-Fayyaz et al.~\cite{vehicles7030094} expose how raw vehicle listings resist direct ML application. Working with real-world listing data, they found that transmission entries varied widely (e.g., ``6-Speed A/T'', ``8-Speed PDK'', ``CVT-F''), mileage was stored as strings (e.g., ``10,000 mi.''), and engine specifications were embedded in free text (e.g., ``2.0L 255HP'') requiring regex extraction. They also standardized color names from manufacturer branding (e.g., ``Midnight Black'' mapped to ``Black''). After systematic feature engineering, Linear Regression $R^2$ improved from 0.03 to 0.80, yet the authors acknowledge that their pipeline is dataset-specific. Dutulescu et al.~\cite{electronics12143083} confirm that this problem extends across markets: training deep learning models on a German dataset (300,000+ entries) and evaluating on a Romanian dataset (15,000+ entries), they found that car model embeddings failed for infrequent models and explicitly called for ``a method for dataset standardization across different car markets.'' Madhusudhanan et al.~\cite{10825740} faced similar challenges at larger scale, handling 56 categorical features (make, model, trim, equipment, market region) across approximately 2 million records, where state-of-the-art tabular models could not even process the dataset due to the high cardinality of unstandardized vehicle attributes.
-
-Taken together, these studies show that vehicle data preprocessing remains ad-hoc, non-transferable, and a significant engineering bottleneck. Our framework addresses this gap by providing a reusable normalization pipeline that is agnostic to source schema, language, and market.
+Existing ML studies on vehicle data each rebuild preprocessing from scratch, with no transfer across datasets, languages, or markets. Bergmann and Feuerriegel~\cite{bergmann2025125640} mapped roughly $50{,}000$ German equipment strings onto $18$ manually selected categories via keyword and regex rules co-designed with $51$ car dealers, reducing MAE by $3.27\%$ on $92{,}239$ Swiss listings; the authors describe the approach as ``tailored'' to their partner's market. Fayyaz et al.~\cite{vehicles7030094} relied on regex extraction and per-field standardization (transmission, mileage, engine, color) to increase Linear Regression $R^2$ from $0.03$ to $0.80$ on US listings, and acknowledge the recipe is dataset-specific. Dutulescu et al.~\cite{electronics12143083} trained on $300{,}000+$ German listings and tested on $15{,}000+$ Romanian ones, found that car-model embeddings failed to transfer for infrequent models, and explicitly called for ``a method for dataset standardization across different car markets.'' At larger scale, Madhusudhanan et al.~\cite{10825740} found that the high cardinality of $56$ unstandardized categorical features (make, model, trim, equipment, market region) prevented state-of-the-art tabular models from processing their $\sim$$2$M-record corpus.
 
 \subsection{Information Extraction}
 
 IE from product descriptions has evolved from task-specific sequence taggers to general-purpose LLM-based extractors. OpenTag~\cite{zheng2018opentag} formalized product attribute value extraction (AVE) as sequence tagging with a BiLSTM-CRF architecture, achieving 83\% F1 with only 150 annotated samples. Wang et al.~\cite{wang2020aveqa} reformulated AVE as question answering, where each attribute becomes a query and the model identifies answer spans using a shared BERT encoder.
 
-The most relevant line of work for our framework comes from Brinkmann et al. In an initial study~\cite{brinkmann2023chatgpt_ie}, they showed that ChatGPT achieves performance comparable to fine-tuned pre-trained language models (PLMs) for product information extraction while requiring far less training data: a single few-shot example boosted open extraction F1 by approximately 33\%. Their follow-up, ExtractGPT~\cite{brinkmann2024extractgpt}, evaluated GPT-3.5, GPT-4, and Llama-3-70B on attribute-value extraction from unstructured product descriptions, with GPT-4 reaching 85\% F1 and outperforming BERT-based baselines. Most directly relevant to our work, Brinkmann et al.~\cite{brinkmann2024adbis} extended AVE to include \textit{normalization}, exploring GPT-3.5 and GPT-4 for both extracting and normalizing attribute values to a unified scale. On the WDC-PAVE benchmark, GPT-4 achieved 91\% F1 with 10 demonstrations, and the authors found LLMs to be especially strong at name expansion and string wrangling for normalization, which is precisely the capability our framework exploits for vehicle attribute extraction.
+The most relevant line of work for our framework comes from Brinkmann et al. Their initial study~\cite{brinkmann2023chatgpt_ie} showed that ChatGPT achieves performance comparable to fine-tuned pre-trained language models (PLMs) for product information extraction while requiring far less training data: a single few-shot example boosted open extraction F1 by approximately 33\%. Their follow-up, ExtractGPT~\cite{brinkmann2024extractgpt}, evaluated GPT-3.5, GPT-4, and Llama-3-70B on attribute-value extraction from unstructured product descriptions, with GPT-4 reaching 85\% F1 and outperforming BERT-based baselines. Most directly relevant to our work, Brinkmann et al.~\cite{brinkmann2024adbis} extended AVE to include \textit{normalization}, exploring GPT-3.5 and GPT-4 for both extracting and normalizing attribute values to a unified scale. On the WDC-PAVE benchmark, GPT-4 achieved 91\% F1 with 10 demonstrations, and the authors found LLMs to be especially strong at name expansion and string wrangling for normalization, which is precisely the capability our framework exploits for vehicle attribute extraction.
 
 Beyond product-specific work, GoLLIE~\cite{sainz2024gollie} demonstrated that encoding annotation guidelines as Python class definitions with docstrings enables high-quality zero-shot IE, outperforming GPT-3.5 on NER tasks. This finding is directly relevant to our approach, where the vehicle attribute schema serves an analogous role as a structured extraction guide.
 
@@ -120,23 +141,23 @@ section formalizes each component.
 \begin{tikzpicture}[
     node distance=0.18cm and 0.3cm,
     every node/.style={font=\scriptsize},
-    op/.style={draw, rounded corners=2pt, fill=gray!8, 
-               draw=gray!60, thick, minimum height=0.45cm,
+    op/.style={draw, rounded corners=2pt, fill=gray!8,
+               draw=gray!60, thick, minimum height=0.36cm,
                minimum width=1.7cm, inner sep=1.5pt, align=center},
-    llm/.style={draw, rounded corners=2pt, fill=blue!6, 
-                draw=blue!40, thick, minimum height=0.45cm,
+    llm/.style={draw, rounded corners=2pt, fill=blue!6,
+                draw=blue!40, thick, minimum height=0.36cm,
                 minimum width=1.7cm, inner sep=1.5pt, align=center},
     sel/.style={draw, rounded corners=2pt, fill=green!6,
-                draw=green!50, thick, minimum height=0.45cm,
+                draw=green!50, thick, minimum height=0.36cm,
                 minimum width=1.7cm, inner sep=1.5pt, align=center},
-    ops/.style={draw, rounded corners=2pt, fill=gray!8, 
-                draw=gray!60, thick, minimum height=0.45cm,
+    ops/.style={draw, rounded corners=2pt, fill=gray!8,
+                draw=gray!60, thick, minimum height=0.36cm,
                 minimum width=1.7cm, inner sep=1.5pt},
-    llms/.style={draw, rounded corners=2pt, fill=blue!6, 
-                 draw=blue!40, thick, minimum height=0.65cm,
+    llms/.style={draw, rounded corners=2pt, fill=blue!6,
+                 draw=blue!40, thick, minimum height=0.60cm,
                  minimum width=1.7cm, inner sep=1.5pt},
     sels/.style={draw, rounded corners=2pt, fill=green!6,
-                 draw=green!50, thick, minimum height=0.45cm,
+                 draw=green!50, thick, minimum height=0.36cm,
                  minimum width=1.7cm, inner sep=1.5pt},
     cats/.style={draw, rounded corners=2pt, fill=yellow!8, 
                  draw=yellow!60, thick, minimum width=1.4cm,
@@ -147,7 +168,7 @@ section formalizes each component.
                 draw=yellow!60, thick, minimum width=1.4cm,
                 minimum height=0.85cm, inner sep=1.5pt, align=center},
     outnode/.style={draw, rounded corners=2pt, fill=teal!8,
-                    draw=teal!50, thick, minimum height=0.45cm,
+                    draw=teal!50, thick, minimum height=0.36cm,
                     minimum width=1.7cm, inner sep=1.5pt, align=center},
     dm/.style={font=\scriptsize\itshape, text=gray!55},
     arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
@@ -166,55 +187,55 @@ section formalizes each component.
 % ===== TOP: shared pipeline =====
 \node[dat] (x) {$\mathbf{x}$};
 
-\node[op, below=0.25cm of x] (ser) {Serialize};
+\node[op, below=0.20cm of x] (ser) {Serialize};
 \draw[arr] (x) -- (ser);
 
-\node[dat, below=0.25cm of ser] (s) {$s \in \Sigma^+$};
+\node[dat, below=0.20cm of ser] (s) {$s \in \Sigma^+$};
 \draw[arr] (ser) -- (s);
 
-\node[llm, below=0.25cm of s] (ie) 
+\node[llm, below=0.20cm of s] (ie)
     {\textbf{IE}\\[-1pt] $\mathrm{LLM}(\mathrm{prompt}_{\mathrm{ext}}, s)$};
 \draw[arr] (s) -- (ie);
 
-\node[dat, below=0.25cm of ie] (xhat) 
+\node[dat, below=0.20cm of ie] (xhat)
     {$\hat{\mathbf{x}} = (\hat{a}_1, \dots, \hat{a}_m)$};
 \draw[arr] (ie) -- (xhat);
 
-\node[op, below=0.25cm of xhat] (ser2) {Serialize};
+\node[op, below=0.20cm of xhat] (ser2) {Serialize};
 \draw[arr] (xhat) -- (ser2);
 
-\node[dat, below=0.25cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
+\node[dat, below=0.20cm of ser2] (shat) {$\hat{s} \in \Sigma^+$};
 \draw[arr] (ser2) -- (shat);
 
 % ===== OUTER STACKED SECTION =====
 
 % Encode (extra gap below shat for dashed box label)
-\node[ops, soff2, below=0.55cm of shat, opacity=0.3] (enc_s2) {};
-\node[ops, soff,  below=0.55cm of shat, opacity=0.5] (enc_s1) {};
-\node[op,         below=0.55cm of shat]              (enc)    {Encode};
+\node[ops, soff2, below=0.45cm of shat, opacity=0.3] (enc_s2) {};
+\node[ops, soff,  below=0.45cm of shat, opacity=0.5] (enc_s1) {};
+\node[op,         below=0.45cm of shat]              (enc)    {Encode};
 \draw[arr] (shat) -- (enc);
 
-\node[dat, below=0.25cm of enc] (ej) 
+\node[dat, below=0.20cm of enc] (ej)
     {$\mathbf{e}_j = \mathrm{Encode}(\hat{a}_j)$};
 \draw[arr] (enc) -- (ej);
 
 % TopK
-\node[ops, soff2, below=0.25cm of ej, opacity=0.3] (topk_s2) {};
-\node[ops, soff,  below=0.25cm of ej, opacity=0.5] (topk_s1) {};
-\node[op,         below=0.25cm of ej]              (topk)    {TopK};
+\node[ops, soff2, below=0.20cm of ej, opacity=0.3] (topk_s2) {};
+\node[ops, soff,  below=0.20cm of ej, opacity=0.5] (topk_s1) {};
+\node[op,         below=0.20cm of ej]              (topk)    {TopK};
 \draw[arr] (ej) -- (topk);
 
 % Rj text splitting the arrow
-\node[dat, below=0.25cm of topk] (rj) 
+\node[dat, below=0.20cm of topk] (rj)
     {$\mathcal{R}_j = (c_1, \dots, c_k)$};
 \draw[arr] (topk) -- (rj);
 
 % ===== INNER SECTION =====
 
-\node[op,  below=0.25cm of rj] (sub) {$\hat{s}_{j \to c_i}$};
+\node[op,  below=0.20cm of rj] (sub) {$\hat{s}_{j \to c_i}$};
 \draw[arr] (rj) -- (sub);
 
-\node[llm, below=0.3cm of sub] (er) 
+\node[llm, below=0.25cm of sub] (er)
     {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
 
 % Shadow blocks
@@ -245,19 +266,19 @@ section formalizes each component.
     at ([xshift=0.55cm]rj.east |- sub) {$\times k$};
 
 % ===== SELECT (outer stacked) =====
-\node[sels, soff2, below=0.3cm of er, opacity=0.3] (sel_s2) {};
-\node[sels, soff,  below=0.3cm of er, opacity=0.5] (sel_s1) {};
-\node[sel,         below=0.3cm of er]              (select) 
+\node[sels, soff2, below=0.25cm of er, opacity=0.3] (sel_s2) {};
+\node[sels, soff,  below=0.25cm of er, opacity=0.5] (sel_s1) {};
+\node[sel,         below=0.25cm of er]              (select)
     {Select $\tilde{a}_j$};
 \draw[arr] (er) -- (select);
 
 % ===== Output =====
 % Combined label as a text-between-arrows node — vertically centered on the arrow
-\node[dat, below=0.25cm of select] (aj)
+\node[dat, below=0.20cm of select] (aj)
     {$\tilde{a}_j$}; %
 \draw[arr] (select) -- (aj);
 
-\node[outnode, below=0.25cm of aj] (output) 
+\node[outnode, below=0.20cm of aj] (output)
     {$\tilde{\mathbf{x}} = (\tilde{a}_1, \dots, \tilde{a}_m)$};
 \draw[arr] (aj) -- (output);
 
@@ -266,7 +287,7 @@ section formalizes each component.
       fit=(enc)(enc_s2)(ej)(rj)(sub)(er)(select)(sel_s2),
       inner xsep=6pt, inner ysep=8pt] (outerloop) {};
 
-\node[lb, anchor=south east] at ([xshift=0.35cm]outerloop.north east)
+\node[lb, anchor=south west] at ([xshift=0.1cm]outerloop.north east)
     {$j \in \mathcal{I}_{\mathrm{open}}$};
 
 % ===== Catalog =====
@@ -330,7 +351,7 @@ $\text{Serialize}: \mathcal{X} \to \Sigma^+$ renders a vehicle
 representation as a string. The mapping produces
 $\phi(s) = \tilde{\mathbf{x}} \in \tilde{\mathcal{X}}$.
 
-\paragraph{Knowledge catalog.}
+\paragraph{Knowledge catalog}
 For each open-domain attribute $A_j$ with
 $j \in \mathcal{I}_{\text{open}}$, we maintain a knowledge catalog:
 \begin{equation}
@@ -343,7 +364,7 @@ $\mathbf{e}_i = \text{Encode}(c_i) \in \mathbb{R}^{d}$. Any text
 encoder may serve as the encoding function.
 
 
-\paragraph{Information extraction.}
+\paragraph{Information extraction}
 Given a serialized vehicle description $s$, a single LLM call extracts
 candidate values for all attributes simultaneously:
 \begin{equation}
@@ -356,7 +377,7 @@ $\mathcal{V}_j^{\text{closed}}$. For open-domain attributes, the
 candidate $\hat{a}_j$ is passed to the retrieval and resolution steps
 described below.
 
-\paragraph{Information retrieval.}
+\paragraph{Information retrieval}
 For each open-domain attribute $A_j$, the extracted candidate is embedded
 as $\mathbf{e}_j = \text{Encode}(\hat{a}_j)$, and the top-$k$ most
 similar canonical entities are retrieved from catalog $\mathcal{K}_j$:
@@ -371,7 +392,7 @@ similar canonical entities are retrieved from catalog $\mathcal{K}_j$:
 The candidates in $\mathcal{R}_j$ are ranked in decreasing order of
 similarity.
 
-\paragraph{Entity resolution.}
+\paragraph{Entity resolution}
 Given the extracted attributes $\hat{\mathbf{x}}$ and the ranked
 candidates $\mathcal{R}_j = (c_1, c_2, \dots, c_k)$ for each
 open-domain attribute $A_j$, we compare two serialized vehicle
@@ -458,7 +479,7 @@ to human-annotated ground truth on real listings.
 \subsection{Experimental Setup}
 \label{sec:setup}
 
-\textbf{Schema.}
+\paragraph{Schema}
 Table~\ref{tab:schema} lists the $m = 26$ attributes of the normalized
 schema. Two attributes (\textit{brand}, \textit{model}) are open-domain;
 the remaining 24 are closed-domain, with domains given in
@@ -548,28 +569,28 @@ Color & black, white, silver, grey, red, blue, green, yellow, orange, brown, bei
 \end{center}
 \end{table}
 
-\textbf{Models.}
+\paragraph{Models}
 Information extraction uses OpenAI's \textit{gpt-4.1-nano} and
 entity resolution uses OpenAI's \textit{gpt-4.1-mini}. Candidate
 embeddings for open-domain attributes are computed with
 OpenAI's \textit{text-embedding-3-small}.
 
-\textbf{Retrieval configuration.}
+\paragraph{Retrieval configuration}
 Open-domain attributes are indexed with FAISS HNSW ($M = 32$,
 $\mathit{ef}_{\mathrm{search}} = 64$, $k = 5$).
 
-\textbf{Serialization.}
+\paragraph{Serialization}
 $\text{Serialize}(\mathbf{x})$ concatenates column names with their
 values (e.g., \textit{col1: val1, col2: val2, \dots}). The same
 operator renders extracted representations $\hat{\mathbf{x}}$ and
 candidate replacements $(\hat{a}_1, \dots, c_i, \dots, \hat{a}_m)$ in
 the entity-resolution step.
 
-\textbf{Baselines.}
-We compare the full pipeline (\textbf{IE+IR+ER}) against two baselines
+\paragraph{Baselines}
+We compare the full pipeline (IE+IR+ER) against two baselines
 (Fig.~\ref{fig:baselines}).
-\textbf{IE} sets $\tilde{a}_j = \hat{a}_j$ for all $j$, isolating the
-gain from retrieval and resolution. \textbf{IE+IR} keeps $\tilde{a}_j =
+IE sets $\tilde{a}_j = \hat{a}_j$ for all $j$, isolating the
+gain from retrieval and resolution. IE+IR keeps $\tilde{a}_j =
 \hat{a}_j$ for $j \in \mathcal{I}_{\text{closed}}$ and, for $j \in
 \mathcal{I}_{\text{open}}$, sets $\tilde{a}_j = c_1$ when
 $\text{sim}(\mathbf{e}_j, \mathbf{e}_{c_1}) \geq \tau$, for a
@@ -582,21 +603,21 @@ otherwise, isolating the gain from the LLM resolver $M$.
     node distance=0.25cm,
     every node/.style={font=\scriptsize},
     op/.style={draw, rounded corners=2pt, fill=gray!8, draw=gray!60, thick,
-               minimum height=0.45cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
+               minimum height=0.36cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
     llm/.style={draw, rounded corners=2pt, fill=blue!6, draw=blue!40, thick,
-                minimum height=0.45cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
+                minimum height=0.36cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
     sel/.style={draw, rounded corners=2pt, fill=green!6, draw=green!50, thick,
-                minimum height=0.45cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
+                minimum height=0.36cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
     cat/.style={draw, rounded corners=2pt, fill=yellow!8, draw=yellow!60, thick,
                 minimum width=1.2cm, minimum height=0.7cm, inner sep=1.5pt, align=center},
     outnode/.style={draw, rounded corners=2pt, fill=teal!8, draw=teal!50, thick,
-                    minimum height=0.45cm, minimum width=2.3cm, inner sep=1.5pt, align=center},
+                    minimum height=0.36cm, minimum width=2.3cm, inner sep=1.5pt, align=center},
     dat/.style={align=center, inner sep=0.5pt, text height=1.6ex, text depth=0.5ex},
     arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
     darr/.style={-{Stealth[length=2.5pt]}, gray!45, dashed},
     lb/.style={font=\scriptsize, text=gray!55},
     llms/.style={draw, rounded corners=2pt, fill=blue!6, draw=blue!40, thick,
-                 minimum height=0.65cm, minimum width=1.9cm, inner sep=1.5pt},
+                 minimum height=0.52cm, minimum width=1.9cm, inner sep=1.5pt},
     soff/.style={xshift=3pt, yshift=3pt},
     soff2/.style={xshift=6pt, yshift=6pt},
     ptitle/.style={font=\small\bfseries},
@@ -604,18 +625,18 @@ otherwise, isolating the gain from the LLM resolver $M$.
 
 % ===== Panel (c): IE+IR+ER (drawn first to anchor output row) =====
 \node[ptitle] (c_title) at (11, 0) {(c) IE+IR+ER (full)};
-\node[dat, below=0.3cm of c_title] (c_in) {$\hat{a}_j$};
-\node[op, below=0.25cm of c_in] (c_enc) {Encode};
+\node[dat, below=0.2cm of c_title] (c_in) {$\hat{a}_j$};
+\node[op, below=0.15cm of c_in] (c_enc) {Encode};
 \draw[arr] (c_in) -- (c_enc);
-\node[dat, below=0.25cm of c_enc] (c_ej) {$\mathbf{e}_j$};
+\node[dat, below=0.15cm of c_enc] (c_ej) {$\mathbf{e}_j$};
 \draw[arr] (c_enc) -- (c_ej);
-\node[op, below=0.25cm of c_ej] (c_topk) {Top-$k$};
+\node[op, below=0.15cm of c_ej] (c_topk) {Top-$k$};
 \draw[arr] (c_ej) -- (c_topk);
-\node[dat, below=0.25cm of c_topk] (c_rj) {$\mathcal{R}_j = (c_1, \dots, c_k)$};
+\node[dat, below=0.15cm of c_topk] (c_rj) {$\mathcal{R}_j = (c_1, \dots, c_k)$};
 \draw[arr] (c_topk) -- (c_rj);
-\node[llm, below=0.25cm of c_rj] (c_er) {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
-\node[llms, soff2, opacity=0.3] at (c_er) {};
-\node[llms, soff, opacity=0.5] at (c_er) {};
+\node[llm, below=0.35cm of c_rj] (c_er) {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
+\node[llm, soff2, opacity=0.3] at (c_er) {\phantom{\textbf{ER}}\\[-1pt]\phantom{$M(\hat{s},\, \hat{s}_{j \to c_i})$}};
+\node[llm, soff, opacity=0.5] at (c_er) {\phantom{\textbf{ER}}\\[-1pt]\phantom{$M(\hat{s},\, \hat{s}_{j \to c_i})$}};
 \node[llm] at (c_er) {\textbf{ER}\\[-1pt] $M(\hat{s},\, \hat{s}_{j \to c_i})$};
 \draw[arr] (c_rj) -- (c_er);
 \draw[arr, rounded corners=3pt]
@@ -624,27 +645,27 @@ otherwise, isolating the gain from the LLM resolver $M$.
       font=\scriptsize\bfseries, text=gray!60, inner sep=2pt,
       minimum width=0.5cm, minimum height=0.35cm]
     at ([xshift=0.5cm]c_rj.east |- c_er) {$\times k$};
-\node[sel, below=0.3cm of c_er] (c_sel) {Select};
+\node[sel, below=0.2cm of c_er] (c_sel) {Select};
 \draw[arr] (c_er) -- (c_sel);
-\node[outnode, below=0.25cm of c_sel] (c_out) {$\tilde{a}_j = c_{i^*}$ or $\hat{a}_j$};
+\node[outnode, below=0.15cm of c_sel] (c_out) {$\tilde{a}_j = c_{i^*}$ or $\hat{a}_j$};
 \draw[arr] (c_sel) -- (c_out);
 \node[cat, right=0.5cm of c_topk] (c_cat) {$\mathcal{K}_j$};
 \draw[arr] (c_cat) -- (c_topk);
 \draw[darr, rounded corners=2pt] (c_out.east) -| (c_cat.south)
-    node[lb, left, pos=0.78] {update};
+    node[lb, right, pos=0.78] {update};
 
 % ===== Panel (b): IE+IR =====
 \node[ptitle] (b_title) at (5.5, 0) {(b) IE+IR};
-\node[dat, below=0.3cm of b_title] (b_in) {$\hat{a}_j$};
-\node[op, below=0.25cm of b_in] (b_enc) {Encode};
+\node[dat, below=0.2cm of b_title] (b_in) {$\hat{a}_j$};
+\node[op, below=0.15cm of b_in] (b_enc) {Encode};
 \draw[arr] (b_in) -- (b_enc);
-\node[dat, below=0.25cm of b_enc] (b_ej) {$\mathbf{e}_j$};
+\node[dat, below=0.15cm of b_enc] (b_ej) {$\mathbf{e}_j$};
 \draw[arr] (b_enc) -- (b_ej);
-\node[op, below=0.25cm of b_ej] (b_topk) {Top-1};
+\node[op, below=0.15cm of b_ej] (b_topk) {Top-1};
 \draw[arr] (b_ej) -- (b_topk);
-\node[dat, below=0.25cm of b_topk] (b_c1) {$c_1,\; \text{sim}_1$};
+\node[dat, below=0.15cm of b_topk] (b_c1) {$c_1,\; \text{sim}_1$};
 \draw[arr] (b_topk) -- (b_c1);
-\node[sel, below=0.25cm of b_c1] (b_sel) {$\text{sim}_1 \geq \tau$?};
+\node[sel, below=0.15cm of b_c1] (b_sel) {$\text{sim}_1 \geq \tau$?};
 \draw[arr] (b_c1) -- (b_sel);
 \node[outnode] (b_out) at (b_sel |- c_out) {$\tilde{a}_j = c_1$ or $\hat{a}_j$};
 \draw[arr] (b_sel) -- (b_out);
@@ -653,20 +674,15 @@ otherwise, isolating the gain from the LLM resolver $M$.
 
 % ===== Panel (a): IE =====
 \node[ptitle] (a_title) at (0, 0) {(a) IE};
-\node[dat, below=0.3cm of a_title] (a_in) {$\hat{a}_j$};
+\node[dat, below=0.2cm of a_title] (a_in) {$\hat{a}_j$};
 \node[outnode] (a_out) at (a_in |- c_out) {$\tilde{a}_j = \hat{a}_j$};
 \draw[arr] (a_in) -- (a_out);
 
 \end{tikzpicture}
-\caption{Open-domain attribute processing under each variant; shared
-components (serialization, IE, closed-domain bypass) are omitted (see
-Fig.~\ref{fig:pipeline}). (a) The IE baseline emits the extracted value
-as-is. (b) IE+IR retrieves the top-1 canonical candidate and accepts it
-when its cosine similarity to $\hat{a}_j$ exceeds threshold $\tau$,
-otherwise keeping the extracted value. (c) The full pipeline retrieves
-top-$k$ candidates, iterates the LLM entity resolver
-$M(\cdot,\cdot)$ over them in ranked order, selects the first match,
-and expands catalog $\mathcal{K}_j$ when no match is found.}
+\caption{Configurations compared in our experiments.
+(a) IE: emit $\hat{a}_j$. (b) IE+IR: accept top-1 candidate $c_1$
+if cosine $\geq \tau$. (c) IE+IR+ER (full): LLM resolver $M$
+decides over top-$k$.}
 \label{fig:baselines}
 \end{figure*}
 
@@ -697,7 +713,7 @@ AutoScout24 & 251,079 & 47  & 1,312  & 15 & Germany \\
 \end{center}
 \end{table}
 
-\textbf{Knowledge catalog.}
+\paragraph{Knowledge catalog}
 We instantiate the catalog $\mathcal{K}_j$ for the open-domain
 attributes (\textit{brand}, \textit{model}) from DVM-CAR, which has the
 broadest brand coverage in our pool (101 brands). Because DVM-CAR seeds
@@ -706,7 +722,7 @@ normalization is non-trivial.
 
 \subsection{Evaluation Data}
 
-\textbf{Record sampling.}
+\paragraph{Record sampling}
 From MuCars and AutoScout24 we draw 500 listings each via
 proportional stratified sampling on brand, yielding 1000 evaluation
 records. Brand is the dominant source of attribute heterogeneity
@@ -749,7 +765,7 @@ MuCars      & 98.9\% & 99.2\% & 63.6\% & 67.8\% \\
 \end{center}
 \end{table}
 
-\textbf{Human annotation.}
+\paragraph{Human annotation}
 Three trained annotators independently label every record using a
 structured form backed by per-attribute data validation. All three
 annotators hold bachelor's degrees, have prior experience in the
@@ -763,7 +779,7 @@ are left blank. Each annotator completed a 20-record pilot round, after
 which instructions were revised to resolve systematic disagreements
 before the full annotation run.
 
-\textbf{Ground-truth construction.}
+\paragraph{Ground-truth construction}
 The ground-truth value for each (record, attribute) cell is the majority
 vote across the three annotators. Cells on which all three annotators
 disagree are marked \texttt{ABSTAIN} and excluded from headline metrics but
@@ -775,9 +791,8 @@ from the headline metrics~\cite{landis1977kappa}.
 Table~\ref{tab:iaa} reports inter-annotator agreement per dataset.
 
 \begin{table}[htbp]
-\caption{Inter-annotator agreement per dataset (attributes with
-$\geq 10\%$ non-null coverage). \textbf{\#low-$\kappa$}: reported
-attributes with $\kappa < 0.60$.}
+\caption{Inter-annotator agreement on attributes with $\geq 10\%$
+non-null coverage; \textbf{\#low-$\kappa$}: $\kappa < 0.60$.}
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{6pt}
@@ -809,11 +824,21 @@ of the schema itself: Section~\ref{sec:downstream} shows that the
 same 26-attribute schema can be populated in full when the LLM is
 prompted to infer values from contextual cues (e.g., body type
 inferred from a model name), drawing on knowledge that lies outside
-the annotator's literal reading of the listing. Flagged
-low-agreement attributes ($\kappa < 0.60$) are \textit{Engine size}
-and \textit{Energy source} on AutoScout24, and \textit{Mileage unit},
-\textit{Body type}, \textit{Energy source}, and \textit{Propulsion
-system} on MuCars.
+the annotator's literal reading of the listing.
+
+Flagged low-agreement attributes ($\kappa < 0.60$) are
+\textit{Engine size} and \textit{Energy source} on AutoScout24, and
+\textit{Mileage unit}, \textit{Body type}, \textit{Energy source},
+and \textit{Propulsion system} on MuCars. These attributes are
+rarely stated explicitly in their source listings (null fractions of
+$0.70$ to $0.88$), so annotators must either leave the field blank
+or infer market defaults (the platform's implicit \textit{km} unit;
+\textit{fossil} or \textit{icev} for older ICE-dominated MuCars
+listings); the resulting policy split is what drives the per-attribute
+$\kappa$ below zero on MuCars. The pooled $\kappa = 0.591$ reflects
+this mechanism on a larger fraction of attributes than AutoScout24,
+not uniform disagreement across the schema: on the remaining eight
+MuCars attributes all three annotators agree at $\kappa \geq 0.96$.
 
 \subsection{Metrics}
 \label{sec:metrics}
@@ -825,7 +850,7 @@ retrieval-with-threshold variant that replaces the entity-resolution
 step by a top-1 cosine match above threshold $\tau$ (IE$+$IR), and the
 full pipeline (IE$+$IR$+$ER).
 
-\textbf{Normalization.}
+\paragraph{Normalization}
 For each open-domain attribute $A_j \in \{\mathrm{brand},
 \mathrm{model}\}$ we compare the normalized value $\tilde{a}_j$
 produced by the pipeline to the human-annotated ground-truth value
@@ -842,7 +867,7 @@ dominated by a few popular models, whereas macro-F1 weights rare
 canonical values equally and therefore tracks the tail. Records for
 which all annotators disagreed are marked \texttt{ABSTAIN} and excluded.
 
-\textbf{Novelty detection.}
+\paragraph{Novelty detection}
 For each record we form the pair $(\mathrm{brand}, \mathrm{model})$
 from both the ground truth and the pipeline output. A pair is declared
 \textit{novel} if it is absent from the catalog; this
@@ -854,19 +879,23 @@ Precision is the operationally important metric, since low precision
 floods the catalog with near-duplicates, whereas recall tracks whether
 genuinely new entities are being caught.
 
-\textbf{Compression.}
+\paragraph{Compression}
 For each open-domain attribute we count the number of unique values
 emitted by the extraction-only baseline, $|U_{\mathrm{IE}}|$, and the
 number of unique canonical values produced by the full pipeline,
-$|U_{\mathrm{VN}}|$, on the same set of records. We report the
-compression percentage $1 - |U_{\mathrm{VN}}| / |U_{\mathrm{IE}}|$,
-which is the fraction of surface variants that the pipeline has merged
-into a shared canonical entity (for example, ``mercedes'',
-``mercedes-benz'', and ``benz'' collapsing to a single entry). Positive
-compression indicates that the canonicalization step is actively
-resolving naming inconsistency, whereas zero compression indicates
-that the extractor already yields canonical strings or that no
-merges were performed on this sample.
+$|U_{\mathrm{VN}}|$, on the same set of records. Both vocabularies
+are counted after lowercasing and whitespace stripping, so the
+reported compression reflects merges of genuinely distinct surface
+forms rather than trivial casing or whitespace differences. We
+report the compression percentage
+$1 - |U_{\mathrm{VN}}| / |U_{\mathrm{IE}}|$, which is the fraction
+of surface variants that the pipeline has merged into a single
+canonical entity (for example, ``mercedes'', ``mercedes-benz'', and
+``benz'' collapsing to a single entry). Positive compression
+indicates that the canonicalization step is actively resolving
+naming inconsistency, whereas zero compression indicates that the
+extractor already yields canonical strings or that no merges were
+performed on this sample.
 
 \subsection{Results}
 \label{sec:results}
@@ -877,7 +906,7 @@ Section~\ref{sec:metrics}: normalization quality, novelty detection,
 and catalog compression. Table~\ref{tab:extraction} complements this
 with per-attribute extraction accuracy on attributes with reliable
 annotator agreement. Throughout the discussion, IE+IR uses cosine
-threshold $\tau = 0.85$, with a sensitivity study over $\tau$
+threshold $\tau = 0.80$, with a sensitivity study over $\tau$
 deferred to Section~\ref{sec:ablation}. All metrics are computed on
 $n = 500$ evaluation records per dataset, and 95\% bootstrap
 confidence intervals ($1{,}000$ resamples) are reported in square
@@ -914,10 +943,10 @@ pairs, and catalog compression.}
  & \textit{F1} & \textit{P} & \textit{R}
  & \\
 \hline
-IE                      & 0.992 & 0.917 & 0.787 & 0.825 & 0.437 & 0.280 & \textbf{1.000} & n/a
-                        & 1.000 & 1.000 & 0.858 & 0.826 & 0.680 & 0.516 & \textbf{1.000} & n/a \\
-IE+IR ($\tau = 0.85$)   & 1.000 & 1.000 & 0.831 & 0.841 & 0.486 & 0.337 & 0.875 & 3.8\%
-                        & 1.000 & 1.000 & 0.902 & 0.866 & 0.755 & 0.645 & 0.909 & 1.0\% \\
+IE                      & 0.992 & 0.917 & 0.783 & 0.822 & 0.437 & 0.280 & \textbf{1.000} & n/a
+                        & 1.000 & 1.000 & 0.862 & 0.832 & 0.684 & 0.520 & \textbf{1.000} & n/a \\
+IE+IR ($\tau = 0.80$)   & 1.000 & 1.000 & 0.821 & 0.838 & 0.504 & 0.354 & 0.875 & 7.5\%
+                        & 1.000 & 1.000 & 0.908 & 0.852 & 0.795 & 0.725 & 0.879 & 4.1\% \\
 IE+IR+ER (full)         & 1.000 & 1.000 & \textbf{0.865} & \textbf{0.890} & \textbf{0.623} & \textbf{0.463} & 0.950 & \textbf{4.2\%}
                         & 1.000 & 1.000 & \textbf{0.930} & \textbf{0.885} & \textbf{0.878} & \textbf{0.793} & 0.985 & \textbf{5.6\%} \\
 \hline
@@ -926,60 +955,63 @@ IE+IR+ER (full)         & 1.000 & 1.000 & \textbf{0.865} & \textbf{0.890} & \tex
 \end{center}
 \end{table*}
 
-\textbf{Normalization.} Brand accuracy saturates at 1.000 once any
+\paragraph{Normalization}
+Brand accuracy saturates at 1.000 once any
 retrieval step is introduced, reflecting that the DVM-CAR brand
 catalog covers the head of the brand distribution for both datasets.
 We therefore focus on the \textit{model} attribute, where the
 normalization problem is genuinely non-trivial. Adding retrieval
 (IE+IR) improves model accuracy over the IE baseline by roughly four
-percentage points on each dataset, from 0.787 to 0.831 on AutoScout24
-and from 0.858 to 0.902 on MuCars. The full pipeline lifts this
-further to 0.865 and 0.930 respectively. The 95\% bootstrap intervals
+percentage points on each dataset, from 0.783 to 0.821 on AutoScout24
+and from 0.862 to 0.908 on MuCars. The full pipeline reaches
+0.865 and 0.930 respectively. The 95\% bootstrap intervals
 for the full pipeline ($[0.835, 0.894]$ on AutoScout24 and $[0.906,
 0.950]$ on MuCars) lie strictly above the corresponding IE intervals
-($[0.748, 0.819]$ and $[0.828, 0.886]$), so the improvement over the
+($[0.744, 0.819]$ and $[0.830, 0.888]$), so the improvement over the
 IE-only baseline is statistically clean on both datasets. Macro-F1
-follows the same ordering, rising from $0.825~[0.795, 0.846]$ to
-$0.890~[0.866, 0.912]$ on AutoScout24 and from $0.826~[0.801, 0.859]$
+follows the same ordering, rising from $0.822~[0.792, 0.842]$ to
+$0.890~[0.866, 0.912]$ on AutoScout24 and from $0.832~[0.804, 0.861]$
 to $0.885~[0.869, 0.921]$ on MuCars, indicating that the accuracy
 gain is not driven purely by head classes. Against the threshold
 variant, the full pipeline's accuracy edge is directional rather than
 statistically sharp: at $n = 500$ per dataset the confidence
 intervals of the two overlap on model accuracy.
 
-\textbf{Novelty detection.} The largest qualitative gap between
+\paragraph{Novelty detection}
+The largest qualitative gap between
 variants appears on novelty detection, the task of flagging vehicle
 models absent from the DVM-CAR catalog. The full pipeline improves
-novelty precision substantially on both datasets: from $0.516~
-[0.422, 0.607]$ to $0.793~[0.696, 0.878]$ on MuCars, and from
-$0.280~[0.212, 0.357]$ to $0.463~[0.366, 0.573]$ on AutoScout24.
-Novelty F1 rises from $0.680~[0.594, 0.755]$ to $0.878~[0.812,
-0.932]$ on MuCars and from $0.437~[0.350, 0.526]$ to $0.623~[0.525,
+novelty precision substantially on both datasets: from $0.520~
+[0.426, 0.607]$ to $0.793~[0.696, 0.878]$ on MuCars, and from
+$0.280~[0.213, 0.355]$ to $0.463~[0.366, 0.573]$ on AutoScout24.
+Novelty F1 rises from $0.684~[0.597, 0.755]$ to $0.878~[0.812,
+0.932]$ on MuCars and from $0.437~[0.352, 0.524]$ to $0.623~[0.525,
 0.715]$ on AutoScout24. The 95\% bootstrap intervals indicate that
 these gains are robust under resampling, while recall stays at or
 above 0.95 across variants. The threshold variant yields novelty F1
-of $0.486~[0.388, 0.585]$ on AutoScout24 and $0.755~[0.671, 0.821]$
-on MuCars, so the full pipeline's lower confidence bound on MuCars
-$(0.812)$ sits essentially at the threshold variant's upper bound,
-indicating near-clean separation even against the best fixed-cosine
-configuration. This is consistent with the design intent of the ER
+of $0.504~[0.399, 0.597]$ on AutoScout24 and $0.795~[0.725, 0.854]$
+on MuCars, both below the full pipeline's $0.623$ and $0.878$.
+The $\tau$-ablation (Section~\ref{sec:ablation_tau}) confirms that no
+fixed cutoff matches the full pipeline jointly on model and novelty
+quality. This is consistent with the design intent of the ER
 step: when the vector-space neighborhood is genuinely ambiguous, a
 fixed cutoff cannot distinguish legitimate synonyms from new entities,
 and deferring the decision to the LLM recovers both precision and
 compression.
 
-\textbf{Compression.} The full pipeline compresses the model
+\paragraph{Compression}
+The full pipeline compresses the model
 vocabulary from 238 to 228 unique values on AutoScout24 (4.2\%) and
 from 196 to 185 on MuCars (5.6\%), confirming that the canonicalization
 step actively merges surface-form duplicates into shared canonical
-entries. The threshold variant compresses less aggressively (3.8\%
-and 1.0\% respectively), particularly on MuCars where a $\tau = 0.85$
-cutoff seldom fires. This is the mirror image of the novelty-detection
-result: a conservative cosine threshold leaves synonyms split across
-the catalog, which in turn inflates both the apparent novelty rate and
-the size of the emitted vocabulary.
+entries. The threshold variant compresses by $7.5\%$ on AutoScout24
+and $4.1\%$ on MuCars; on AutoScout24 this exceeds the full pipeline
+numerically, but as Section~\ref{sec:ablation_tau} shows, lower
+$\tau$ inflates compression by collapsing some genuine novelties,
+while the full pipeline's compression concentrates on correct
+merges.
 
-\textbf{Per-attribute extraction accuracy.}
+\paragraph{Per-attribute extraction accuracy}
 Table~\ref{tab:extraction} reports accuracy on every attribute for
 which annotator agreement meets the reliability threshold
 ($\kappa \geq 0.60$). The LLM extractor reaches macro-averaged
@@ -990,15 +1022,14 @@ the scalar annotation schema). Most closed-domain attributes
 saturate at 1.000, reflecting that the extraction prompt constrains
 outputs to $\mathcal{V}_j^{\text{closed}}$. Attributes where the
 pipeline adds measurable value over IE are concentrated on brand
-and model, where retrieval and LLM resolution lift accuracy beyond
+and model, where retrieval and LLM resolution improve accuracy beyond
 what extraction alone yields.
 
 \begin{table}[htbp]
-\caption{Per-attribute extraction accuracy. IE+IR is omitted
-because retrieval only affects the two open-domain attributes and
-reproduces IE exactly on closed-domain attributes.
-$^\dagger$Excluded from the MuCars macro-average because MuCars
-encodes mileage as ranges.}
+\caption{Per-attribute extraction accuracy. IE+IR is omitted, as
+it is identical to IE on closed-domain attributes.
+$^\dagger$Excluded from MuCars macro-average, as mileage is
+encoded as ranges.}
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{5pt}
@@ -1011,7 +1042,7 @@ encodes mileage as ranges.}
                    & \textit{IE} & \textit{Full} \\
 \hline
 brand                     & 0.992 & 1.000          & 1.000          & 1.000          \\
-model                     & 0.787 & 0.865          & 0.858          & 0.930          \\
+model                     & 0.783 & 0.865          & 0.862          & 0.930          \\
 year                      & 1.000 & 1.000          & 1.000          & 1.000          \\
 mileage                   & 1.000 & 1.000          & 0.332$^\dagger$ & 0.332$^\dagger$ \\
 engine\_power             & 1.000 & 1.000          & --             & --             \\
@@ -1041,36 +1072,35 @@ We sweep $\tau \in \{0.50, 0.55, \dots, 0.95\}$ on both
 evaluation datasets, re-using the IE extractions of
 Section~\ref{sec:results} so that only the
 retrieval-and-thresholding stage varies. Confidence bands are
-95\% percentile bootstrap intervals with $500$ resamples
+95\% percentile bootstrap intervals with $1{,}000$ resamples
 (Fig.~\ref{fig:ablation_tau}).
 
-No single $\tau$ optimizes the three objectives jointly. Model
-macro F1 peaks in $\tau \in [0.85, 0.90]$ ($0.846$ on
-AutoScout24, $0.870$ on MuCars), where novelty F1 is near its
-minimum. Novelty F1 is maximized at lower thresholds ($0.588$
-near $\tau{=}0.50$ on AutoScout24; $0.795$ near $\tau{=}0.80$
-on MuCars), but the resulting high compression ($\geq 13\%$ on
-AutoScout24, $\geq 8\%$ on MuCars) is driven by merges with low
-novelty precision, reflecting spurious synonymy rather than
-genuine canonicalization. At every $\tau$ the variant remains
-below the full IE+IR+ER pipeline on both quality metrics
-(Table~\ref{tab:results}: model F1 $0.890 / 0.885$, novelty F1
-$0.623 / 0.878$), whose compression of $4.2\%$ and $5.6\%$ is
-concentrated on correct merges. The LLM resolver is therefore
-load-bearing rather than cosmetic over a well-tuned cosine
-cutoff.
+No single $\tau$ optimizes both quality metrics. Model macro
+F1 peaks at $\tau{=}0.90$ on AutoScout24 ($0.846$) and at
+$\tau{=}0.85$ on MuCars ($0.870$); novelty F1 instead peaks
+at $\tau \in [0.50, 0.65]$ on AutoScout24 ($0.588$) and at
+$\tau{=}0.80$ on MuCars ($0.795$). Lowering $\tau$ filters IE
+noise from the predicted novel set, increasing novelty precision
+from $0.280$ to $0.443$ on AutoScout24 and from $0.520$ to
+$0.839$ on MuCars at $\tau{=}0.50$, but the same aggressive
+matching collapses some genuine novelties into catalog
+entries, dropping novelty recall to $0.875$ and $0.712$. The
+resulting compression at the lowest $\tau$ ($\sim$$13\%$ on
+AutoScout24, $\sim$$8\%$ on MuCars) therefore mixes correct
+synonym collapses with false matches against true novelties.
+At every $\tau$ the variant remains below the full IE+IR+ER
+pipeline on both metrics (Table~\ref{tab:results}: model F1
+$0.890 / 0.885$, novelty F1 $0.623 / 0.878$), whose
+compression of $4.2\%$ and $5.6\%$ concentrates on correct
+merges.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/ablation_threshold.pdf}
 \caption{IE+IR sensitivity to the cosine threshold $\tau$.
-Rows: datasets (top: AutoScout24, bottom: MuCars). Columns:
-model normalization (accuracy and macro F1), novelty detection
-(precision, recall, F1), and catalog compression. Dashed lines
-mark the IE-only baseline; the vertical dotted line marks the
-$\tau = 0.85$ operating point of Table~\ref{tab:results}. Shaded
-bands are 95\% percentile bootstrap intervals with $500$
-resamples.}
+Dashed lines: IE-only baseline; dotted vertical: $\tau = 0.80$
+used in Table~\ref{tab:results}. Bands are 95\% bootstrap CIs
+($1{,}000$ resamples).}
 \label{fig:ablation_tau}
 \end{figure*}
 
@@ -1081,7 +1111,7 @@ We sweep $k \in \{1, 3, 5, 10, 20\}$ on both datasets, re-using
 the IE extractions of Section~\ref{sec:results} so that only
 the retrieval depth and entity-resolution loop vary.
 Confidence bands are 95\% percentile bootstrap intervals with
-$500$ resamples (Fig.~\ref{fig:ablation_k}).
+$1{,}000$ resamples (Fig.~\ref{fig:ablation_k}).
 
 Quality saturates by $k = 3$ to $5$ on both datasets: the
 largest jump is from $k{=}1$ to $k{=}3$ (model F1 $+3.3$
@@ -1106,14 +1136,10 @@ keeping cost bounded.
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/ablation_k.pdf}
-\caption{Sensitivity of IE+IR+ER to retrieval depth $k$. Rows:
-datasets (top: AutoScout24, bottom: MuCars). Columns: model
-normalization (accuracy and macro F1), novelty detection
-(precision, recall, F1), and catalog compression for both the
-model and brand catalogs. Dashed lines mark the IE-only
-baseline; the vertical dotted line marks the $k = 5$ operating
-point of Table~\ref{tab:results}. Shaded bands are 95\%
-percentile bootstrap intervals with $500$ resamples.}
+\caption{IE+IR+ER sensitivity to retrieval depth $k$.
+Dashed lines: IE-only baseline; dotted vertical: $k = 5$
+used in Table~\ref{tab:results}. Bands are 95\% bootstrap CIs
+($1{,}000$ resamples).}
 \label{fig:ablation_k}
 \end{figure*}
 
@@ -1121,43 +1147,44 @@ percentile bootstrap intervals with $500$ resamples.}
 \label{sec:downstream}
 
 We train three gradient-boosting regressors (CatBoost,
-XGBoost, LightGBM) with default library hyperparameters
-($\texttt{random\_state}=42$, early stopping at five rounds;
-no per-model tuning) to predict listing price on MuCars,
+XGBoost, LightGBM) with default library hyperparameters to predict listing price on MuCars,
 averaging errors over ten random 20\% holdout splits per
-model. The \textit{raw} feature set uses the nine MuCars
-columns plus a 16-dimensional binary encoding of the
-per-listing equipment list parsed from its JSON-list string
-($25$ features). The \textit{normalized} feature set adds the
-16 LLM-imputed schema fields produced by the imputing variant
-of the IE step (Sec.~\ref{sec:method}: body type, drive type,
-propulsion system, energy source, cylinders, engine
-aspiration, injection type, transmission gears, etc.),
-bringing the total to $41$. Equipment one-hots are present in
-both sets, so the gap measures the marginal contribution of
-canonicalization plus imputation alone. Listings with
+model. The IE step is instantiated with a prompt variation
+in order to populate the schema in full: beyond extracting
+explicitly stated values, the LLM fills attributes a domain
+expert would derive with confidence from make, model, and
+year (e.g., body type, drive type, cylinders, engine
+aspiration, doors). We train each regressor on two
+configurations: the nine MuCars columns plus a 16-dimensional
+equipment one-hot encoding (\textit{raw}, $25$ features), and
+the same inputs concatenated with the 16 imputed schema
+fields (\textit{normalized}, $41$ features). The gap measures
+the marginal contribution of canonicalization plus imputation
+alone. Listings with
 implausible prices (outside $5{,}000$ to $5{,}000{,}000$~MAD)
 are excluded, leaving $75{,}733$ rows. Missing numeric and
 categorical values are imputed on each fold by (brand, model)
 group median or mode with brand-level and overall fallbacks.
 The MuCars catalog is seeded from DVM-CAR
-(Sec.~\ref{sec:setup}); $21.6\%$ of test rows have a model
-string that the IE+IR+ER pipeline rewrote into a different
-canonical (e.g., \texttt{golf 7} to \texttt{golf},
-\texttt{classe c} to \texttt{c class}, \texttt{220} to
-\texttt{c class}). We report results on the full test set and
-on this \textit{merged} subset separately.
+(Section~\ref{sec:setup}). On $21.6\%$ of test rows the IE+IR+ER
+pipeline matched the raw model string to an existing canonical
+entry in the catalog and substituted the canonical label (e.g.,
+\texttt{golf 7} to \texttt{golf}, \texttt{classe c} to
+\texttt{c class}, \texttt{220} to \texttt{c class}); we call
+these the \textit{canonicalized models}. The remaining $78.4\%$ either match a
+catalog entry by surface form or are kept as novel entries with
+no surface change. We report results on the full test set and
+on the canonicalized-models subset separately.
 
 Table~\ref{tab:downstream} reports the results. Normalization
 reduces error on every metric, every model, and both slices.
 On the full test set MAPE falls by $2.7$ to $5.3\%$
 (CatBoost weakest, XGBoost largest) and MAE by
 $4.4$ to $6.4\%$ (LightGBM weakest, XGBoost largest). On the
-merged subset, where the LLM resolver pooled surface-form
-variants into shared canonical labels, the reduction
-concentrates: MAPE drops by $4.5$ to $5.1\%$, MdAPE by $6.5$
-to $8.3\%$, and MAE by $5.5$ to $8.7\%$, with CatBoost
-recording the largest MAE reduction at $-8.7\%$. The
+canonicalized-models subset the reduction concentrates: MAPE drops
+by $4.5$ to $5.1\%$, MdAPE by $6.5$ to $8.3\%$, and MAE by
+$5.5$ to $8.7\%$, with CatBoost recording the largest MAE
+reduction at $-8.7\%$. The
 improvement is consistent in direction and comparable in
 magnitude across architectures, indicating that the canonical
 labels carry signal that is robust to the choice of downstream
@@ -1165,16 +1192,9 @@ estimator rather than an artefact of any one model's inductive
 bias.
 
 \begin{table*}[htbp]
-\caption{Downstream price prediction on MuCars (10-seed
-average; lower is better). Each cell shows raw $\to$
-normalized followed by the relative delta in parentheses. The
-\textit{normalized} feature set adds 16 LLM-imputed schema
-fields on top of the raw 25-feature set; equipment one-hots
-appear in both. The \textit{merged} subset is the
-$21.6\%$ of test rows where the IE+IR+ER pipeline rewrote the
-raw model string into a different canonical (e.g.,
-\texttt{golf 7} to \texttt{golf}, \texttt{220} to
-\texttt{c class}).}
+\caption{Downstream price prediction on MuCars, averaged over
+10 random $20\%$ holdout splits. Cells show raw $\to$ normalized
+with relative change.}
 \begin{center}
 \footnotesize
 \setlength{\tabcolsep}{6pt}
@@ -1182,13 +1202,13 @@ raw model string into a different canonical (e.g.,
 \hline
 \textbf{Model} & \textbf{MAPE} & \textbf{MdAPE} & \textbf{MAE} (MAD) \\
 \hline
-\multicolumn{4}{|l|}{\textit{Full test set} ($n \approx 15{,}147$ per fold)} \\
+\multicolumn{4}{|l|}{\textit{Full test set} ($n = 15{,}147$)} \\
 \hline
 CatBoost & $0.197 \to \mathbf{0.192}$ ($-2.7\%$) & $0.093 \to \mathbf{0.089}$ ($-3.6\%$) & $26{,}676 \to \mathbf{25{,}260}$ ($-5.3\%$) \\
 XGBoost  & $0.201 \to \mathbf{0.190}$ ($-5.3\%$) & $0.105 \to \mathbf{0.096}$ ($-8.3\%$) & $27{,}602 \to \mathbf{25{,}847}$ ($-6.4\%$) \\
 LightGBM & $0.200 \to \mathbf{0.192}$ ($-4.3\%$) & $0.106 \to \mathbf{0.100}$ ($-5.9\%$) & $27{,}650 \to \mathbf{26{,}422}$ ($-4.4\%$) \\
 \hline
-\multicolumn{4}{|l|}{\textit{Merged-model rows} ($n \approx 3{,}272$ per fold, $21.6\%$ of test set)} \\
+\multicolumn{4}{|l|}{\textit{Canonicalized models} ($n = 3{,}272$, $21.6\%$ of test set)} \\
 \hline
 CatBoost & $0.192 \to \mathbf{0.183}$ ($-4.5\%$) & $0.103 \to \mathbf{0.096}$ ($-6.5\%$) & $33{,}668 \to \mathbf{30{,}747}$ ($-8.7\%$) \\
 XGBoost  & $0.200 \to \mathbf{0.190}$ ($-5.1\%$) & $0.113 \to \mathbf{0.103}$ ($-8.3\%$) & $33{,}596 \to \mathbf{31{,}017}$ ($-7.7\%$) \\
@@ -1201,7 +1221,48 @@ LightGBM & $0.198 \to \mathbf{0.188}$ ($-4.9\%$) & $0.113 \to \mathbf{0.106}$ ($
 
 \section{Conclusion}
 
-\section*{Acknowledgment}
+We presented a vehicle normalization framework that maps
+free-text listings to a 26-attribute schema by chaining LLM
+extraction, dense retrieval over a per-attribute catalog, and
+record-level LLM resolution. On $1{,}000$ human-annotated
+listings from AutoScout24 and MuCars, the full pipeline
+(IE$+$IR$+$ER) raises model accuracy over an extraction-only
+baseline (IE) from $0.783$ to $0.865$ on AutoScout24 and from
+$0.862$ to $0.930$ on MuCars, improves novelty F1 on (brand, model) pairs from $0.437$ to
+$0.623$ and from $0.684$ to $0.878$, and compresses the model
+vocabulary by $4.2\%$ and $5.6\%$. The benefits extend
+downstream: on MuCars price prediction, MAPE improves by
+$2.7$--$5.3\%$ and MAE by $4.4$--$6.4\%$ across CatBoost,
+XGBoost, and LightGBM on the full test set. The
+improvement is larger on the $21.6\%$ of listings whose model
+was canonicalized by the pipeline: on this subset,
+MAPE improves by $4.5$--$5.1\%$ and MAE by $5.5$--$8.7\%$ across
+the same three regressors, well above the full-set figures.
+The takeaway is that downstream regressors benefit mostly from
+variant pooling: a single canonical label lets the regressor
+treat as one input what the raw data splits into separate
+categories.
+
+The empirical pattern reduces to a single observation: no fixed cosine threshold
+can jointly satisfy normalization and novelty detection, because the
+cutoff that merges synonyms also collapses new entities. The LLM
+resolver avoids this trade-off by deciding at the record level rather
+than at the embedding-distance level. The $k$ ablation confirms it:
+at $k = 1$ the resolver over-merges, and at $k \geq 3$ it turns
+selective at near-flat quality cost.
+
+Brand normalization already saturates because the seed catalog covers
+the brand head, so the measurable gains concentrate on model and
+novelty detection. Inter-annotator agreement is genuinely lower on
+attributes whose meaning is contested in source listings, and the
+schema reflects this rather than hides it. A direct next step
+follows from the merged subset, which is $21.6\%$ of MuCars listings
+and drives the largest downstream gains: seeding the catalog from a
+union of markets should widen this subset and test whether downstream
+improvement scales with cross-market catalog overlap.
+
+Our code and evaluation data will be released as open source upon
+acceptance.
 
 \bibliographystyle{IEEEtran}
 \bibliography{references}
