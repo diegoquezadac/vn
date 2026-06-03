@@ -1220,6 +1220,69 @@ LightGBM & $0.198 \to \mathbf{0.188}$ ($-4.9\%$) & $0.113 \to \mathbf{0.106}$ ($
 \end{center}
 \end{table*}
 
+\subsection{Computational Cost and Scalability}
+\label{sec:feasibility}
+
+We assess deployment feasibility by profiling the full IE+IR+ER
+pipeline on a stream of $10{,}000$ records per dataset, processed
+with up to $50$ concurrent requests, on a 2024 Mac Mini
+(Apple M4, 16~GB) under the configuration of
+Section~\ref{sec:setup}. Figure~\ref{fig:feasibility} reports how
+latency, throughput, and API calls evolve as the catalog grows.
+
+\paragraph{Latency}
+Per-record latency is dominated by the extraction call and
+decreases as the catalog saturates and fewer records invoke entity
+resolution: the median is $3.4$~s on AutoScout24 and $8.0$~s on
+MuCars, with $95$th percentiles of $7.9$ and $17.3$~s corresponding
+to records that still trigger resolution. This time is incurred
+almost entirely at the model API. Locally the pipeline performs
+little computation, running nearest-neighbor search on CPU in under
+$0.1$~ms per record and using no GPU and at most $0.8$~GB of memory
+regardless of corpus size.
+
+\paragraph{Throughput}
+Throughput increases as the catalog saturates and resolution work
+disappears, reaching a steady $768$ records per minute on
+AutoScout24 and $364$ on MuCars from a single process. Because
+local resources are not the bottleneck, this rate is bounded by API
+throughput rather than by hardware, and scales with additional
+concurrency up to the provider's quota. The per-record cost
+amortizes likewise, to roughly \$0.37 and \$0.55 per thousand
+records. A complete pass over the AutoScout24 source ($251$k
+records) thus costs about \$92 and finishes in roughly five hours on
+one process, and the MuCars source ($102$k records) about
+\$56 in under five hours, with the runtime decreasing further under
+additional request parallelism.
+
+\paragraph{API calls}
+Each record incurs exactly one extraction call. Only attribute
+values absent from the catalog require further work, namely an
+embedding for retrieval and one or more entity-resolution calls,
+while values already canonical require none. This added work stays
+small and diminishes as the catalog fills; entity resolution
+accounts for only $129$ of the $10{,}129$ calls on AutoScout24 and
+$1{,}533$ of the $11{,}533$ on MuCars, and embedding for a further
+$180$ and $529$. As the cache-hit rate climbs to $82\%$ and $84\%$,
+the number of API calls per record falls toward the single
+extraction call (Fig.~\ref{fig:feasibility}), settling at $1.00$ on
+AutoScout24 and $1.06$ on MuCars; the higher MuCars value reflects
+the greater variety of novel models in its Moroccan-market data,
+each of which must be resolved against retrieved candidates.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/feasibility.pdf}
+\caption{Per-record metrics over a $10{,}000$-record stream
+(AutoScout24 top, MuCars bottom), each as a function of records
+processed. Left: end-to-end latency. Center: realized throughput.
+Right: API calls per record, where the dashed line marks the
+single-call extraction floor. Panels carry no legend; as the
+catalog saturates, latency falls, throughput rises, and calls per
+record approach one.}
+\label{fig:feasibility}
+\end{figure*}
+
 \section{Conclusion}
 
 We presented a vehicle normalization framework that maps
@@ -1237,6 +1300,13 @@ $5.5$--$8.7\%$, well above the full-set figure. Downstream
 regressors therefore benefit mostly from variant pooling: a
 single canonical label lets the regressor treat as one input
 what the raw data splits into separate categories.
+
+Beyond predictive quality, the method exhibits favorable
+asymptotic behavior: as the knowledge catalog saturates, the
+per-record number of API calls converges to a single extraction
+call, keeping latency and cost bounded as the corpus grows. This
+makes its deployment feasible in large-scale production
+environments, as discussed in Section~\ref{sec:feasibility}.
 
 This study has three main limitations. First, open-domain coverage
 is narrow: only \textit{brand} and \textit{model} exercise the full
