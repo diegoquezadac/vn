@@ -1,5 +1,5 @@
 """
-normalize_all.py  —  normalize unique vehicles from autoscout24, craigslist, mucars.
+normalize_all.py  —  normalize unique vehicles from autoscout24 and mucars.
 
 FULL PIPELINE MODE: extract → retrieve → match → catalog update.
 Each vehicle description is extracted into structured fields, then brand/model/submodel/
@@ -13,7 +13,6 @@ FILES WRITTEN:
   db/hnsw_submodel.index         — FAISS HNSW index for submodel similarity search
   db/hnsw_trim_level.index       — FAISS HNSW index for trim_level similarity search
   data/autoscout24_mappings.db   — SQLite result cache for autoscout24
-  data/craigslist_mappings.db    — SQLite result cache for craigslist
   data/mucars_mappings.db        — SQLite result cache for mucars
 
 Progress is saved after every batch. Ctrl+C or crashes are safe to resume.
@@ -58,19 +57,7 @@ DATASETS = {
     },
     "mucars": {
         "path": "data/mucars.csv",
-        "cols_to_normalize": [
-            "Brand", "Model", "Year", "Condition",
-            "Gearbox", "Fiscal Power", "Fuel",
-            "Equipment", "Number of Doors",
-        ],
-    },
-    "craigslist": {
-        "path": "data/craigslist.csv",
-        "cols_to_normalize": [
-            "manufacturer", "model", "year", "condition",
-            "cylinders", "fuel", "transmission",
-            "drive", "type", "paint_color",
-        ],
+        "cols_to_normalize": ["Brand", "Model", "Year", "Gearbox"],
     },
 }
 
@@ -164,7 +151,7 @@ def _save_analytics(
         time.time(), dataset, batch_index, batch_size, batch_failed,
         metrics["new_catalog_inserts"],
         metrics["catalog_brand"], metrics["catalog_model"],
-        metrics["catalog_submodel"], metrics["catalog_trim_level"],
+        metrics.get("catalog_submodel", 0), metrics.get("catalog_trim_level", 0),
         metrics["extract_s"], metrics["retrieve_s"],
         metrics["match_s"], metrics["dedup_s"], metrics["total_s"],
         metrics["match_calls"], metrics["cache_hits"],
@@ -430,7 +417,11 @@ async def run(args) -> None:
             print(f"  {_db_path(cfg['path'])}   ({name} result cache)")
         print("\nProgress is saved after every batch. Ctrl+C is safe.\n")
 
-    normalizer = Normalizer(extract_only=False, persist_directory=DB_DIR)
+    normalizer = Normalizer(
+        match_mode="llm",
+        model=args.model,
+        persist_directory=DB_DIR,
+    )
     analytics_conn = _open_analytics_db()
 
     # Pre-compute total to-normalize count for overall progress
@@ -481,7 +472,7 @@ async def run(args) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Normalize unique vehicles from autoscout24, craigslist, and mucars.",
+        description="Normalize unique vehicles from autoscout24 and mucars.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__,
     )
@@ -515,6 +506,12 @@ def main():
         type=int,
         default=3,
         help="Number of samples in test mode (default: 3)",
+    )
+    parser.add_argument(
+        "--model",
+        choices=["gpt-4.1-nano", "gpt-4.1-mini"],
+        default="gpt-4.1-nano",
+        help="OpenAI model used for the IE step (default: gpt-4.1-nano)",
     )
     parser.add_argument(
         "--fresh_start",

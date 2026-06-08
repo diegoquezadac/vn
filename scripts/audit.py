@@ -54,21 +54,6 @@ DATASETS = {
             "Number of Doors",
         ],
     },
-    "craigslist": {
-        "path": "data/craigslist.csv",
-        "cols_to_normalize": [
-            "manufacturer",
-            "model",
-            "year",
-            "condition",
-            "cylinders",
-            "fuel",
-            "transmission",
-            "drive",
-            "type",
-            "paint_color",
-        ],
-    },
 }
 
 W = 70  # separator width
@@ -126,7 +111,7 @@ async def run(args) -> None:
     tmp_dir = tempfile.mkdtemp(prefix="vn_audit_")
     try:
         normalizer = Normalizer(
-            extract_only=False,
+            match_mode="llm",
             persist_directory=tmp_dir,
         )
 

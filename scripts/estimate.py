@@ -42,20 +42,6 @@ DATASETS = {
             "offer_description",
         ],
     },
-    # "craigslist": {
-    #     "path": "data/craigslist.csv",
-    #     "cols_to_normalize": [
-    #         "manufacturer",
-    #         "model",
-    #         "year",
-    #         "fuel",
-    #         "transmission",
-    #         "drive",
-    #         "type",
-    #         "paint_color",
-    #         "description",
-    #     ],
-    # },
     # "mucars": {
     #     "path": "data/mucars.csv",
     #     "cols_to_normalize": [
@@ -105,7 +91,7 @@ async def run(n: int, model: str, batch_size: int = 25, prefetch: int = 1) -> No
 
     try:
         normalizer = Normalizer(
-            extract_only=False,
+            match_mode="llm",
             model=model,
             persist_directory=tmp_db,
         )
@@ -226,7 +212,7 @@ def main():
     parser.add_argument(
         "--batch_size",
         type=int,
-        efault=20,
+        default=20,
         help="Batch size matching normalize.py (default: 20)",
     )
     parser.add_argument(
