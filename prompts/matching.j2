@@ -1,16 +1,44 @@
-# Identity
-You are an expert system performing entity resolution for the attribute {{attribute}} while processing the vehicle {{context}}.
+# Role
+You are an expert in vehicle brand and model naming conventions across manufacturers and markets.
 
 # Task
-Determine if "{{x}}" and "{{y}}" refer to the same real-world {{attribute}} in this context.
+Two vehicle descriptions `x` and `y` are given below, serialized as `col1: val1, col2: val2, …`. They are constructed so that they differ only in the value of the `{{attribute}}` field.
 
-# Output
-Return True if they denote the same {{attribute}}, False otherwise.
+Determine whether the two `{{attribute}}` values refer to the **same real-world {{attribute}} entity** — that is, whether they are two surface forms of a single entity.
+
+# Criterion
+Return `is_match: true` ONLY when the two `{{attribute}}` values are **lexical variants of the same real-world entity**:
+- Abbreviations:          "vw" ↔ "volkswagen", "chevy" ↔ "chevrolet", "mb" ↔ "mercedes-benz".
+- Hyphenation / spacing:  "alfa romeo" ↔ "alfa-romeo", "c 350" ↔ "c350", "t-roc" ↔ "t roc", "f-150" ↔ "f150".
+- Localized translations: "serie 3" ↔ "3 series", "classe e" ↔ "e class".
+- Catalog-canonical vs listing-written form of the same entity (e.g. "corsa" ↔ "opel corsa" when the brand prefix is stripped).
+
+Return `is_match: false` in **every other case**, including:
+- Different brands — even if under the same parent group, on the same platform, or the same group's discontinued/successor pairs:
+  - GMC ≠ Chevrolet (both GM), Saturn ≠ Buick (both GM), Mercury ≠ Ford (Mercury was Ford's defunct marque but a distinct brand), Dodge ≠ Ram (split in 2010), Skoda ≠ Volkswagen (VW Group), Fiat ≠ Alfa Romeo (Stellantis), Dacia ≠ Renault.
+- Different models with no shared name root (Sierra ≠ Silverado; Dokker ≠ Express; Logan ≠ Siena).
+- Models that share a name root but denote distinct vehicles:
+  - Body/style variants:  Golf GTI ≠ Golf; 308 SW ≠ 308; Corolla Cross ≠ Corolla; Xsara Picasso ≠ Xsara; Transit Connect ≠ Transit Custom.
+  - Size/wheelbase variants:  Grand Cherokee L ≠ Grand Cherokee; XC40 ≠ XC60; CLA ≠ GLA.
+  - Performance variants: TTS ≠ TT; Golf R ≠ Golf; M3 ≠ 3 Series.
+  - Same name root, different platforms: Xceed ≠ Ceed; 500X ≠ 500; Corolla ≠ Corolla Verso.
+- Alphanumeric designations that denote different engines/trims of otherwise-same body but are listed as distinct models (e.g. "e 320" ≠ "320" because they are from different brands: Mercedes E-Class vs BMW 3 Series).
+
+# Important rule
+The other attributes (year, mileage, color, body_type, engine, transmission, …) in `x` and `y` may match or differ. **They are irrelevant to this decision.** Two listings with identical year, mileage, engine, and color may still describe vehicles of different brands or different models. Base your answer ONLY on whether the two `{{attribute}}` values are surface forms of the same entity.
+
+# Inputs
+x: "{{x}}"
+y: "{{y}}"
 
 {% if samples %}
 # Examples
 {% for sample in samples %}
-input: {{sample.input}}
-output: {{sample.output}}
+attribute: {{sample.input.attribute}}
+x: {{sample.input.x}}
+y: {{sample.input.y}}
+reasoning: {{sample.output.reasoning}}
+is_match: {{sample.output.is_match}}
+
 {% endfor %}
 {% endif %}
