@@ -115,15 +115,6 @@ class Vehicle(BaseModel):
         default=None, description="Unit for mileage: kilometers (km) or miles (mi)"
     )
 
-    submodel: Optional[str] = Field(
-        default=None, description="Specific variant of the vehicle model"
-    )
-
-    trim_level: Optional[str] = Field(
-        default=None,
-        description="Package of features, styling, and equipment for the vehicle. Defines the specific configuration or edition",
-    )
-
     cylinders: Optional[int] = Field(
         default=None, description="Number of cylinders in the engine"
     )
