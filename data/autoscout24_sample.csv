@@ -1,0 +1,501 @@
+Unnamed: 0,brand,model,color,registration_date,year,price_in_euro,power_kw,power_ps,transmission_type,fuel_type,fuel_consumption_l_100km,fuel_consumption_g_km,mileage_in_km,offer_description
+183016,seat,SEAT Ateca,silver,09/2019,2019,24470,110,150,Automatic,Petrol,"5,7 l/100 km",129 g/km,52493.0,Style 1.5 TSI ACT Navi FSE Klimaautomatik
+31199,bmw,BMW 318,grey,10/2013,2013,10000,105,143,Manual,Diesel,"4,3 l/100 km",114 g/km,160000.0,318d
+180088,seat,SEAT Ateca,blue,07/2018,2018,23490,110,150,Manual,Petrol,"6,1 l/100 km",139 g/km,88000.0,Xcellence 4Drive 4x4/LED/KeyLess/LM
+79876,hyundai,Hyundai i40,grey,12/2018,2018,16550,99,135,Manual,Petrol,"6,1 l/100 km",140 g/km,50912.0,i40 Kombi blue 1.6 Trend
+57532,fiat,Fiat 500,white,04/2023,2023,17650,51,69,Manual,Petrol,"4,1 l/100 km",93 g/km,10.0,"Club 1,0 Hybrid"
+202558,skoda,Skoda Fabia,black,03/2023,2023,19945,81,110,Manual,Petrol,"5,1 l/100 km",116 g/km,510.0,"Ambition TSI|SUNSET|15""|PDCHINTEN|WINTERPA"
+179972,seat,SEAT Arona,blue,10/2018,2018,10890,85,116,Manual,Petrol,"4,9 l/100 km",113 g/km,190000.0,Style/Navi/EURO6/ISOFIX/DAB /LED
+65280,ford,Ford Mondeo,grey,07/2017,2017,25990,132,179,Automatic,Hybrid,"3,9 l/100 km",89 g/km,56627.0,Hybrid Lim. (CNG)
+39717,bmw,BMW X1,silver,06/2019,2019,23900,110,150,Automatic,Diesel,"4,6 l/100 km",121 g/km,73860.0,sDrive 18d LED Sitzhzg. AHK Einparkhilfe v/h
+240987,volkswagen,Volkswagen Passat Variant,red,12/2020,2020,24499,90,122,Automatic,Diesel,"4,9 l/100 km",128 g/km,57887.0,Business 2.0 TDI DSG BMT NAVI LED
+19147,audi,Audi Q2,red,02/2020,2020,26820,110,150,Automatic,Diesel,"5,5 l/100 km",145 g/km,27890.0,35 TDI S tronic S line LM LED KlimaA Teilled.
+100190,mazda,Mazda CX-5,white,03/2019,2019,24990,121,165,Manual,Petrol,"6,4 l/100 km",168 g/km,34054.0,2.0L EXCLUSIVE-LINE
+204940,smart,smart forFour,red,12/2021,2021,19999,60,82,Automatic,Electric,,0 g/km,8100.0,EQ Passion Exclusive 22kW LED Kamera
+36282,bmw,BMW M4,grey,04/2017,2017,58990,331,450,Automatic,Petrol,"8,7 l/100 km",203 g/km,48340.0,Cabrio DKG *OHNE OPF* HUD 360° H/K KEYLESS
+177848,seat,SEAT Ibiza,grey,03/2013,2013,7999,77,105,Manual,Petrol,"5,1 l/100 km",121 g/km,133422.0,1.2 TSI Style Viva NAVI TEMPOMAT PDC AHK
+197396,skoda,Skoda Superb,white,10/2019,2019,26740,140,190,Automatic,Diesel,"5,3 l/100 km",123 g/km,87826.0,Combi 2.0 TDI DSG PREMIUM EDT *ACC *LED *VIRTUAL
+247239,volvo,Volvo V40,white,03/2014,2014,7490,84,114,Manual,Diesel,"3,8 l/100 km",99 g/km,291000.0,Cross Country Kinetic 1.6d TOP! 2.Hand VB
+8370,audi,Audi A3,blue,04/2014,2014,14200,132,179,Automatic,Petrol,"5,6 l/100 km",- (g/km),124000.0,A3 1.8 TFSI Sportback S tronic Ambiente
+163280,peugeot,Peugeot 5008,grey,11/2022,2022,33388,96,131,Manual,Diesel,"4,1 l/100 km",134 g/km,10.0,1.5 BHDi 130 Allure LED Nav Kam180° 18Z 7-S
+203698,smart,smart forTwo,white,09/2011,2011,5600,52,71,Automatic,Petrol,"4,2 l/100 km",97 g/km,104500.0,smart fortwo coupe softouch edition nightlight mic
+227773,volkswagen,Volkswagen Sharan,grey,01/2014,2014,14550,103,140,Manual,Diesel,6 l/100 km,158 g/km,151000.0,2.0 TDI 4Motion BlueMotion Technology Comfortline
+225475,volkswagen,Volkswagen up!,white,01/2012,2012,4000,55,75,Manual,Petrol,"4,7 l/100 km",108 g/km,172000.0,1.4 TSI Comf. EcoFuel DSG Erdgas
+152309,opel,Opel Mokka X,silver,05/2019,2019,16588,103,140,Manual,Petrol,"6,6 l/100 km",165 g/km,65146.0,1.4 Turbo 140 Enjoy WinterP 17Z PDC Temp
+184584,seat,SEAT Leon,silver,07/2020,2020,23480,96,131,Automatic,CNG,"3,6 kg/100 km",- (g/km),24791.0,Sportstourer 1.5 TGI DSG FR BLACK MATT EDIT
+31339,bmw,BMW 114,black,09/2013,2013,7900,75,102,Manual,Petrol,"5,5 l/100 km",127 g/km,130000.0,114i
+228323,volkswagen,Volkswagen Polo,black,06/2014,2014,10990,66,90,Manual,Petrol,"4,7 l/100 km",107 g/km,60150.0,"V Comfortline PDC, Sitzheizung, CD"
+251019,volvo,Volvo XC60,grey,03/2023,2023,62850,145,197,Automatic,Petrol,7 l/100 km,160 g/km,2500.0,"B4 B Plus Dark 145 kW, 5-türig"
+104046,mercedes-benz,Mercedes-Benz C 180,silver,04/2003,2003,4999,105,143,Manual,Petrol,"8,2 l/100 km",197 g/km,249000.0,Kompressor Sportcoupe JUBILÄUMSPREIS 25 JAHRE
+48702,dacia,Dacia Sandero,blue,02/2018,2018,10980,66,90,Manual,Petrol,"4,9 l/100 km",109 g/km,77700.0,Prestige
+168116,porsche,Porsche Macan,grey,11/2022,2022,119990,324,441,Automatic,Petrol,"9,9 l/100 km",225 g/km,3490.0,"GTS, Bose, GTS  Sport Paket,Panorama,AHK"
+224198,volkswagen,Volkswagen Tiguan,grey,12/2012,2012,9990,90,122,Manual,Petrol,"6,5 l/100 km",152 g/km,139860.0,Comfortline  Passivfahrer
+177103,renault,Renault Clio,orange,04/2023,2023,20890,66,90,Automatic,Petrol,"6,1 l/100 km",100 g/km,50.0,EQULIBRE TCe 90 X-Tronic DAB CARPLAY LED
+221602,volkswagen,Volkswagen Touran,black,02/2010,2010,7450,77,105,Manual,Diesel,6 l/100 km,158 g/km,164532.0,"Freestyle 1,9*TDI*7 Sitzer*NAVI*EURO 5"
+86715,jeep,Jeep Compass,black,08/2020,2020,33850,177,241,Automatic,Hybrid,"2,1 l/100 km",48 g/km,31060.0,PHEV 'S' 4Xe ParkPaket
+122,alfa-romeo,Alfa Romeo 147,black,11/2004,2004,17199,184,250,Manual,Petrol,"12,1 l/100 km",- (g/km),151715.0,147 3.2 V6 24V GTA
+165195,porsche,Porsche Boxster,black,08/2013,2013,26999,232,315,Automatic,Petrol,8 l/100 km,188 g/km,45350.0,S PDK-SpoSitz-Navi-SportAga-BOSE-SHZ-20
+205162,ssangyong,SsangYong REXTON,black,10/2017,2017,24450,131,178,Automatic,Diesel,7 l/100 km,184 g/km,44085.0,2.2e-XDi Executive 4WD LEDER-TEMP-NAV-KAM
+26635,bmw,BMW 116,grey,10/2008,2008,4498,90,122,Manual,Petrol,"5,8 l/100 km",- (g/km),214000.0,116i BMW
+105849,mercedes-benz,Mercedes-Benz B 200,grey,04/2006,2006,4590,103,140,Automatic,Diesel,"6,3 l/100 km",165 g/km,127500.0,CDI PDC. Klimaaut. Sportfahrwerk
+36028,bmw,BMW M2,blue,05/2017,2017,43888,272,370,Manual,Petrol,"8,5 l/100 km",201 g/km,52594.0,Coupe Navi Soundsystem Kurvenlicht Sperrdiff. Mehr
+192478,skoda,Skoda Octavia,blue,09/2017,2017,14999,110,150,Manual,Petrol,"5,3 l/100 km",124 g/km,83532.0,Drive 1.4 TSI*LED*SHZ*KLIMA*PDC*AHK*TEMP
+44450,citroen,Citroen C4,black,11/2015,2015,8999,60,82,Manual,Petrol,"4,6 l/100 km",109 g/km,90000.0,Cactus Shine*NAVI*KAMERA*SHZ***
+230061,volkswagen,Volkswagen up!,red,07/2015,2015,6899,44,60,Manual,Petrol,"4,5 l/100 km",105 g/km,77000.0,"move ,klima ,El fenster ,Tüv Neu"
+87875,kia,Kia Sportage,black,03/2012,2012,6950,85,116,Manual,Diesel,"5,3 l/100 km",139 g/km,269622.0,1.7 CRDi
+6952,audi,Audi A6,black,01/2012,2012,9990,180,245,Automatic,Diesel,"5,7 l/100 km",- (g/km),197000.0,A6 3.0 TDI DPF quattro S tronic
+38196,bmw,BMW 540,silver,10/2018,2018,34989,235,320,Automatic,Diesel,"6,1 l/100 km",160 g/km,122732.0,d xDrive Touring Sport Line Standhzg/H&K/AHK
+1428,alfa-romeo,Alfa Romeo Giulia,silver,02/2023,2023,50550,206,280,Automatic,Petrol,7 l/100 km,144 g/km,15.0,"Ti 2.0 Turbo Klimautomatik, CarPlay,"
+16312,audi,Audi Q2,white,02/2018,2018,19980,85,116,Manual,Petrol,"5,4 l/100 km",122 g/km,49690.0,sport ultra LED SiHz PDC Temp ePano AHK
+213263,toyota,Toyota C-HR,white,01/2023,2023,26690,72,98,Automatic,Hybrid,"3,8 l/100 km",86 g/km,10.0,1.8 Hybrid Flow FLA SpurH LM KlimaA Navi LED
+7095,audi,Audi TT,silver,11/2012,2012,9950,125,170,Manual,Diesel,"5,6 l/100 km",146 g/km,216000.0,2.0 TDI Roadster Coupe/Roadster (8J3/8J9)
+41503,bmw,BMW X4 M,grey,07/2021,2021,71888,375,510,Automatic,Petrol,"10,9 l/100 km",251 g/km,25000.0,Competition+HUD+DispKey+DAB +ACC +LED +360°
+88952,kia,Kia Ceed / cee'd,grey,04/2017,2017,16490,99,135,Manual,Petrol,"6,3 l/100 km",149 g/km,80300.0,Sportswagon 1.7 CRDi  GT Line
+68674,ford,Ford Mustang,blue,08/2019,2019,39997,343,466,Automatic,Petrol,"12,1 l/100 km",- (g/km),58000.0,5.0 V8 GT Auto/Performance-Klappenausp.
+208210,toyota,Toyota Corolla,red,09/2019,2019,23870,72,98,Automatic,Hybrid,"3,3 l/100 km",76 g/km,26041.0,1.8 Hybrid Club NAVI KAMERA
+97481,maserati,Maserati Ghibli,grey,04/2019,2019,50900,202,275,Automatic,Diesel,"7,2 l/100 km",189 g/km,116172.0,3.0 V6 Diesel*GranSport*3xDvD*360*ACC*SD*
+27238,bmw,BMW 118,white,07/2008,2008,5999,105,143,Manual,Diesel,"4,5 l/100 km",119 g/km,200000.0,d Sportline * Navigation * 2.Hand *
+68637,ford,Ford EcoSport,blue,05/2019,2019,15950,92,125,Manual,Petrol,"5,3 l/100 km",119 g/km,40800.0,Titanium*Kamera*Park-Pilot*Sitzhzg
+3837,audi,Audi A4,black,05/2008,2008,12999,176,239,Manual,Diesel,"6,8 l/100 km",176 g/km,154686.0,3.0 TDI Quattro  Originale ABT !
+120696,mercedes-benz,Mercedes-Benz GLC 350,silver,12/2017,2017,26850,190,258,Automatic,Diesel,,- (g/km),228000.0,350 d 4Matic Distronic/AHK/Navi -Mod. 2018 (808)
+24542,bmw,BMW 330,black,02/2003,2003,14900,170,231,Automatic,Petrol,"9,6 l/100 km",230 g/km,95000.0,"i Lim 1Hd GARANTIE Leder Navi Xen GSD PDC 18"""
+249190,volvo,Volvo XC60,black,01/2019,2019,41990,228,310,Automatic,Petrol,"7,8 l/100 km",181 g/km,32100.0,R Design AWD IntelliSafePro/LED/DAB/elHeckk
+133443,mini,MINI Cooper Cabrio,yellow,06/2023,2023,27300,100,136,Automatic,Petrol,"6,4 l/100 km",145 g/km,5000.0,1.5 Classic Trim LED ALUFELGEN
+160537,peugeot,Peugeot 2008,red,01/2017,2017,12900,81,110,Manual,Petrol,"4,4 l/100 km",103 g/km,96890.0,(Testfahrzeug) PureTech 110 Stop&Start GT-Line Edi
+231144,volkswagen,Volkswagen Polo,white,03/2015,2015,9490,44,60,Manual,Petrol,"4,7 l/100 km",106 g/km,58428.0,1.0 44kW Trendline BMT Klima Radio-CD
+26108,bmw,BMW 320,grey,09/2007,2007,19999,110,150,Manual,Petrol,"7,4 l/100 km",178 g/km,164000.0,320i
+10220,audi,Audi A5,grey,09/2015,2015,25945,180,245,Automatic,Diesel,"5,7 l/100 km",151 g/km,94163.0,"Sportback 3.0 TDI quattro S line Navi Xen.19"""
+238187,volkswagen,Volkswagen Golf,blue,03/2019,2019,27750,135,184,Automatic,Diesel,"4,3 l/100 km",- (g/km),65500.0,GTD 2.0 TDI SCR DSG
+23000,bentley,Bentley Continental,blue,11/2014,2014,103900,467,635,Automatic,Petrol,"14,6 l/100 km",338 g/km,40200.0,GT Speed Vollleder
+111794,mercedes-benz,Mercedes-Benz C 180,black,11/2012,2012,12500,115,156,Unknown,Petrol,"7,6 l/100 km",182 g/km,85500.0,CGI BlueEfficiency C -Klasse Lim. (BM 204)
+195883,skoda,Skoda Fabia,grey,08/2019,2019,11900,55,75,Manual,Petrol,"4,9 l/100 km",111 g/km,75259.0,"Cool Plus Klima,SHZ,,DAB,PDC hinten,Alu"
+170442,renault,Renault Kadjar,black,11/2015,2015,15000,96,131,Manual,Diesel,"4,9 l/100 km",129 g/km,115404.0,Energy dCi 130 4x4 Bose Edition
+174078,renault,Renault Twingo,grey,12/2020,2020,11950,54,73,Manual,Petrol,"4,5 l/100 km",102 g/km,21000.0,Limited TCe 75
+142140,opel,Opel Corsa,brown,02/2011,2011,5900,64,87,Manual,Petrol,"5,5 l/100 km",129 g/km,99000.0,"Innovation D 99tkm, Klimaanlage, Alufelgen"
+150569,opel,Opel Crossland X,white,06/2018,2018,15850,96,131,Manual,Petrol,5 l/100 km,114 g/km,71100.0,INNOVATION
+160149,peugeot,Peugeot Expert,white,09/2015,2015,8998,66,90,Manual,Diesel,"6,9 l/100 km",183 g/km,95000.0,Kasten AVANTAGE 2.HAND+KLIMA+PDC+TÜV NEU
+152286,opel,Opel Astra,silver,11/2019,2019,18690,96,131,Manual,Petrol,"5,5 l/100 km",125 g/km,19796.0,K 1.2 Turbo Elegance Rückfahrkamera / Navi
+136916,nissan,Nissan X-Trail,blue,11/2022,2022,44970,120,163,Automatic,Petrol,,- (g/km),1900.0,Tekna AWR  AHK
+32561,bmw,BMW X1,black,11/2014,2014,13500,110,150,Manual,Petrol,"7,7 l/100 km",- (g/km),95000.0,sDrive18i
+236036,volkswagen,Volkswagen Golf,yellow,02/2018,2018,16799,81,110,Manual,Petrol,"4,8 l/100 km",109 g/km,34963.0,VII Lim. Sound NAVI PDC SHZ ACC
+227592,volkswagen,Volkswagen up!,blue,07/2014,2014,4699,55,75,Manual,Petrol,"4,7 l/100 km",108 g/km,181061.0,cup/Klima/Sitzhz.
+79466,hyundai,Hyundai iX20,silver,11/2017,2017,14985,92,125,Automatic,Petrol,"6,5 l/100 km",150 g/km,79296.0,1.6 Automatik YES! Plus
+23869,bmw,BMW 328,silver,07/2000,2000,3999,142,193,Manual,Petrol,"9,3 l/100 km",221 g/km,203000.0,Touring /met+Alu+Klima+SSD+T-Leder /TÜV mögl
+242260,volkswagen,Volkswagen Golf,grey,01/2021,2021,25480,180,245,Automatic,Hybrid,,- (g/km),29300.0,GTE 1.4 DSG KAM LED+ NAVI APP SHZ DAB+
+86737,jeep,Jeep Renegade,black,12/2020,2020,20900,110,150,Automatic,Petrol,"6,4 l/100 km",163 g/km,90500.0,1.3 T-GDI Limited*ACC*Navi*LED*R-Kam*
+162873,peugeot,Peugeot 2008,grey,03/2021,2021,26500,96,131,Manual,Petrol,"5,7 l/100 km",128 g/km,47299.0,PureTech 130 GT
+43864,citroen,Citroen C3 Picasso,black,02/2010,2010,4999,70,95,Manual,Petrol,,- (g/km),131439.0,1.4 Klima PDC Tempomat BC AUX USB Nebel ISOFIX
+90476,kia,Kia Sportage,black,05/2019,2019,26900,136,185,Automatic,Diesel,"6,3 l/100 km",166 g/km,54465.0,2.0 CRDI Platinum Edition 4WD Mild Hybrid
+206017,toyota,Toyota Avensis,silver,01/2010,2010,9930,97,132,Manual,Petrol,"6,5 l/100 km",154 g/km,112990.0,Lim Sol *KLIMAAUTOMATIK*PDC*
+140077,opel,Opel Astra,silver,10/2006,2006,2400,66,90,Manual,Petrol,"6,1 l/100 km",146 g/km,186000.0,GTC 1.4
+141105,opel,Opel Meriva,grey,12/2009,2009,3550,77,105,Automatic,Petrol,"6,7 l/100 km",161 g/km,132000.0,"Innovation ""110 Jahre"""
+190572,skoda,Skoda Yeti,black,03/2013,2013,8350,77,105,Manual,Petrol,"6,6 l/100 km",154 g/km,125000.0,Active Plus Edition|2.Hand|S.Heft|Klima
+239573,volkswagen,Volkswagen Golf,black,05/2019,2019,18875,110,150,Manual,Diesel,"5,2 l/100 km",135 g/km,62048.0,"VII Join 2.0 TDI SCR ""NAVI,ACC"""
+186868,seat,SEAT Arona,red,07/2022,2022,23990,81,110,Manual,Petrol,"4,8 l/100 km",109 g/km,20.0,"1,0 TSI FR - LAGER 81 kW (110 PS), Schaltgetriebe"
+163560,peugeot,Peugeot 2008,black,12/2022,2022,32990,100,136,Automatic,Electric,460 km (Ort),331 km Reichweite,2560.0,Elektro GT
+219480,volkswagen,Volkswagen Passat,blue,10/2009,2009,5100,90,122,Manual,Petrol,"5,9 l/100 km",138 g/km,218000.0,Comfortline TSI BlueMotion Lim. (3C2)
+176305,renault,Renault Clio,orange,03/2022,2022,19989,67,91,Manual,Petrol,"5,1 l/100 km",117 g/km,14330.0,BUSINESS EDITION TCe 90 NAVI PDC KLIMA SHZ
+26850,bmw,BMW 525,black,11/2008,2008,11000,145,197,Automatic,Diesel,"6,9 l/100 km",200 g/km,158000.0,d Lim. (E60) LCI
+32039,bmw,BMW 428,blue,08/2014,2014,18900,180,245,Automatic,Petrol,"6,8 l/100 km",159 g/km,82800.0,428i Coupe xDrive Aut. Luxury Line
+233289,volkswagen,Volkswagen Sharan,blue,06/2017,2017,25790,110,150,Manual,Diesel,"5,1 l/100 km",132 g/km,86900.0,2.0D Comfortline | Navi | AHK | 7-Sitzer
+2369,audi,Audi A6,grey,11/2004,2004,5450,125,170,Manual,Petrol,"9,9 l/100 km",238 g/km,255000.0,2.4
+118093,mercedes-benz,Mercedes-Benz S 350,black,10/2016,2016,43880,190,258,Automatic,Diesel,"5,7 l/100 km",149 g/km,136000.0,Panorama*TV*Standheizung*Softclose*Vollaustattung
+216633,volkswagen,Volkswagen Golf,blue,06/2006,2006,2990,103,140,Manual,Diesel,"5,4 l/100 km",146 g/km,211000.0,V Lim. Sportline-TÜV12/23-GUTE ZUSTAND
+12896,audi,Audi A5,blue,09/2017,2017,25799,185,252,Automatic,Petrol,"6,3 l/100 km",144 g/km,87000.0,2.0 TFSI Coupe Aut. LED~KAMERA~LEDER BRAUN~
+162772,peugeot,Peugeot Rifter,grey,03/2021,2021,20990,96,131,Manual,Diesel,"4,3 l/100 km",112 g/km,80805.0,BlueHDI 130 L1 Allure
+165772,porsche,Porsche Macan,white,06/2015,2015,41900,190,258,Automatic,Diesel,"6,3 l/100 km",167 g/km,160000.0,S Diesel *SPORT*PANO*TOTW*SITZKLIMA*KAMERA
+29664,bmw,BMW 530,black,08/2011,2011,15900,180,245,Automatic,Diesel,"6,9 l/100 km",183 g/km,137000.0,530d xDrive Gran Turismo
+149754,opel,Opel Astra,black,11/2018,2018,15900,110,150,Manual,Diesel,"4,8 l/100 km",136 g/km,88285.0,K INNOVATION 1.6 BiTurbo CDTI  SHZ/CAM/LHZ
+105556,mercedes-benz,Mercedes-Benz C 200,silver,09/2005,2005,7990,90,122,Automatic,Diesel,"6,9 l/100 km",180 g/km,133000.0,7G-TRONIC Elegance mit LPG-Autogas
+167127,porsche,Porsche 991,silver,03/2018,2018,169990,368,500,Manual,Petrol,"12,9 l/100 km",290 g/km,14182.0,(911) GT3 Clubsport SportChrono 90l Bose Lift
+69606,ford,Ford Focus,red,09/2019,2019,29200,206,280,Manual,Petrol,"7,9 l/100 km",179 g/km,33500.0,ST 5-türig
+68750,ford,Ford Fiesta,blue,09/2019,2019,15500,74,101,Manual,Petrol,,- (g/km),7035.0,1.0 EcoBoost S&S TREND
+205744,toyota,Toyota Verso,grey,07/2009,2009,9800,108,147,Automatic,Petrol,7 l/100 km,164 g/km,199900.0,Executive+ 7-Sitzer+RFK+XENON+SHZ+
+166222,porsche,Porsche Macan,grey,01/2017,2017,42970,190,258,Automatic,Diesel,"6,3 l/100 km",164 g/km,128300.0,S Diesel°PASM°PDLS°BOSE°Xenon°Navi°Pano°
+22309,audi,Audi A1,red,02/2023,2023,25988,81,110,Automatic,Petrol,"5,7 l/100 km","132,3 g/km",6000.0,"Sportback 30 TFSI S tronic - LED,PDC+,SHZ,BT"
+233526,volkswagen,Volkswagen Caddy,blue,06/2017,2017,17990,75,102,Manual,Diesel,"4,5 l/100 km",117 g/km,100000.0,Nfz Maxi Kasten Klima Navi AHK Sitzheizung
+138711,opel,Opel Omega,silver,01/2002,2002,4990,106,144,Manual,LPG,"9,6 l/100 km",231 g/km,119990.0,B Selection Lim./2.Hand/Gasanlage
+123121,mercedes-benz,Mercedes-Benz X 250,white,01/2018,2018,36999,140,190,Automatic,Diesel,"7,9 l/100 km",207 g/km,66800.0,d 4M.  * 1.Hand * Vollausstattung * AHK *
+105044,mercedes-benz,Mercedes-Benz CLK 200,blue,06/2005,2005,10499,120,163,Automatic,Petrol,"8,7 l/100 km",207 g/km,120000.0,K Aut. Leder Bluet. Sitzhz PTS vo+hi AHK
+61482,ford,Ford Focus,white,05/2013,2013,8600,74,101,Manual,Petrol,"4,7 l/100 km",111 g/km,84000.0,Lim. Champions Edition
+22731,audi,Audi A3,white,05/2023,2023,31385,110,150,Manual,Petrol,"5,6 l/100 km",128 g/km,10.0,Sportback 35 TFSI * PDC KLIMA TEMPOMAT LED KEYL...
+117297,mercedes-benz,Mercedes-Benz Sprinter,white,07/2015,2015,18921,120,163,Manual,Diesel,"8,2 l/100 km",217 g/km,170260.0,Automatic SB*NAVI*XENON*PDC*SH*Tempomat*Teilleder*
+92309,kia,Kia XCeed,white,07/2022,2022,21950,118,160,Manual,Petrol,"6,1 l/100 km",137 g/km,14300.0,1.5T Edition 7 | Emotion
+164353,peugeot,Peugeot Boxer,white,05/2023,2023,35838,121,165,Manual,Diesel,"9,1 l/100 km",239 g/km,10.0,335 2.2 BHDi 165 L3H2 DAB PDC Temp 270°
+83458,hyundai,Hyundai i20,green,03/2023,2023,22790,88,120,Manual,Petrol,"5,6 l/100 km",124 g/km,1500.0,Trend*LichtP*AssistP*KomfP*DachLack*17ZollFe
+109713,mercedes-benz,Mercedes-Benz E 200,black,03/2010,2010,16499,135,184,Automatic,Petrol,"7,4 l/100 km",- (g/km),97636.0,E 200 CGI Coupe BlueEFFICIENCY Automatik Avantgard
+109355,mercedes-benz,Mercedes-Benz E 220,grey,12/2010,2010,8200,125,170,Manual,Diesel,5 l/100 km,- (g/km),293000.0,CDI DPF BlueEFFICIENCY
+210432,toyota,Toyota Aygo,blue,06/2022,2022,69290,53,72,Manual,Petrol,5 l/100 km,114 g/km,10.0,X Explore
+108628,mercedes-benz,Mercedes-Benz C 200,black,04/2009,2009,5700,100,136,Manual,Diesel,"6,1 l/100 km",154 g/km,207643.0,C-Klasse T-Modell C 200 T CDI
+59514,ford,Ford Fiesta,silver,07/2009,2009,4990,44,60,Manual,Petrol,"5,5 l/100 km",128 g/km,88095.0,Ambiente Klima 8-fach-bereift 2.Hand
+165296,porsche,Porsche 911,black,04/2014,2014,102949,412,560,Automatic,Petrol,"9,9 l/100 km",231 g/km,173500.0,Turbo S Cabriolet 991 Sport-Chrono-Paket
+12110,audi,Audi A3,black,03/2016,2016,20980,92,125,Manual,Petrol,"5,3 l/100 km",126 g/km,83560.0,Cabriolet 1.4 NAVI XENON SHZ PDC KLIMA
+56997,fiat,Fiat 500,grey,06/2023,2023,16990,51,69,Manual,Petrol,"5,2 l/100 km",119 g/km,5.0,1.0 GSE Hybrid Dolcevita
+229979,volkswagen,Volkswagen Polo,grey,02/2015,2015,8490,55,75,Manual,Petrol,"5,1 l/100 km",116 g/km,123000.0,Comfortline
+138038,nissan,Nissan Qashqai,black,03/2023,2023,30950,103,140,Manual,Petrol,"5,8 l/100 km",131 g/km,20.0,1.3 DIG-T Acenta 6MT 140PS Navi Winterpaket
+58882,ford,Ford Fiesta,blue,09/2008,2008,5199,60,82,Manual,Petrol,"5,7 l/100 km",- (g/km),77889.0,Fiesta 1.25 Ambiente
+40162,bmw,BMW 320,blue,07/2020,2020,34930,140,190,Automatic,Diesel,"4,5 l/100 km",117 g/km,32400.0,d xDrive Touring Advantage Aut. ACC Standheiz
+96689,land-rover,Land Rover Defender,blue,03/2023,2023,129800,386,525,Automatic,Petrol,"12,8 l/100 km",290 g/km,7000.0,"110 5.0 P525 V8*HEAD-UP*BLACK PACK*22"""
+5508,audi,Audi TT RS,grey,10/2011,2011,35990,250,340,Automatic,Petrol,"8,5 l/100 km",197 g/km,94980.0,2.5TFSI quattro Coupe S tronic EXCLUSIVE BOSE NAVI
+6292,audi,Audi A3,brown,05/2012,2012,12999,92,125,Manual,Petrol,6 l/100 km,- (g/km),117000.0,A3 Cabriolet 1.4 TFSI S line Sportpaket
+133656,mitsubishi,Mitsubishi Pajero,white,05/2017,2017,36990,140,190,Automatic,Diesel,"9,3 l/100 km",0 g/km,74168.0,3.2 DI-D Edition 100
+27283,bmw,BMW Z4,blue,05/2009,2009,22900,225,306,Automatic,Petrol,"9,4 l/100 km",219 g/km,122400.0,Roadster sDrive 35i Xenon Navi Leder 1.Hand
+111773,mercedes-benz,Mercedes-Benz C 220,black,05/2012,2012,9990,127,173,Manual,Diesel,"4,4 l/100 km",117 g/km,198000.0,CDI DPF (BlueEFFICIENCY) Avantgarde
+224143,volkswagen,Volkswagen Polo,grey,11/2012,2012,12990,66,90,Automatic,Petrol,"5,3 l/100 km",124 g/km,69000.0,V Match+1.Hand+Schiebedach+Automatik+PDC+++
+44701,citroen,Citroen Berlingo,blue,09/2016,2016,11800,73,99,Unknown,Diesel,"4,3 l/100 km",113 g/km,114746.0,Selection Kombi
+105581,mercedes-benz,Mercedes-Benz A 180,silver,05/2005,2005,2150,80,109,Manual,Diesel,"5,4 l/100 km",- (g/km),219650.0,CDI Classic
+134291,mitsubishi,Mitsubishi,orange,11/2022,2022,64796,110,150,Manual,Diesel,,-/-,3050.0,Canter 6S15 Absetzer KlimaA Kam.
+17388,audi,Audi A5,red,03/2019,2019,32600,140,190,Automatic,Diesel,"5,8 l/100 km",152 g/km,55700.0,2.0 TDI quattro Sportback *VC*LED*PANORAMA*NAVI*EL
+114494,mercedes-benz,Mercedes-Benz E 250,black,09/2014,2014,23500,155,211,Automatic,Petrol,"5,6 l/100 km",- (g/km),85000.0,Coupe 7G-TRONIC
+129565,mini,MINI Cooper Cabrio,red,08/2012,2012,12950,90,122,Manual,Petrol,"5,7 l/100 km",133 g/km,74400.0,"""Pepper"",Navigation,Teil-Leder uvm"
+244597,volkswagen,Volkswagen T-Roc,black,11/2022,2022,29870,110,150,Automatic,Petrol,"5,4 l/100 km",123 g/km,17550.0,Style 1.5 Neues Modell SOFORT IQ Navi Kamera Winte
+3513,audi,Audi A3,black,11/2007,2007,7500,75,102,Manual,Petrol,"7,1 l/100 km",- (g/km),110450.0,1.6 Ambition
+65379,ford,Ford Focus,grey,01/2017,2017,15990,110,150,Automatic,Petrol,"6,1 l/100 km",140 g/km,62000.0,Turnier Titanium/Navi/
+22653,audi,Audi Q3,silver,04/2023,2023,43980,110,150,Automatic,Diesel,5 l/100 km,132 g/km,9999.0,35 TDI NAVI LED VIRTUAL OPTIKPAKET
+2775,audi,Audi TT,silver,05/2005,2005,8999,132,179,Manual,Petrol,"9,5 l/100 km",228 g/km,91000.0,1.8 quattro Cabrio
+216177,volkswagen,Volkswagen Passat,brown,02/2005,2005,6300,110,150,Automatic,Petrol,"8,1 l/100 km",193 g/km,133000.0,2.0 FSI Trendline
+179911,seat,SEAT Ateca,white,01/2017,2017,22890,110,150,Automatic,Petrol,"5,5 l/100 km",126 g/km,58000.0,Xcellence*Automatik*Alu*Navi*LED*
+1560,aston-martin,Aston Martin DB11,blue,10/2017,2017,169900,447,608,Automatic,Petrol,"11,4 l/100 km",265 g/km,12000.0,V12 Launch Edition
+106699,mercedes-benz,Mercedes-Benz C 220,black,07/2007,2007,7800,125,170,Automatic,Diesel,"6,6 l/100 km",- (g/km),224924.0,CDI DPF Automatik Avantgarde
+194262,skoda,Skoda Rapid/Spaceback,red,11/2018,2018,12990,70,95,Manual,Petrol,"4,8 l/100 km",109 g/km,47730.0,Rapid Spaceback 1.0 TSI Cool Edition PDC/KLIMA
+36669,bmw,BMW 440,black,12/2017,2017,48850,265,360,Automatic,Petrol,"6,8 l/100 km",- (g/km),2100.0,440i Gran Coupe Aut. M Sport M Perfomance.
+52755,fiat,Fiat Qubo,blue,05/2009,2009,3899,54,73,Manual,Petrol,7 l/100 km,165 g/km,170000.0,Active Tüv/Au 10.2024
+163843,peugeot,Peugeot 5008,white,04/2022,2022,44990,130,177,Automatic,Diesel,6 l/100 km,157 g/km,14800.0,GT-Pack BHDi180 EAT8 Leder SHZ Allwetter
+228278,volkswagen,Volkswagen Golf,black,01/2014,2014,7300,77,105,Manual,Diesel,"3,9 l/100 km",102 g/km,181900.0,Vollausstattung
+22317,audi,Audi SQ2,red,05/2023,2023,47388,221,300,Automatic,Petrol,"7,7 l/100 km",188 g/km,10.0,TFSI 300 S line-Int Matrix Nav+ eHK Keyl 19Z
+222269,volkswagen,Volkswagen Passat Variant,blue,01/2011,2011,9300,90,122,Manual,Petrol,"6,4 l/100 km",149 g/km,120000.0,Trendline 1.4 |NAVI|GARANTIE|
+230367,volkswagen,Volkswagen Golf Cabriolet,black,05/2015,2015,26900,195,265,Automatic,Petrol,"8,2 l/100 km",190 g/km,58350.0,R VI (517)
+19587,audi,Audi e-tron,white,06/2020,2020,45000,230,313,Automatic,Electric,,0 g/km,53000.0,"50 quattro advanced, AUDI GW+Garantie: 05/2025"
+5001,audi,Audi A6,black,05/2010,2010,15000,140,190,Automatic,Diesel,"7,1 l/100 km",- (g/km),179000.0,2.7 TDI DPF quattro tiptronic
+223944,volkswagen,Volkswagen Touran,brown,07/2012,2012,13000,103,140,Manual,Diesel,"5,3 l/100 km",- (g/km),171000.0,Touran 2.0 TDI DPF MATCH
+54183,fiat,Fiat Tipo,white,02/2017,2017,25990,70,95,Manual,Unknown,,- (g/km),67573.0,1.4 16V Pop
+19143,audi,Audi A3,red,03/2020,2020,21680,150,204,Automatic,Hybrid,"1,9 l/100 km",43 g/km,51000.0,Sportback 40 e-tron LED+ACC+Navi+PDC+SHZ
+78858,hyundai,Hyundai TUCSON,black,06/2016,2016,18490,130,177,Automatic,Petrol,"7,5 l/100 km",175 g/km,107500.0,1.6 Premium Kamera 4x4 SHZ Leder LM LED
+225558,volkswagen,Volkswagen Scirocco,blue,04/2013,2013,13500,130,177,Manual,Diesel,"5,1 l/100 km",134 g/km,111195.0,*Match*Bi-Xenon*Sport-Fahrw.*Bluetooth*
+68078,ford,Ford Tourneo Connect,silver,09/2018,2018,27455,88,120,Automatic,Diesel,"5,2 l/100 km",135 g/km,75300.0,Grand Tourneo Connect Titanium Autom. 7-Sitzer
+75123,ford,Ford Tourneo Custom,grey,05/2023,2023,50480,125,170,Automatic,Diesel,"7,3 l/100 km",192 g/km,15.0,170PS Autom. L1 Titanium X 5J.FGS
+90927,kia,Kia Stinger,grey,10/2020,2020,43990,269,366,Automatic,Petrol,"10,6 l/100 km",244 g/km,7056.0,GT 4WD // Sitzklima / Pano / H&K / HUD / 360°
+183976,seat,SEAT Arona,red,10/2020,2020,19940,85,116,Manual,Petrol,"5,7 l/100 km","134,5 g/km",26000.0,FR VOLL-LED | Full Link | Leder-Alcantara | SH | P
+91249,kia,Kia Sportage,white,02/2020,2020,30000,136,185,Automatic,Diesel,"5,8 l/100 km",153 g/km,20637.0,Platinum Edition QL Hybrid Pano Leder LED
+58955,ford,Ford Kuga,black,09/2008,2008,8990,100,136,Manual,Diesel,"6,4 l/100 km",170 g/km,133636.0,"Titanium, 4x4, Ahk,Pdc."
+181880,seat,SEAT Ibiza,blue,07/2019,2019,12990,59,80,Manual,Petrol,5 l/100 km,112 g/km,62100.0,1.0 MPI Reference *Cool&Sound*
+192209,skoda,Skoda Octavia,black,07/2016,2016,10500,110,150,Manual,Diesel,"4,7 l/100 km",125 g/km,246000.0,"2,0 TDI Combi Ambition 4x4"
+98353,mazda,Mazda CX-3,red,09/2015,2015,14339,77,105,Manual,Diesel,4 l/100 km,106 g/km,93257.0,1.5 SkyActiv Sports-Line LED/TECHNIK-PAKET/18-ZOL
+192502,skoda,Skoda Kodiaq,blue,12/2017,2017,24898,140,190,Automatic,Diesel,"5,7 l/100 km",150 g/km,123067.0,4x4 DSG Style*LED*Pano*Navi*WiPa*
+146292,opel,Opel Astra,red,02/2016,2016,8490,85,116,Manual,Petrol,"6,3 l/100 km",149 g/km,133800.0,"J Sports Tourer Style,Klima,Sitzheizung,SH"
+222658,volkswagen,Volkswagen Polo,red,12/2011,2011,11690,132,179,Automatic,Petrol,"5,9 l/100 km",139 g/km,105900.0,1.4 DSG GTI
+62465,ford,Ford Focus,white,12/2014,2014,7900,74,101,Manual,Petrol,"4,8 l/100 km",109 g/km,191666.0,"Wagon 1.0 Trend Edition Airco 18""LM 101Pk! Bluetoo"
+185275,seat,SEAT Ateca,grey,02/2021,2021,28940,110,150,Automatic,Petrol,"5,6 l/100 km",127 g/km,32453.0,Xperience 1.5 TSI DSG AHK LED Scheinwerferreg. Spe
+39710,bmw,BMW 420,silver,05/2019,2019,37890,135,184,Automatic,Petrol,"6,3 l/100 km",143 g/km,31013.0,i Cabrio Sport Line Head-Up HK HiFi DAB LED
+121349,mercedes-benz,Mercedes-Benz GLA 200,blue,07/2018,2018,26800,100,136,Automatic,Diesel,"5,5 l/100 km",147 g/km,34595.0,d 7G-DCT**Panorama-Navi-Memorysitze**
+85751,jaguar,Jaguar F-Type,black,01/2022,2022,106850,423,575,Automatic,Petrol,11 l/100 km,252 g/km,3500.0,R AWD*Pano*Perf-Sitz*Meridian*Black*Keyl*
+250703,volvo,Volvo S90,grey,01/2022,2022,55870,288,392,Automatic,Hybrid,- (l/100 km),- (g/km),8900.0,R Design ReCharge AWD Sunroof H&K 360° LED Navi e-
+187999,seat,SEAT Ateca,grey,05/2023,2023,37490,110,150,Automatic,Petrol,"6,7 l/100 km",150 g/km,50.0,"FR 1,5 TSI DSG"
+202232,skoda,Skoda Karoq,grey,03/2023,2023,39250,110,150,Automatic,Petrol,"6,2 l/100 km",141 g/km,4950.0,"Style 1,5 TSI DSG Smartlink AHK Navi uvm."
+134942,nissan,Nissan Qashqai+2,black,01/2013,2013,14500,110,150,Automatic,Diesel,"7,1 l/100 km",188 g/km,154000.0,2.0 dCi DPF 4x4 Aut. acenta
+56594,fiat,Fiat Tipo,silver,03/2022,2022,18985,74,101,Manual,Petrol,"5,4 l/100 km",124 g/km,10.0,"Kombi City Life Life1,0 Ltr. - 74 kW 74 kW (101..."
+123047,mercedes-benz,Mercedes-Benz E 200,white,06/2018,2018,34490,135,184,Automatic,Petrol,"6,3 l/100 km",142 g/km,30298.0,"AMG+NIGHT+LED+AMBIENTE+PARK-PAKET+ALU 19"""
+68575,ford,Ford Fiesta,orange,04/2018,2018,10000,74,101,Manual,Petrol,"4,6 l/100 km",97 g/km,113500.0,Fiesta 1.0 EcoBoost S
+46697,citroen,Citroen C4,white,07/2021,2021,24990,96,131,Automatic,Petrol,"4,8 l/100 km",110 g/km,35998.0,1.2 PureTech 130 EAT8 Shine Stop&Start (EURO
+76624,honda,Honda CR-V,white,12/2017,2017,16790,88,120,Manual,Diesel,"4,5 l/100 km",119 g/km,101500.0,1.6 i-DTEC 2WD Lifestyle Plus
+186457,seat,SEAT Leon,grey,07/2022,2022,25400,110,150,Automatic,Diesel,"4,5 l/100 km",117 g/km,13971.0,Style 2.0 TDI DSG Winter-Paket FullLink Cli
+240500,volkswagen,Volkswagen Golf,blue,12/2020,2020,24970,150,204,Automatic,Hybrid,"1,2 l/100 km",28 g/km,23900.0,VIII 1.4 TSI DSG Style Plug-in eHybrid
+30330,bmw,BMW 640,black,11/2012,2012,29000,230,313,Automatic,Diesel,"5,7 l/100 km",- (g/km),184000.0,640d xDrive Coupe
+126634,mercedes-benz,Mercedes-Benz B 200,blue,07/2021,2021,36500,110,150,Automatic,Diesel,5 l/100 km,1.480 g/km,14000.0,Mercedes-Benz B 200 AMG Line
+78596,hyundai,Hyundai iX20,beige,08/2016,2016,15990,92,125,Automatic,Petrol,"6,5 l/100 km",150 g/km,35900.0,1.6 Style Automatik
+83065,hyundai,Hyundai i10,silver,05/2022,2022,15790,49,67,Manual,Petrol,"4,5 l/100 km",104 g/km,11890.0,1.0 Select + Funktionspaket
+99093,mazda,Mazda CX-5,grey,09/2018,2018,21580,135,184,Manual,Diesel,"5,2 l/100 km",137 g/km,105266.0,SKYACTIV-D 184 AWD 6GS SPORTS LEDER-S TEC-P GSD
+113933,mercedes-benz,Mercedes-Benz E 350,brown,05/2014,2014,23990,185,252,Automatic,Diesel,"5,9 l/100 km",156 g/km,138000.0,4-Matic AMG LINE LEDER* PANORAMA*KAM* LED
+28918,bmw,BMW 328,blue,11/2011,2011,18990,180,245,Automatic,Petrol,"6,4 l/100 km",152 g/km,125000.0,i*HUD*360°Cam*Navi-Prof*SHD*Sportsitze*
+242098,volkswagen,Volkswagen ID.4,yellow,04/2021,2021,30949,150,204,Automatic,Electric,,0 g/km,53911.0,"°°Pro Perfo 150/77 313,-ohne Anzahlung Navi"
+181253,seat,SEAT Mii,white,04/2018,2018,8500,44,60,Manual,Petrol,"4,4 l/100 km",102 g/km,42000.0,Reference-Klima-Scheckheft-1.HAND
+115112,mercedes-benz,Mercedes-Benz GLA 200,white,04/2014,2014,17900,115,156,Automatic,Petrol,"5,8 l/100 km",134 g/km,36000.0,Pano Night RCAM Navi
+59527,ford,Ford Transit,white,04/2009,2009,6350,103,140,Manual,Diesel,"7,4 l/100 km",196 g/km,217000.0,"TüvAu:Neu,6-Gang,Klima,Temp.140ps 2xSchiebetür"""
+148267,opel,Opel Astra,white,05/2017,2017,12790,110,150,Manual,Petrol,"5,5 l/100 km",127 g/km,63000.0,1.4 Turbo Sports Tourer Edition
+152858,opel,Opel Crossland X,white,11/2019,2019,18490,96,131,Unknown,Petrol,5 l/100 km,113 g/km,25290.0,"Edition 1.2 Turbo Automatik Navi,PDC"
+107890,mercedes-benz,Mercedes-Benz CLK 280,silver,06/2008,2008,11800,170,231,Automatic,Petrol,10 l/100 km,239 g/km,84000.0,Coupe-XENON-LEDER-COMAND-
+179396,seat,SEAT Ateca,grey,11/2017,2017,19950,110,150,Manual,Petrol,"5,4 l/100 km",- (g/km),65000.0,1.4 ECO TSI XCELLENCE AHK 360°-Kamera Navi
+190121,skoda,Skoda Octavia,blue,10/2012,2012,6499,125,170,Manual,Diesel,"5,7 l/100 km",- (g/km),198893.0,Combi 2.0 TDI DPF RS
+120462,mercedes-benz,Mercedes-Benz C 220,silver,11/2017,2017,22790,125,170,Automatic,Diesel,"4,3 l/100 km",114 g/km,84950.0,d T Avantgarde LEDER|NAVI|LED|SHZ| KAMERA|TEMPOMAT
+177391,saab,Saab 9-3,blue,05/2008,2008,13990,188,256,Manual,Petrol,"10,6 l/100 km",254 g/km,209560.0,2.8 Turbo V6 Cabrio Aero
+120839,mercedes-benz,Mercedes-Benz C 180,white,01/2017,2017,17500,115,156,Automatic,Petrol,5 l/100 km,116 g/km,156700.0,7G-TRONIC Automatik TÜV 08/2023
+200342,skoda,Skoda Kodiaq,blue,08/2022,2022,43990,147,200,Automatic,Diesel,"5,9 l/100 km",175 g/km,16019.0,2.0 TDI DSG 4x4 Style
+134652,nissan,Nissan 350Z,black,05/2008,2008,24999,230,313,Manual,Petrol,12 l/100 km,- (g/km),95000.0,350 Z Roadster
+18299,audi,Audi Q5,white,09/2019,2019,45500,270,367,Automatic,Hybrid,"2,1 l/100 km",- (g/km),72000.0,Q5 55 TFSI e quattro S tronic
+99279,mazda,Mazda 6,black,10/2018,2018,22450,121,165,Manual,Petrol,"6,6 l/100 km",150 g/km,44583.0,2.0 SKYACTIVE Exclusive-Line
+68421,ford,Ford Kuga,white,11/2018,2018,19139,132,179,Manual,Diesel,"6,1 l/100 km",162 g/km,59752.0,Titanium AWD|Sportsitze vorn|Sicht-Paket
+188286,seat,SEAT Leon,grey,02/2023,2023,28490,96,131,Manual,Petrol,"5,5 l/100 km",124 g/km,2.0,ST FR Navi+ACC+Kamera+ParkAss+Winter+LED+PDC+Klima
+121126,mercedes-benz,Mercedes-Benz GLC 350,blue,12/2018,2018,66999,190,258,Automatic,Diesel,"8,2 l/100 km",215 g/km,130297.0,d 4M AMG COMAND KAMERA DISTRO LED AHK
+227985,volkswagen,Volkswagen Golf Variant,grey,02/2014,2014,11500,77,105,Manual,Diesel,"3,9 l/100 km",102 g/km,80000.0,"Golf 7 - 1.6 TDI BlueMotion Tech. Trendline, AHK"
+141879,opel,Opel Zafira,silver,07/2010,2010,7990,103,140,Manual,Petrol,"7,4 l/100 km",175 g/km,115800.0,7 Sitzer+SHZ+PDC+Klima+2.Hnd+Scheckheft
+27194,bmw,BMW 335,silver,01/2008,2008,8000,225,306,Automatic,Petrol,"9,6 l/100 km",231 g/km,144000.0,335i Aut.
+55650,fiat,Fiat,white,11/2020,2020,29980,103,140,Manual,Diesel,,-/-,11003.0,Ducato 33 L1H1 KaWa verblecht 140Multijet
+46348,citroen,Citroen C3,beige,03/2021,2021,14240,60,82,Manual,Petrol,"4,2 l/100 km",97 g/km,57070.0,Feel PureTech 83 + LED + PDC + DAB + BLUETOOTH
+246525,volkswagen,Volkswagen Tiguan Allspace,silver,05/2023,2023,41395,110,150,Automatic,Petrol,"6,9 l/100 km",157 g/km,10.0,"LIFE 1.5 TSI DSG Life, 7-Sitzer, Navi, virtual ..."
+22802,audi,Audi Q5,white,05/2023,2023,72000,195,265,Automatic,Petrol,"8,9 l/100 km",202 g/km,1550.0,Sportback 45 TFSI qu. S line S tr. +StHz+AHK
+189140,seat,SEAT Ibiza,white,01/2023,2023,20898,70,95,Manual,Petrol,"4,8 l/100 km",109 g/km,3000.0,"Style 1.0 TSI / FullLink, PDC, RFK"
+173409,renault,Renault Kadjar,grey,12/2019,2019,11950,117,159,Automatic,Petrol,"5,8 l/100 km",137 g/km,39200.0,Bose Edition
+174011,renault,Renault Trafic,beige,09/2020,2020,30990,88,120,Manual,Diesel,"5,5 l/100 km",144 g/km,16970.0,"Kasten L1H1 2,8t Komfort Sortimo SR5, LED"
+80622,hyundai,Hyundai KONA,yellow,07/2019,2019,18890,88,120,Manual,Petrol,,- (g/km),33900.0,1.0 T-GDI YES!+
+68098,ford,Ford Transit Custom,silver,06/2018,2018,31740,77,105,Manual,Diesel,"6,8 l/100 km",159 g/km,97400.0,Kombi 320 L2 Trend
+89151,kia,Kia Picanto,white,07/2017,2017,14600,62,84,Automatic,Petrol,"5,9 l/100 km",- (g/km),60000.0,1.2 Aut. GT Line
+195903,skoda,Skoda Superb,grey,11/2019,2019,34990,140,190,Automatic,Diesel,"6,7 l/100 km",175 g/km,49374.0,2.0TDI DSG Sportline 4x4 Digt Cock Pano
+93183,kia,Kia EV6,white,04/2023,2023,62990,430,585,Automatic,Electric,,546 km Reichweite,5000.0,Elektro 77h GT ACC 4xSHZ STH SpurH LM
+224493,volkswagen,Volkswagen Golf GTI,black,04/2012,2012,16500,173,235,Manual,Petrol,"8,1 l/100 km",189 g/km,108142.0,Edition 35 VI (5K1)
+18468,audi,Audi Q2,white,04/2019,2019,23840,110,150,Automatic,Petrol,"6,7 l/100 km",152 g/km,30900.0,35 TFSI S-tronic LED AHK CAM
+191892,skoda,Skoda Fabia,blue,03/2016,2016,11900,66,90,Manual,Petrol,"4,6 l/100 km",105 g/km,35000.0,1.2 TSI Blau/Weiß
+52098,ferrari,Ferrari F430,red,03/2008,2008,249430,375,510,Automatic,Petrol,"15,7 l/100 km",360 g/km,26439.0,F1 Scuderia  F1 Sammlerstück 2. Hd Top
+39048,bmw,BMW 125,grey,03/2019,2019,26990,165,224,Automatic,Petrol,"6,2 l/100 km",146 g/km,36000.0,i M Sport Paket Shadow LCI SHZ NAVI PDC Schiebedac
+4709,audi,Audi A4,brown,12/2010,2010,6900,140,190,Automatic,Diesel,"6,2 l/100 km",164 g/km,248000.0,Avant 2.7 TDI DPF Ambiente
+141314,opel,Opel Zafira,black,11/2009,2009,9750,103,140,Automatic,Petrol,"7,4 l/100 km",177 g/km,106500.0,1.8
+84706,jaguar,Jaguar F-Pace,grey,10/2018,2018,37950,184,250,Automatic,Petrol,"8,3 l/100 km",189 g/km,35015.0,25t Prestige AWD In Control Pro1+Park+20Z
+219264,volkswagen,Volkswagen Golf,silver,01/2008,2008,4999,59,80,Manual,Petrol,"6,9 l/100 km",164 g/km,111500.0,V Lim. United Klima
+150538,opel,Opel Insignia,white,07/2018,2018,18480,121,165,Manual,Petrol,"6,1 l/100 km",139 g/km,96950.0,B ST Innovation 1.5 T Navi PDC Kamera AHK
+232356,volkswagen,Volkswagen Polo,black,09/2016,2016,10860,66,90,Manual,Petrol,,- (g/km),65986.0,1.0 TSI COMFORTLINE KLIMA LM ZV
+98428,mazda,Mazda CX-5,white,06/2015,2015,8699,110,150,Manual,Diesel,"4,6 l/100 km",122 g/km,248000.0,"Exclusive-Line 2WD ""Klima-Navigation-Tempomat"""
+146186,opel,Opel Astra,green,01/2016,2016,15480,110,150,Manual,Petrol,,- (g/km),53300.0,K Dynamic Navi/Kamera/SHZ/DAB/Tempomat
+207403,toyota,Toyota Proace,brown,03/2018,2018,30800,110,150,Manual,Diesel,"5,4 l/100 km",- (g/km),84500.0,"Proace 2,0-l-D-4D L2 (8-Si.) Verso Family Comfort"
+72953,ford,Ford Kuga,red,07/2021,2021,34990,165,224,Automatic,Hybrid,"1,2 l/100 km",26 g/km,6000.0,PHEV ST-Line X HUD BLIS B&O 2xKamera 4xSHZ
+198166,skoda,Skoda Scala,green,03/2020,2020,20980,85,116,Manual,Diesel,"4,1 l/100 km",107 g/km,47424.0,"1.6 TDI Style Navi, LED, Panoramadach"
+69664,ford,Ford Focus,red,04/2019,2019,19979,92,125,Automatic,Petrol,"4,2 l/100 km",100 g/km,51000.0,1.0 EcoBoost Vignale Automatik
+217181,volkswagen,Volkswagen Golf,black,09/2006,2006,5800,59,80,Manual,Petrol,"6,9 l/100 km",166 g/km,92000.0,V Lim. Trendline **TÜV NEU** NEUER ZAHNRIEM
+150186,opel,Opel Vivaro,silver,11/2018,2018,21998,107,145,Manual,Diesel,,0 g/km,128000.0,1.6 S&S Werkstatt L1 H1 Klimaautomat NAVI
+71662,ford,Ford Puma,red,12/2020,2020,20500,114,155,Manual,Hybrid,"4,4 l/100 km",99 g/km,17000.0,ST-Line X Hybrid 155PS/Leder/Navi/LED/DAB
+179608,seat,SEAT Leon,black,03/2017,2017,20890,213,290,Automatic,Petrol,"6,6 l/100 km",154 g/km,139700.0,LEON 2.0 ST CUPRA 290*AUT*LEDER*NAVI*CAM*ACC*LED
+48295,dacia,Dacia Lodgy,blue,09/2017,2017,13650,85,116,Manual,Petrol,"5,5 l/100 km",124 g/km,60000.0,Lodgy Stepway Celebration *AHK*Navi*Bluetooth*1H
+65394,ford,Ford Edge,grey,08/2017,2017,22780,155,211,Automatic,Diesel,"5,8 l/100 km",149 g/km,114600.0,"2.0 TDCi 4x4 TITANIUM KEYLESS,PANO,STANDHZ."
+124752,mercedes-benz,Mercedes-Benz C 220,silver,04/2019,2019,27999,143,194,Automatic,Diesel,"4,7 l/100 km",123 g/km,81000.0,4MATIC LM AkustikGlas ACC PDC elSitz Spur
+237920,volkswagen,Volkswagen Golf,gold,01/2018,2018,19990,110,150,Automatic,Petrol,5 l/100 km,0 g/km,74774.0,VII 1.5 TSI DSG Sound ACC Winterpaket PDC
+47875,dacia,Dacia Sandero,grey,01/2012,2012,5999,62,84,Manual,Petrol,"6,7 l/100 km",159 g/km,97415.0,Laureate
+204470,smart,smart forTwo,white,03/2018,2018,12490,60,82,Automatic,Electric,,0 g/km,15700.0,coupe electric drive/EQ greenflash passio
+70972,ford,Ford Fiesta,blue,06/2020,2020,20500,147,200,Manual,Petrol,"5,9 l/100 km",132 g/km,48000.0,1.5 EcoBoost S
+87944,kia,Kia Venga,black,03/2013,2013,9450,66,90,Manual,Petrol,,- (g/km),79000.0,"1,4 Attract *Garantie*119€ mtl."
+109705,mercedes-benz,Mercedes-Benz E 220,black,12/2010,2010,8700,125,170,Manual,Diesel,"5,2 l/100 km",- (g/km),240000.0,T CDI DPF BlueEFFICIENCY Elegance AHK
+123801,mercedes-benz,Mercedes-Benz E 63 AMG,grey,05/2019,2019,72900,478,650,Automatic,Petrol,"10,8 l/100 km",245 g/km,84550.0,E63 AMG Lim. 4Matic+*Stage1/650*Widescreen*Pano
+145405,opel,Opel Corsa,silver,06/2015,2015,11000,66,90,Unknown,Petrol,,- (g/km),19753.0,Winterpaket
+149264,opel,Opel Astra,grey,04/2018,2018,19990,110,150,Automatic,Petrol,"5,4 l/100 km",128 g/km,48100.0,K Sports Tourer Edition S/S Allwetter PDC
+173628,renault,Renault Clio,black,06/2019,2019,12400,56,76,Manual,Petrol,5 l/100 km,113 g/km,5862.0,"TCe 75, Klima, Navi, Business Paket, DAB+,TÜV Neu"
+191707,skoda,Skoda Superb,white,12/2015,2015,19999,140,190,Automatic,Diesel,"4,7 l/100 km",- (g/km),112000.0,Combi 2.0 TDI DSG Style
+196707,skoda,Skoda Scala,black,10/2019,2019,27470,85,116,Automatic,Petrol,"5,1 l/100 km",116 g/km,79900.0,1.0 DSG Style*PANO*VIRTUAL*LED*ACC*KESSY
+147258,opel,Opel Insignia,grey,10/2017,2017,16990,125,170,Manual,Diesel,"6,5 l/100 km",172 g/km,128141.0,B Country Tourer 2.0 CDTi EXCLUSIVE LED
+72581,ford,Ford Kuga,blue,05/2021,2021,26480,165,224,Automatic,Hybrid,"1,2 l/100 km",26 g/km,18652.0,"Hybrid Titanium LED 18"" Navi Unfallfrei"
+142405,opel,Opel Corsa,black,05/2011,2011,3150,63,86,Manual,Petrol,"5,3 l/100 km",- (g/km),114000.0,Corsa 1.2 16V (ecoFLEX) Easytronic Selection
+124338,mercedes-benz,Mercedes-Benz C 180,black,06/2019,2019,31900,115,156,Automatic,Petrol,"6,3 l/100 km",- (g/km),39000.0,C-Klasse Coupe 9G-TRONIC AMG Line
+210293,toyota,Toyota C-HR,blue,09/2022,2022,33880,135,184,Automatic,Hybrid,"5,2 l/100 km",118 g/km,2200.0,"Hybrid ""Team Deutschland"""
+106229,mercedes-benz,Mercedes-Benz C 220,silver,05/2006,2006,10250,110,150,Automatic,Diesel,"7,3 l/100 km",194 g/km,229446.0,C -Klasse T-Modell C 220 T CDI Autom./PDC
+58424,ford,Ford Focus,silver,07/2006,2006,990,74,101,Manual,Petrol,"6,7 l/100 km",161 g/km,233999.0,Turnier 1.6 Fun
+208972,toyota,Toyota Corolla,black,10/2020,2020,23990,90,122,Automatic,Hybrid,"3,3 l/100 km",76 g/km,37600.0,Touring Sport 1.8 Hybrid Comfort
+157117,opel,Opel Crossland X,white,05/2022,2022,22490,96,131,Manual,Petrol,"4,7 l/100 km",107 g/km,3680.0,"1,2 Turbo Edition DAB LED KAMERA PDC LHZ SHZ"
+243139,volkswagen,Volkswagen T6.1 California,silver,01/2021,2021,66777,110,150,Manual,Diesel,"6,3 l/100 km",- (g/km),33500.0,Traumbulli California T6.1 Coast Edition *Markise*
+182721,seat,SEAT Alhambra,black,03/2019,2019,29495,110,150,Automatic,Petrol,"6,6 l/100 km",- (g/km),57500.0,SEAT Alhambra 1.4 TSI DSG Style
+155047,opel,Opel Mokka,grey,09/2021,2021,23600,96,131,Manual,Petrol,"4,5 l/100 km",103 g/km,9900.0,"""Premium ELEGANCE"" mit vielen Extras"
+183236,seat,SEAT Arona,white,06/2019,2019,24930,110,150,Manual,Petrol,"4,9 l/100 km",112 g/km,36039.0,FR 1.5TSi LED ACC PDC DAB Navi Kessy
+139844,opel,Opel Corsa,blue,04/2006,2006,1999,44,60,Manual,Petrol,"5,3 l/100 km",- (g/km),226000.0,Corsa 1.0 12V Edition
+203226,skoda,Skoda Kodiaq,white,06/2023,2023,38890,110,150,Automatic,Petrol,"7,2 l/100 km",163 g/km,10.0,"FL Style 1.5 TSI DSG *Garantie, AHK, LED, ACC, 19"
+172018,renault,Renault Clio,white,08/2017,2017,10799,66,90,Manual,Petrol,,0 g/km,54300.0,(Energy) TCe 90 Start & Stop INTENS KLIMA NAVI
+57266,fiat,Fiat Panda,black,03/2023,2023,16530,51,69,Manual,Petrol,"4,1 l/100 km",93 g/km,99.0,City Plus
+93243,kia,Kia Sorento,white,05/2023,2023,50979,169,230,Automatic,Hybrid,"5,4 l/100 km",124 g/km,0.0,1.6 T-GDI Hybrid BOSE NAPPA GLASDACH 360°
+144324,opel,Opel Astra,black,06/2014,2014,5299,81,110,Manual,Diesel,"4,5 l/100 km",119 g/km,195000.0,ACTIVE 1.6T 7-Sitzer 19'' Navi
+215038,volkswagen,Volkswagen T4,silver,12/2002,2002,21950,75,102,Manual,Diesel,"10,1 l/100 km",268 g/km,190320.0,Golf 1.6 Champ
+227493,volkswagen,Volkswagen Passat Variant,blue,10/2014,2014,21490,176,239,Automatic,Diesel,"5,5 l/100 km",145 g/km,107400.0,PASSAT 2.0 TDI DSG HIGHLINE R-LINE LED NAPPA ACC
+215470,volkswagen,Volkswagen Golf,silver,11/2003,2003,5900,85,116,Manual,Petrol,"6,7 l/100 km",- (g/km),180000.0,Golf 1.6 FSI Trendline
+211378,toyota,Toyota Corolla,silver,11/2022,2022,31580,135,184,Automatic,Hybrid,"3,7 l/100 km",84 g/km,5000.0,2.0 Hybrid Touring Sports Team D Technik
+127678,mercedes-benz,Mercedes-Benz GLC 300,blue,11/2022,2022,74950,143,194,Automatic,Diesel Hybrid,,44 km Reichweite,6000.0,de 4M Coupé AMG BURMESTER DISTR 360° AHK
+151806,opel,Opel Insignia,black,09/2019,2019,32840,154,209,Automatic,Diesel,"7,1 l/100 km",165 g/km,38287.0,Grand Sport GSi 2.0 4x4 CDTI VOLLAUSTATTUNG/FOLIER
+82716,hyundai,Hyundai,red,08/2022,2022,17690,62,84,Manual,Petrol,"5,7 l/100 km",129 g/km,7242.0,Select*Winterpaket*Lenkradheizung*DAB*
+64799,ford,Ford S-Max,white,01/2016,2016,20999,154,209,Automatic,Diesel,"5,5 l/100 km",- (g/km),126332.0,2.0 TDCi Bi-Turbo Aut. Titanium
+101421,mazda,Mazda MX-5,grey,03/2023,2023,32990,135,184,Manual,Petrol,"6,9 l/100 km",156 g/km,660.0,2.0L SKYACTIV G 184PS KAZARI
+131651,mini,MINI Cooper S,black,04/2019,2019,23850,141,192,Automatic,Petrol,"5,6 l/100 km",- (g/km),31000.0,"Sport DKG, LED, JCW, Chili"
+125080,mercedes-benz,Mercedes-Benz GLA 200,white,05/2019,2019,26900,115,156,Automatic,Petrol,"6,6 l/100 km",151 g/km,35000.0,"7G-DCT Urban, Navi, Temp, Pano, SHD, AHK, Totw"
+74032,ford,Ford Transit Custom,yellow,02/2022,2022,41910,96,131,Automatic,Diesel,"6,9 l/100 km",182 g/km,16000.0,Kombi Trend 320 L2 2.0 l EcoBlue Automatik 8-Sitze
+74426,ford,Ford Puma,silver,01/2022,2022,22950,114,155,Manual,Petrol,"5,5 l/100 km",127 g/km,18990.0,ST-LINE 1.0 EcoBoost Hybrid Navi Fahrerassist
+175589,renault,Renault Kadjar,blue,02/2022,2022,23788,103,140,Automatic,Petrol,"5,6 l/100 km",127 g/km,22900.0,TCe 140 EDC Black Edition  NAVI SHZ PDC
+120414,mercedes-benz,Mercedes-Benz GLC 220,silver,08/2017,2017,28950,125,170,Automatic,Diesel,"5,9 l/100 km",- (g/km),72700.0,GLC 220 d 4Matic 9G-TRONIC Exclusive
+195115,skoda,Skoda Kodiaq,white,07/2018,2018,28480,110,150,Automatic,Diesel,"4,9 l/100 km",129 g/km,107400.0,Ambition 2.0 TDI*7-SITZ*PDC*CANTOR*NAVI*
+202837,skoda,Skoda Octavia,silver,05/2023,2023,30988,110,150,Automatic,Diesel,"4,5 l/100 km",119 g/km,10.0,Combi 2.0 TDI 150 DSG Amb LED SHZ SunS
+72973,ford,Ford Mustang,red,05/2021,2021,40490,331,450,Manual,Petrol,,287 g/km,16000.0,5.0 V8 Coupe * Shelby Look *
+143222,opel,Opel Adam,blue,10/2013,2013,6450,51,69,Manual,Petrol,"5,3 l/100 km",126 g/km,147000.0,Jam
+211828,toyota,Toyota Yaris Cross,gold,11/2022,2022,28640,85,116,Automatic,Hybrid,"3,2 l/100 km",73 g/km,6500.0,1.5 Hybrid 2WD Team Deutschland
+56672,fiat,Fiat Tipo,white,06/2022,2022,22190,74,101,Manual,Petrol,"5,8 l/100 km",131 g/km,500.0,CROSS 1.0 T3 100PS NAVI LED CARPLAY KLIMAAUTO E6DF
+188848,seat,SEAT Arona,black,03/2023,2023,21450,81,110,Manual,Petrol,"5,9 l/100 km",114 g/km,50.0,Style
+164424,peugeot,Peugeot Rifter,white,02/2023,2023,26288,75,102,Manual,Diesel,"4,3 l/100 km",157 g/km,10.0,1.5 BlueHDi 100 Allure EasyP Temp MFL 16Z
+64319,ford,Ford EcoSport,black,01/2016,2016,12970,92,125,Manual,Petrol,"5,4 l/100 km",125 g/km,58700.0,ECOSPORT TITANIUM/SHZ/TEMP/12 MON. GARANTIE
+216505,volkswagen,Volkswagen Golf Plus,silver,07/2005,2005,4490,85,116,Manual,Petrol,"7,2 l/100 km",171 g/km,105309.0,"1.6 FSI 2.Hand, TÜV 12/2023 Kundendienst neu"
+13928,audi,Audi TT,black,08/2017,2017,26980,132,179,Manual,Petrol,"6,1 l/100 km",142 g/km,44067.0,Roadster Roadster NAVI VIRT XENON SHZ KLIM
+214903,volkswagen,Volkswagen Polo,black,02/2002,2002,2400,55,75,Manual,Petrol,"6,4 l/100 km",154 g/km,193500.0,1.4i Sommer+Winterreif+Klima+Sitzheizung+Servo+ABS
+28029,bmw,BMW 318,blue,06/2010,2010,13000,105,143,Manual,Petrol,"6,3 l/100 km",147 g/km,174000.0,318i Touring
+152436,opel,Opel Corsa,silver,02/2019,2019,12160,66,90,Manual,Petrol,,0 g/km,31535.0,"1.4 Edition - eFH, PDC Klima Fenster el."
+39111,bmw,BMW 540,grey,11/2019,2019,36490,250,340,Automatic,Petrol,"7,4 l/100 km",167 g/km,125000.0,i xDrive Luxury Line / LED/Leder/AHK/el.Dach
+104419,mercedes-benz,Mercedes-Benz SLK 200,grey,05/2004,2004,11499,120,163,Manual,Petrol,"8,7 l/100 km",- (g/km),69000.0,Kompressor R171 Sommerfahrzeug Cabrio
+93659,lamborghini,Lamborghini Aventador,orange,10/2016,2016,599999,552,751,Automatic,Petrol,16 l/100 km,370 g/km,2960.0,SV Roadster*1-HAND*IPE-EXHAUST*
+203271,skoda,Skoda Kamiq,white,04/2023,2023,23490,81,110,Manual,Petrol,"5,1 l/100 km",116 g/km,1000.0,1.0 TSI Ambition LED  5J Garantie Kamera P
+83846,hyundai,Hyundai i30,silver,02/2023,2023,21450,81,110,Manual,Petrol,6 l/100 km,136 g/km,18.0,III 1.5 DPi ALU DAB KAMERA PDC LHZ SHZ TEMPOMAT
+10495,audi,Audi A6,black,10/2015,2015,19490,235,320,Automatic,Diesel,"6,2 l/100 km",166 g/km,208741.0,"3.0 TDI quattro Avant, GARANTIE, TÜV NEU, LED,"
+10127,audi,Audi A3,grey,03/2015,2015,19990,110,150,Automatic,Petrol,"4,9 l/100 km",114 g/km,113869.0,Cabriolet S line Sportpaket ultra 1.4 TFSI
+16769,audi,Audi A4,blue,05/2019,2019,24500,110,150,Automatic,Diesel,"4,4 l/100 km",- (g/km),49800.0,A4 Avant 35 TDI S tronic
+87320,jeep,Jeep Renegade,grey,01/2023,2023,26190,88,120,Manual,Petrol,"6,1 l/100 km",141 g/km,99.0,LIMITED 1.0 T-GDI NAV PARKPAKET CARPLAY
+69150,ford,Ford Mondeo,grey,10/2019,2019,15470,110,150,Automatic,Diesel,"5,2 l/100 km",155 g/km,123131.0,"2,0 TDCi Titanium Aut Navi Temp Kamer PDC"
+192302,skoda,Skoda Fabia,white,04/2016,2016,10500,55,75,Manual,Petrol,"4,8 l/100 km",109 g/km,44700.0,Fabia Combi 1.0 MPI Ambition
+172752,renault,Renault Kadjar,black,06/2018,2018,13380,81,110,Automatic,Diesel,"3,8 l/100 km",99 g/km,94506.0,1.5 dCi Collection Automatik/Kamera/Navi
+106296,mercedes-benz,Mercedes-Benz E 220,silver,08/2006,2006,9950,125,170,Automatic,Diesel,"7,1 l/100 km",187 g/km,166500.0,"CDI Elegance, Bi-Xenon, AHK, Klimaautom."
+49532,dacia,Dacia Dokker,white,09/2019,2019,14500,75,102,Manual,Petrol,"6,8 l/100 km",156 g/km,53300.0,II Comfort Navi Touch Tempomat
+30511,bmw,BMW X5,black,06/2012,2012,24900,225,306,Automatic,Petrol,"10,1 l/100 km",239 g/km,171900.0,xDrive35i M-SPORTPAKET*TOPVIEW*SOFTCLOSE*ACC
+124830,mercedes-benz,Mercedes-Benz C 220,silver,05/2019,2019,32880,143,194,Automatic,Diesel,"6,1 l/100 km",159 g/km,65600.0,d 4M T AMG Line+DISTRONIC+COMAND+MULTIBEAM
+239628,volkswagen,Volkswagen Golf,black,03/2019,2019,17400,96,131,Manual,Petrol,"4,8 l/100 km",110 g/km,37500.0,"7, 1.5 TSI BluMotion, 130 PS, 37.500 km"
+202776,skoda,Skoda Octavia,silver,06/2023,2023,34980,110,150,Automatic,Petrol,"5,5 l/100 km",125 g/km,20.0,Combi 1.5 TSI e-TEC DSG Style / Navi
+91651,kia,Kia Ceed / cee'd,silver,11/2021,2021,23490,118,160,Manual,Petrol,"5,5 l/100 km",125 g/km,22800.0,TOP 160 PS LED*Navi*Sitzheizung*PDC*Kamera*uvm ...
+14426,audi,Audi Q5,white,05/2017,2017,35980,185,252,Automatic,Petrol,,- (g/km),41560.0,2.0 FSI quattro sport SHZ NAVI MATRIX-LED
+248072,volvo,Volvo V90,grey,11/2018,2018,39999,173,235,Automatic,Diesel,,- (g/km),48700.0,D5 AWD Geartronic Momentum
+206720,toyota,Toyota Auris,red,08/2016,2016,13990,100,136,Automatic,Hybrid,"3,5 l/100 km",79 g/km,108800.0,4 Executive Hybrid Aut.1.Hd Assistenzsysteme
+113283,mercedes-benz,Mercedes-Benz A 200,silver,10/2013,2013,14400,115,156,Manual,Petrol,"5,5 l/100 km",130 g/km,100000.0,A -Klasse A 200 BlueEfficiency
+144973,opel,Opel Zafira Tourer,grey,03/2015,2015,9200,100,136,Manual,Diesel,"3,9 l/100 km",- (g/km),184000.0,1.6 CDTI DPF ecoFLEX Start/Stop ENERGY
+108280,mercedes-benz,Mercedes-Benz Sprinter,white,09/2008,2008,12200,80,109,Manual,Diesel,,- (g/km),320000.0,309/311/313/315 CDI (906.631/633/635/637) II Kaste
+209728,toyota,Toyota Yaris,black,04/2021,2021,39800,192,261,Manual,Petrol,"8,2 l/100 km",186 g/km,28490.0,GR
+21907,audi,Audi A1,blue,01/2023,2023,35480,110,150,Automatic,Petrol,"6,3 l/100 km",142 g/km,6000.0,"Sportback 35 TFSI S-Line LP: 42.880,-"
+129626,mini,MINI Cooper SD Countryman,black,09/2012,2012,13990,105,143,Automatic,Diesel,"4,8 l/100 km",126 g/km,126008.0,Mini One 1.6D |2.HAND|8-FACH|TOP|
+214175,volkswagen,Volkswagen Polo,blue,10/2000,2000,3799,44,60,Manual,Petrol,"6,1 l/100 km",- (g/km),91800.0,1.4 Comfortline / 1. Hand Klimaauto SHZ
+49757,dacia,Dacia Duster,silver,07/2020,2020,16490,74,101,Manual,Petrol,"6,5 l/100 km",149 g/km,16000.0,II PRESTIGE  NAVI/PDC/Kamera/Klimaaut.
+112542,mercedes-benz,Mercedes-Benz C 250,grey,09/2013,2013,21990,150,204,Automatic,Petrol,"6,4 l/100 km",152 g/km,73000.0,CGI AMG SOUND *SHD*HARMON&KARDON*
+241165,volkswagen,Volkswagen up!,black,12/2020,2020,17950,61,83,Automatic,Electric,,0 g/km,13400.0,"e- United Klima, RFK, Alu, Navi, PDC"
+114593,mercedes-benz,Mercedes-Benz CLA 200,black,10/2014,2014,19999,115,156,Automatic,Petrol,"5,7 l/100 km",135 g/km,114100.0,Automatik KAMERA/XENON/LEDER/NAVI/SHZ
+86244,jeep,Jeep Renegade,grey,03/2018,2018,18990,103,140,Manual,Diesel,,0 g/km,109600.0,"Limited 4WD *NAVI, DAB, ALLWETTER, SHZ*"
+47785,dacia,Dacia Sandero,,03/2010,2010,2750,55,75,Manual,Petrol,"5,9 l/100 km",140 g/km,137000.0,1.2 Ambiance Klima
+154951,opel,Opel Crossland X,grey,07/2021,2021,26750,96,131,Automatic,Petrol,"4,9 l/100 km",112 g/km,11950.0,Crossland  Elegance Aut. * Navi *
+105509,mercedes-benz,Mercedes-Benz ML 320,silver,11/2005,2005,8490,165,224,Automatic,Diesel,"9,6 l/100 km",254 g/km,304705.0,CDI *Finanzierung*
+28220,bmw,BMW 530,grey,10/2010,2010,16490,180,245,Automatic,Diesel,"6,1 l/100 km",160 g/km,184525.0,Baureihe 5 Lim. 530d*Head-up*Leder*Schiebe-D*Ahk
+34906,bmw,BMW 118,red,12/2016,2016,17400,100,136,Manual,Petrol,,- (g/km),22600.0,Sport-Line
+8023,audi,Audi A8,black,02/2013,2013,31000,283,385,Automatic,Diesel,"7,4 l/100 km",- (g/km),205000.0,A8 4.2 TDI DPF quattro tiptronic
+136340,nissan,Nissan Qashqai,white,04/2019,2019,14750,103,140,Manual,Petrol,"5,3 l/100 km",122 g/km,104000.0,Qashqai 1.3 DIG-T VISIA
+158946,peugeot,Peugeot 407,grey,09/2007,2007,2950,103,140,Automatic,LPG,"8,6 l/100 km",204 g/km,130230.0,Sport*Automatik*LPG*AHK*Tempomat*
+98120,mazda,Mazda MX-5,silver,03/2012,2012,13500,93,126,Manual,Petrol,,- (g/km),152000.0,MX-5 1.8 MZR Kaminari
+225690,volkswagen,Volkswagen Golf,blue,07/2013,2013,12380,77,105,Manual,Diesel,"4,2 l/100 km",109 g/km,57080.0,"VI Variant TDI, Klimaauto.,PDC v/h Sitzhzg."
+14122,audi,Audi A4,black,10/2017,2017,21000,140,190,Manual,Diesel,"4,3 l/100 km",- (g/km),96000.0,2.0 tdi Design 190cv
+208683,toyota,Toyota C-HR,blue,02/2020,2020,15450,135,184,Automatic,Hybrid,,- (g/km),20757.0,2.0 Hybrid Style Selection *Navi/Rückfahrkamera*
+115826,mercedes-benz,Mercedes-Benz C 220,grey,09/2015,2015,22490,125,170,Automatic,Diesel,,- (g/km),127572.0,C220d LED AHK el.SD Navi Teilleder
+133112,mini,MINI Cooper,red,01/2022,2022,25995,100,136,Manual,Petrol,"5,3 l/100 km",120 g/km,3700.0,5-Türer Head-Up DAB LED RFK Navi Shz PDC
+150064,opel,Opel Mokka X,silver,10/2018,2018,16500,103,140,Manual,Petrol,"6,6 l/100 km",156 g/km,111678.0,1.4Turbo ON Navi|Sitzhzg|ParkPilot
+81855,hyundai,Hyundai i20,white,08/2020,2020,14800,74,101,Manual,Petrol,"5,9 l/100 km",- (g/km),35000.0,i20 aktive
+212146,toyota,Toyota Proace,brown,05/2023,2023,47688,130,177,Automatic,Diesel,5 l/100 km,191 g/km,10.0,Verso 2.0 D-4D 177 AT L2 8S Nav SHZ PDC
+60874,ford,Ford Transit,blue,05/2013,2013,9999,103,140,Manual,Diesel,,- (g/km),200000.0,350 M TDCi Lkw VA Trend
+25085,bmw,BMW 318,grey,09/2005,2005,4700,95,129,Manual,Petrol,,- (g/km),193000.0,i *STEUERKETTE NEU~TÜV NEU~GARANTIE*
+58940,ford,Ford Fiesta,black,09/2008,2008,2700,51,69,Manual,Petrol,"6,1 l/100 km",145 g/km,89000.0,Style
+74427,ford,Ford Kuga,silver,10/2022,2022,37850,140,190,Automatic,Diesel,"6,4 l/100 km",166 g/km,4210.0,2.0 EcoBlue 4x4 Aut. TITANIUM X
+223905,volkswagen,Volkswagen Caddy,blue,04/2012,2012,11990,75,102,Manual,Diesel,"5,7 l/100 km",149 g/km,175000.0,Roncali+Navi+Sitzh.+Alu+PDC+1.Hand
+11749,audi,Audi Q5,grey,04/2016,2016,25500,140,190,Automatic,Diesel,"5,7 l/100 km",151 g/km,144000.0,2.0 TDI quattro S-Line Navi Leder Panorama
+162410,peugeot,Peugeot 3008,black,02/2020,2020,29990,132,179,Automatic,Diesel,"4,9 l/100 km",129 g/km,23100.0,GT Full LED/Navi/360° Kamera/ Massagesitze
+214626,volkswagen,Volkswagen Passat,silver,11/2001,2001,4800,85,116,Automatic,Petrol,"8,4 l/100 km",202 g/km,70602.0,"/GOLF-2,0*FAST-WIE-NEU*1.HAND*A-Wunsch ALLES-NEU"
+23812,bmw,BMW 318,black,02/2000,2000,4800,103,140,Manual,Petrol,8 l/100 km,- (g/km),170000.0,318is Sport Edition
+150039,opel,Opel Astra,silver,10/2018,2018,12990,77,105,Manual,Petrol,"4,6 l/100 km",130 g/km,121000.0,1.0 Turbo Start/Stop Sports Tourer Edition
+10332,audi,Audi A5,green,09/2015,2015,27980,180,245,Automatic,Diesel,"5,9 l/100 km",156 g/km,91400.0,Cabriolet 3.0 TDI quattro individual ACC DCC
+81083,hyundai,Hyundai KONA,black,07/2019,2019,18480,88,120,Manual,Petrol,"5,3 l/100 km",120 g/km,31700.0,1.0 T-GDI NAVI+RFK+SHZ+18ZollALU
+13115,audi,Audi A4,blue,10/2017,2017,24980,110,150,Automatic,Petrol,"5,7 l/100 km",131 g/km,50817.0,Avant 1.4 TFSI sport Alu LEDScheinw. S-line Nav
+190924,skoda,Skoda Fabia,grey,04/2014,2014,8499,63,86,Manual,Petrol,"5,2 l/100 km",123 g/km,112500.0,Combi 1.2 TSI / Monte Carlo
+228801,volkswagen,Volkswagen T5 Transporter,silver,02/2014,2014,14999,132,179,Automatic,Diesel,"7,5 l/100 km",199 g/km,196000.0,Kasten Kasten-Kombi (7E)
+192096,skoda,Skoda Superb,black,05/2016,2016,23990,140,190,Automatic,Diesel,"5,1 l/100 km",134 g/km,89300.0,Combi 2.0 TDI L&K *Panoramadach*Bi-Xenon*
+108234,mercedes-benz,Mercedes-Benz ML 320,white,12/2008,2008,14800,165,224,Automatic,Diesel,"9,4 l/100 km",249 g/km,195000.0,CDI 4Matic 7G-TRONIC
+148152,opel,Opel Insignia,silver,08/2017,2017,17990,121,165,Manual,Petrol,6 l/100 km,0 g/km,65516.0,1.5 Turbo Dynamic Klima PDC Kamera
+238794,volkswagen,Volkswagen Caddy,grey,04/2019,2019,29460,96,131,Automatic,Petrol,"5,9 l/100 km",133 g/km,75150.0,Caddy 1.4 TSI (5-Si.) DSG Highline
+235394,volkswagen,Volkswagen Touran,orange,05/2017,2017,29990,140,190,Automatic,Diesel,"4,7 l/100 km",122 g/km,67000.0,Highline  R-LINE PANORAMA STANDHEIZUNG LED NAVI
+176631,renault,Renault Express,grey,02/2023,2023,20850,75,102,Manual,Petrol,"6,4 l/100 km",144 g/km,18.0,"Van 1,3 TCe DAB KLIMA RADIO BLUETOOTH"
+106046,mercedes-benz,Mercedes-Benz CLK 320,black,02/2006,2006,1999,165,224,Automatic,Diesel,"7,7 l/100 km",205 g/km,169000.0,CDI Cabrio BI XEN.-SZ LÜ.-LEDER-NAVI-PDC
+119032,mercedes-benz,Mercedes-Benz C 250,white,06/2016,2016,29650,150,204,Automatic,Diesel,"4,3 l/100 km",109 g/km,107796.0,d *Frontspoiler * *AMG Line * AMG-Styling *
+127300,mercedes-benz,Mercedes-Benz C 63 AMG,silver,02/2021,2021,86900,375,510,Automatic,Petrol,,- (g/km),24763.0,S Cabrio P-Abgas+COM+HiFi+PerfSitze+Night
+147898,opel,Opel Insignia,black,07/2017,2017,15999,125,170,Manual,Diesel,"5,3 l/100 km",139 g/km,116000.0,B Sports Tourer INNOVATION
+215147,volkswagen,Volkswagen New Beetle,blue,05/2003,2003,4350,75,102,Manual,Petrol,"7,8 l/100 km",185 g/km,158000.0,"Cabriolet 1.6 Highline, el. Verdeck"
+126623,mercedes-benz,Mercedes-Benz GLC 200,blue,02/2021,2021,45950,155,211,Automatic,Petrol,"7,3 l/100 km",166 g/km,22400.0,4Matic AMG Line 3x HighEnd Standhzg. AHK
+235747,volkswagen,Volkswagen T-Roc,blue,02/2018,2018,19490,85,116,Manual,Petrol,"5,2 l/100 km",132 g/km,75903.0,1.0TSI Style AHK+ACC+NAVI+PDC
+243593,volkswagen,Volkswagen T-Cross,beige,05/2022,2022,31970,110,150,Automatic,Petrol,6 l/100 km,138 g/km,12550.0,1.5 TSI DSG Style NAVI AHK LED ALU 18
+152937,opel,Opel Corsa,orange,11/2019,2019,13890,74,101,Manual,Petrol,"5,9 l/100 km",134 g/km,29800.0,F 1.2 Turbo Edition FLA LM KAM LED PDC
+176226,renault,Renault Captur,white,12/2022,2022,43290,103,140,Automatic,Petrol,"5,6 l/100 km",138 g/km,2001.0,II Techno 1.3 TCe 140 Mild-Hybrid
+137963,nissan,Nissan Qashqai,black,01/2023,2023,31990,116,158,Automatic,Petrol,"6,4 l/100 km",144 g/km,500.0,N-CONNECTA 1.3L DIG-T MHEV 158PS Xtronic 4x2
+98264,mazda,Mazda 3,black,11/2014,2014,13680,88,120,Manual,Petrol,"5,1 l/100 km",119 g/km,98350.0,Lim. 2.0 KLIMAAUTOMATIK PDC SITZHEIZUNG
+80550,hyundai,Hyundai i20,blue,02/2019,2019,12590,62,84,Manual,Petrol,"5,8 l/100 km",132 g/km,56834.0,Select Klima/MF-Lenkrad/BC/ZV eFH.
+22320,audi,Audi Q2,red,05/2023,2023,40848,110,150,Automatic,Petrol,6 l/100 km,137 g/km,1110.0,"S line 35 TFSI S tronic MATRIX LED,uvm."
+115032,mercedes-benz,Mercedes-Benz C 180,silver,11/2014,2014,18450,115,156,Manual,Petrol,"5,1 l/100 km",118 g/km,107000.0,Parkpilot+Sitzheizung+LM-Felgen
+189557,skoda,Skoda Octavia,silver,01/2008,2008,4800,125,170,Manual,Diesel,"5,9 l/100 km",156 g/km,230738.0,Skoda Octavia Combi RS+KLIMAAUTOMATIK+TEILLEDER
+94772,land-rover,Land Rover Discovery,grey,09/2018,2018,33700,225,306,Automatic,Diesel,"7,6 l/100 km",201 g/km,103071.0,"5 3.0 SDV6 HSE PANO,Standheizung,AHK,Black-Paket"
+148056,opel,Opel Corsa,silver,04/2017,2017,10250,66,90,Automatic,Petrol,"5,9 l/100 km",137 g/km,133211.0,E Active Aut. *1.HAND*INTLINK*SITZHZ*PDC*
+129294,mini,MINI One,yellow,08/2008,2008,4500,70,95,Manual,Petrol,"5,3 l/100 km",128 g/km,142825.0,ONE/2.Hand/Klimaanlage/El.Fenster/El.Spiegel/Alu
+56086,fiat,Fiat 500X,blue,02/2022,2022,25790,110,150,Automatic,Petrol,"6,9 l/100 km",156 g/km,16416.0,1.3 GSE Yacht Club Capri*LED*Leder*Sound*
+37369,bmw,BMW X2,blue,07/2018,2018,22999,170,231,Automatic,Diesel,"5,3 l/100 km",139 g/km,186200.0,xDrive 25 d M Sport*Panorama*LED*NAVI*AHK*
+198870,skoda,Skoda Kodiaq,white,05/2020,2020,33800,140,190,Automatic,Diesel,7 l/100 km,182 g/km,60900.0,2.0TDI DSG Sportline 4x4 VIRTUAL+MEMORY+ACC+LED+++
+443,alfa-romeo,Alfa Romeo Giulietta,black,05/2012,2012,4790,88,120,Manual,Petrol,"6,4 l/100 km",152 g/km,176835.0,Super KLIMA ALU
+229072,volkswagen,Volkswagen Golf,white,07/2014,2014,21990,169,230,Automatic,Petrol,"6,4 l/100 km",149 g/km,94000.0,VII DSG GTI Performance NAVI PANO KAMERA
+215855,volkswagen,Volkswagen New Beetle,silver,08/2004,2004,4500,85,116,Automatic,Petrol,"8,7 l/100 km",- (g/km),118000.0,New Beetle 2.0 Miami
+39303,bmw,BMW 550,black,02/2019,2019,47999,294,400,Automatic,Diesel,"6,5 l/100 km",172 g/km,67410.0,Touring M550 d xDrive*Aerodynamik-Paket M-Tech
+209364,toyota,Toyota Corolla,white,01/2020,2020,25390,132,179,Automatic,Hybrid,,- (g/km),30596.0,x-play
+32097,bmw,BMW 320,brown,06/2014,2014,17777,135,184,Automatic,Diesel,"4,9 l/100 km",130 g/km,136400.0,d xDrive Touring Aut. Luxury Line NAVI+LEDER
+113060,mercedes-benz,Mercedes-Benz C 220,black,01/2013,2013,8600,125,170,Automatic,Diesel,"6,1 l/100 km",162 g/km,261700.0,C -Klasse T-Modell C 220 T CDI
+21357,audi,Audi A4,silver,12/2022,2022,61340,150,204,Automatic,Diesel,"4,7 l/100 km",123 g/km,1000.0,"Matrix LED, Panoramadach"
+133502,mini,MINI Cooper SE,red,06/2023,2023,34650,135,184,Automatic,Electric,,203 km Reichweite,1500.0,3-Türer CLASSIC TRIM + PREMIUM PLUS PA
+237072,volkswagen,Volkswagen Golf,black,10/2018,2018,42990,85,116,Manual,Petrol,"4,8 l/100 km",109 g/km,117600.0,VII 1.0TSI Join LED+NAVI+SITZHZ+++
+178257,seat,SEAT Alhambra,black,06/2014,2014,14900,130,177,Manual,Diesel,"5,8 l/100 km",154 g/km,200000.0,"2,0 TDI ""Style"""
+47629,citroen,Citroen Berlingo,white,05/2023,2023,26980,96,131,Manual,Diesel,"4,2 l/100 km",111 g/km,10.0,BlueHDi 130 S&S FEEL PACK M *LAGERWAGEN
+173978,renault,Renault Captur,orange,10/2019,2019,14488,66,90,Manual,Petrol,"5,4 l/100 km",150 g/km,30222.0,0.9 TCe 90 Limited  R&Go Klima Temp 16Z
+219171,volkswagen,Volkswagen Golf,black,09/2008,2008,3000,77,105,Manual,Diesel,"5,1 l/100 km",135 g/km,251000.0,1.9  Edition
+34138,bmw,BMW 420,white,12/2015,2015,30000,135,184,Manual,Diesel,"4,8 l/100 km",126 g/km,63000.0,420d Coupe xDrive Sport Line
+170417,renault,Renault Grand Scenic,black,04/2015,2015,13000,81,110,Automatic,Diesel,"4,7 l/100 km",- (g/km),94200.0,Grand Scenic dCi 110 EDC Bose Edition
+131230,mini,MINI Cooper S,grey,09/2019,2019,19900,141,192,Manual,Petrol,"6,4 l/100 km",147 g/km,78000.0,All4 Aut. Chili+HUD+RFK+
+125465,mercedes-benz,Mercedes-Benz EQC 400,grey,07/2020,2020,56450,300,408,Automatic,Electric,,339 km Reichweite,31500.0,4Matic AMGLine AHK 360° Kamera Distronic Styling
+17298,audi,Audi Q3,red,05/2019,2019,33420,140,190,Automatic,Diesel,7 l/100 km,184 g/km,47210.0,2.0 TDI Matrix LED Navi DAB virtual cockpit
+140224,opel,Opel,blue,12/2007,2007,4900,84,114,Manual,Diesel,,-/-,390506.0,Vivaro Kastenwagen L1H1
+44286,citroen,Citroen DS3,silver,09/2014,2014,8000,60,82,Manual,Petrol,"4,9 l/100 km",- (g/km),61000.0,DS3 Cabrio Pure Tech 82 SoChic
+197601,skoda,Skoda Karoq,blue,12/2020,2020,24330,110,150,Automatic,Petrol,"5,2 l/100 km",120 g/km,63511.0,Ambition 1.5 TSI DSG #ACC #LED #DAB
+137176,nissan,Nissan Juke,black,06/2022,2022,22970,84,114,Manual,Petrol,5 l/100 km,113 g/km,15.0,1.0 DIG-T  N-Connecta LED SpurH Navi
+78144,hyundai,Hyundai i20,white,08/2014,2014,6700,63,86,Manual,Petrol,"4,9 l/100 km",114 g/km,115200.0,FIFA World Cup Edition (PB)
+168238,porsche,Porsche 992,black,05/2022,2022,193550,353,480,Automatic,Petrol,"10,8 l/100 km",247 g/km,11234.0,911 Carrera 4 GTS InnoDrive LED-Matrix
+250527,volvo,Volvo XC90,white,08/2021,2021,59890,288,392,Automatic,Hybrid,,37 km Reichweite,55300.0,Recharge T8 AWD Inscription Expression 7-Sitzer 19
+59723,ford,Ford Focus,black,01/2010,2010,5900,74,101,Manual,Petrol,"6,7 l/100 km",159 g/km,72000.0,Concept Lim. 2 HAND / SCHECKHEFT /KLIMA / TÜV
+148107,opel,Opel Zafira,silver,02/2017,2017,15680,88,120,Manual,Diesel,"4,5 l/100 km",119 g/km,69878.0,1.6 CDTI SPORT WINTERPAKET AGR LED KLIMAUT
+215278,volkswagen,Volkswagen Bora,black,10/2003,2003,2350,85,116,Manual,Petrol,8 l/100 km,- (g/km),229500.0,2
+162132,peugeot,Peugeot 3008,white,04/2019,2019,23990,96,131,Manual,Diesel,"3,8 l/100 km",101 g/km,51700.0,"Allure HDi 130, Full-LED, Navi, SHZ, e-Klappe"
+128301,mercedes-benz,Mercedes-Benz GLE 350,silver,12/2022,2022,83990,143,194,Automatic,Diesel Hybrid,"0,8 l/100 km",20 g/km,9611.0,de 4M AMG+NIGHT+PANO+360+AHK+LED+FAHRASS
+28808,bmw,BMW 520,white,12/2010,2010,33490,140,190,Automatic,Diesel,,108 g/km,154115.0,d*MPERFORMANCE*MPAKET*KAMERA*CARBON*R19*LED*
+180130,seat,SEAT Alhambra,blue,11/2018,2018,28990,110,150,Automatic,Diesel,"5,2 l/100 km",137 g/km,81900.0,"Style Xenon, Standhzg, Navi, Rückfcam"
+29969,bmw,BMW 530,blue,06/2012,2012,18800,190,258,Automatic,Diesel,"5,9 l/100 km",156 g/km,180000.0,d Touring~M Sport Paket~Navi~Leder~Automatik
+236567,volkswagen,Volkswagen Passat Variant,,05/2018,2018,16999,110,150,Automatic,Petrol,"5,1 l/100 km",119 g/km,127000.0,Highl./NAVI/LED/AHK/PANO/7-G-DSG
+91283,kia,Kia Picanto,white,03/2020,2020,11950,49,67,Manual,Petrol,"4,4 l/100 km",101 g/km,34400.0,1.0 Edition7 Klima Fenster el.
+245606,volkswagen,Volkswagen T-Cross,grey,05/2023,2023,28440,110,150,Automatic,Petrol,"5,9 l/100 km",133 g/km,10.0,1.5 TSI DSG Style
+96854,land-rover,Land Rover Range Rover Sport,grey,04/2023,2023,137899,258,351,Automatic,Diesel,,- (g/km),1900.0,D350 Autobiography
+249424,volvo,Volvo S90,white,11/2019,2019,34100,184,250,Automatic,Petrol,"6,6 l/100 km",172 g/km,30095.0,T5 Autom. Inscription*Apple CarPlay*NAVI*AHK
+94076,land-rover,Land Rover Defender,black,01/2013,2013,27999,90,122,Manual,Diesel,"11,1 l/100 km",295 g/km,90000.0,2.2 TD *110 Td4*DOKA*PRITSCHE*PICKUP!!
+84746,jaguar,Jaguar E-Pace,black,12/2018,2018,32600,132,179,Automatic,Diesel,"6,1 l/100 km",158 g/km,45500.0,D180 AWD Aut. S
+41199,bmw,BMW X1,beige,02/2021,2021,30990,110,150,Automatic,Diesel,"4,3 l/100 km",114 g/km,33882.0,X1 sDrive18d Aut. Advantage Navi AHK SHZ
+41797,bmw,BMW,black,04/2021,2021,30900,100,136,Automatic,Petrol,"5,3 l/100 km",123 g/km,18700.0,218i Gran Coupé Aut. M Sport -- AHK/ HeadUp
+168757,renault,Renault Clio,grey,05/2006,2006,500,43,58,Manual,Petrol,6 l/100 km,143 g/km,219138.0,1.2 Storia
+109947,mercedes-benz,Mercedes-Benz E 350,silver,01/2010,2010,16950,200,272,Automatic,Petrol,"9,6 l/100 km",226 g/km,158988.0,4MATIC 7G-TRONIC Elegance DTC H&K RFK SPUR
+107298,mercedes-benz,Mercedes-Benz Sprinter,white,05/2007,2007,6999,80,109,Manual,Diesel,"9,4 l/100 km",- (g/km),332523.0,Sprinter 211 CDI 1 Hand LKW 3Tonnen
+11158,audi,Audi A5,white,03/2015,2015,27300,180,245,Automatic,Diesel,"5,8 l/100 km",154 g/km,65004.0,Sportback 3.0 TDI quattro S line ACC|Spur|KAM
+154875,opel,Opel Grandland X,grey,10/2021,2021,25350,96,131,Automatic,Petrol,"6,7 l/100 km",152 g/km,32500.0,1.2 Start/Stop Automatik Elegance (Z)
+234855,volkswagen,Volkswagen Passat Variant,silver,04/2017,2017,11899,88,120,Manual,Diesel,"3,8 l/100 km",96 g/km,183515.0,1.6 TDI Trendline *NAVI*AHK*ACC*SHZ* BlueMotion
+83442,hyundai,Hyundai i30,grey,03/2023,2023,24840,88,120,Manual,Petrol,"6,2 l/100 km",141 g/km,100.0,1.0 T-GDI M/T (48V) Connect & GO!
+144894,opel,Opel Corsa,grey,10/2015,2015,9799,74,101,Manual,Petrol,"5,1 l/100 km",119 g/km,72000.0,E Innovation ecoFlex NAVI~XENON~LEDER~SHZ
+214754,volkswagen,Volkswagen Sharan,blue,08/2002,2002,4199,85,116,Manual,Petrol,"9,7 l/100 km",233 g/km,143000.0,Family 6 Sitze KLIMAAUTOMATIK
+96556,land-rover,Land Rover Defender,black,03/2022,2022,125990,386,525,Automatic,Petrol,"12,8 l/100 km",290 g/km,12000.0,90 V8 *Pano *360° *Headup *Keyless
+203272,skoda,Skoda Octavia,white,05/2023,2023,38988,180,245,Automatic,Petrol,"6,5 l/100 km",156 g/km,10.0,Combi TSI 245 DSG RS Matrix Nav EHK VirC
+156944,opel,Opel Mokka,silver,12/2022,2022,26500,96,131,Automatic,Petrol,,- (g/km),1900.0,Mokka 1.2 DI Turbo Automatik Edition
+209571,toyota,Toyota Corolla,grey,05/2021,2021,29990,132,179,Automatic,Hybrid,"3,7 l/100 km",84 g/km,23000.0,TS 2.0 Hybrid Team D *Technik-Paket*Navi*
+176844,renault,Renault Megane,black,05/2023,2023,44990,114,155,Automatic,Petrol,"8,5 l/100 km",192 g/km,90.0,R.S. Trophy TCe 300 EDC KLIMAAUTOMATIK
+129456,mini,MINI Cooper D Countryman,black,11/2011,2011,6400,82,111,Manual,Diesel,"4,9 l/100 km",- (g/km),91000.0,Mini Cooper
+148847,opel,Opel Corsa,blue,11/2018,2018,10890,66,90,Manual,Petrol,"5,7 l/100 km",131 g/km,52550.0,E 1.4-T Active-TEMP) Bremsass Android
+58969,ford,Ford Fiesta,black,03/2008,2008,2990,51,69,Manual,Petrol,,- (g/km),143430.0,Style 1.3 Tüv  03.2025 5 türig
+58930,ford,Ford Fiesta,grey,07/2008,2008,2950,59,80,Automatic,Petrol,"6,6 l/100 km",157 g/km,283213.0,Style Autom. / E.Fenster / Klima
+76556,honda,Honda Civic,red,10/2017,2017,18998,95,129,Automatic,Petrol,5 l/100 km,114 g/km,52700.0,"Lim, R-CAM,Autom.Rally Red,ACC"
+185180,seat,SEAT Alhambra,grey,06/2021,2021,39990,110,150,Automatic,Diesel,"5,3 l/100 km",140 g/km,20949.0,2.0 TDI 6-Gang DSG FR Line AHK/Kamera/PANO/DAB/ALU
+50351,dacia,Dacia Duster,orange,07/2022,2022,25690,110,150,Manual,Petrol,"6,1 l/100 km",139 g/km,50.0,"II TCe 150 Prestige 4WD Sitzheizung, 360° Kamera,"
+186599,seat,SEAT Ateca,grey,06/2022,2022,36290,110,150,Automatic,Petrol,"5,6 l/100 km",127 g/km,10000.0,1.5 TSI ACT Style NAVI*PDC*AHK*BEATS*
+45488,citroen,Citroen C4 Cactus,red,05/2019,2019,11999,81,110,Manual,Petrol,"4,6 l/100 km",104 g/km,111874.0,PureTech 110 *NAVI*ALU*KLIMA*PDC*NEBEL*
+215009,volkswagen,Volkswagen Polo,silver,02/2002,2002,1890,40,54,Manual,Petrol,"5,8 l/100 km",139 g/km,169000.0,1.2
+165715,porsche,Porsche 991,white,01/2015,2015,124990,294,400,Automatic,Petrol,10 l/100 km,237 g/km,29950.0,"911 Carrera 4S 991 Cabriolet, Carbon, Burmester"
+102905,mercedes-benz,Mercedes-Benz SLK 200,silver,07/2000,2000,5499,150,204,Manual,Petrol,"9,9 l/100 km",237 g/km,118000.0,Kompressor Roadster Carlsson
+241570,volkswagen,Volkswagen ID.3,white,09/2020,2020,34300,150,204,Automatic,Electric,,0 g/km,16600.0,PRO PERFORMANCE 58 KWH AUTOMATIK (+ACC-RADAR+
+61630,ford,Ford Focus,blue,04/2014,2014,8600,92,125,Manual,Petrol,5 l/100 km,119 g/km,89000.0,Lim. Titanium
+250043,volvo,Volvo XC60,black,02/2020,2020,33990,140,190,Automatic,Diesel,"6,1 l/100 km",160 g/km,99000.0,Inscription D4 Aut.EU6d*LEDER hell*H+K*KAMERA*
+18729,audi,Audi A3,yellow,12/2020,2020,31970,110,150,Automatic,Hybrid,,65 km Reichweite,37095.0,Sportback 40 TFSI e S tronic advanced LED
+94471,land-rover,Land Rover Range Rover Evoque,grey,07/2017,2017,17900,110,150,Manual,Diesel,"4,8 l/100 km",113 g/km,157383.0,2.0 eD4 Pure Pano
+31343,bmw,BMW 118,black,12/2013,2013,12200,125,170,Manual,Petrol,"5,7 l/100 km",- (g/km),79000.0,118i
+56701,fiat,Fiat 500,orange,10/2022,2022,16990,51,69,Manual,Petrol,"5,3 l/100 km",120 g/km,100.0,1.0 Hybrid Dolcevita CARPLAY PANORAMADACH BT
+137245,nissan,Nissan Qashqai,black,03/2022,2022,28700,103,140,Manual,Petrol,"5,8 l/100 km",131 g/km,7626.0,N-Connecta LED+Around-360°+Winter Paket
+172419,renault,Renault Captur,red,07/2018,2018,15988,81,110,Manual,Diesel,"3,7 l/100 km",98 g/km,49440.0,dCi 110 Intens Nav FullLED PDC Temp 17Z
+243513,volkswagen,Volkswagen Caddy,beige,04/2022,2022,33980,84,114,Manual,Petrol,"6,5 l/100 km",147 g/km,12300.0,Maxi 1.5 TSI Life LED*ACC*SitzHZ
+51655,dodge,Dodge RAM,grey,10/2020,2020,53900,295,401,Automatic,Petrol,,0 g/km,82430.0,"1500 5,7L Gen5 ´BuildtoServe´ LPG Crew Leder"

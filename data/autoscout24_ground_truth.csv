@@ -1,0 +1,501 @@
+brand,model,engine_size,engine_size_unit,engine_power,engine_power_unit,engine_aspiration,injection_type,year,mileage,mileage_unit,cylinders,body_type,transmission_type,transmission_technology,transmission_gears,energy_source,fuel_type,propulsion_system,drive_type,condition,color,doors,fuel_consumption,fuel_consumption_unit,equipment
+seat,ateca,,,110,kw,,,2019,52493,km,,,automatic,,,,petrol,,,,silver,,5.7,l/100km,"[""climate_control"", ""navigation""]"
+bmw,3 series,,,105,kw,,,2013,160000,km,,,manual,,,,diesel,,,,grey,,4.3,l/100km,[]
+seat,ateca,,,110,kw,,,2018,88000,km,,,manual,,,,petrol,,,,blue,,6.1,l/100km,"[""alloy_wheels"", ""keyless_entry""]"
+hyundai,i40,1.6,,99,kw,,,2018,50912,km,,wagon,manual,,,,petrol,,,,grey,,6.1,l/100km,[]
+fiat,500,,,51,kw,,,2023,10,km,,,manual,,,,petrol,,,,white,,4.1,l/100km,[]
+skoda,fabia,,,81,kw,,,2023,510,km,,,manual,,,,petrol,,,,black,,5.1,l/100km,[]
+seat,arona,,,85,kw,,,2018,190000,km,,,manual,,,,petrol,,,,blue,,4.9,l/100km,"[""dab_radio"", ""navigation""]"
+ford,mondeo,,,132,kw,,,2017,56627,km,,,automatic,,,hybrid,,,,,grey,,3.9,l/100km,[]
+bmw,x1,,,110,kw,,,2019,73860,km,,,automatic,,,,diesel,,,,silver,,4.6,l/100km,"[""heated_seats"", ""parking_sensors"", ""tow_bar""]"
+volkswagen,passat,,,90,kw,,,2020,57887,km,,,automatic,,,,diesel,,,,red,,4.9,l/100km,"[""navigation""]"
+audi,q2,,,110,kw,,,2020,27890,km,,,automatic,,,,diesel,,,,red,,5.5,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""leather_seats""]"
+mazda,cx-5,2,l,121,kw,,,2019,34054,km,,,manual,,,,petrol,,,,white,,6.4,l/100km,[]
+smart,forfour,,,60,kw,,,2021,8100,km,,,automatic,,,electric,,,,,red,,,,"[""rear_camera""]"
+bmw,m4,,,331,kw,,,2017,48340,km,,convertible,automatic,,,,petrol,,,,grey,,8.7,l/100km,"[""head_up_display"", ""keyless_entry""]"
+seat,ibiza,,,77,kw,,,2013,133422,km,,,manual,,,,petrol,,,,grey,,5.1,l/100km,"[""cruise_control"", ""navigation"", ""parking_sensors"", ""tow_bar""]"
+skoda,superb,,,140,kw,,,2019,87826,km,,,automatic,,,,diesel,,,,white,,5.3,l/100km,"[""adaptive_cruise_control""]"
+volvo,v40,,,84,kw,,,2014,291000,km,,,manual,,,,diesel,,,,white,,3.8,l/100km,[]
+audi,a3,,,132,kw,,,2014,124000,km,,,automatic,,,,petrol,,,,blue,,5.6,l/100km,[]
+peugeot,5008,1.5,,96,kw,,,2022,10,km,,,manual,,,,diesel,,,,grey,,4.1,l/100km,"[""navigation"", ""rear_camera""]"
+smart,fortwo,,,52,kw,,,2011,104500,km,,,automatic,,,,petrol,,,,white,,4.2,l/100km,[]
+volkswagen,sharan,2,,103,kw,,,2014,151000,km,,,manual,,,,diesel,,awd,,grey,,6,l/100km,[]
+volkswagen,up!,,,55,kw,,,2012,172000,km,,,manual,,,,petrol,,,,white,,4.7,l/100km,[]
+opel,mokka x,1.4,,103,kw,turbo,,2019,65146,km,,,manual,,,,petrol,,,,silver,,6.6,l/100km,"[""parking_sensors""]"
+seat,leon,,,96,kw,,,2020,24791,km,,,automatic,,,,cng,,,,silver,,3.6,l/100km,[]
+bmw,1 series,,,75,kw,,,2013,130000,km,,,manual,,,,petrol,,,,black,,5.5,l/100km,[]
+volkswagen,polo,,,66,kw,,,2014,60150,km,,,manual,,,,petrol,,,,black,,4.7,l/100km,"[""bluetooth"", ""heated_seats"", ""parking_sensors""]"
+volvo,xc60,,,145,kw,,,2023,2500,km,,,automatic,,,,petrol,,,,grey,5,7,l/100km,[]
+mercedes-benz,c class,,,105,kw,,,2003,249000,km,,,manual,,,,petrol,,,,silver,,8.2,l/100km,[]
+dacia,sandero,,,66,kw,,,2018,77700,km,,,manual,,,,petrol,,,,blue,,4.9,l/100km,[]
+porsche,macan,,,324,kw,,,2022,3490,km,,,automatic,,,,petrol,,,,grey,,9.9,l/100km,"[""panoramic_roof"", ""premium_audio"", ""tow_bar""]"
+volkswagen,tiguan,,,90,kw,,,2012,139860,km,,,manual,,,,petrol,,,,grey,,6.5,l/100km,[]
+renault,clio,,,66,kw,,,2023,50,km,,,automatic,,,,petrol,,,,orange,,6.1,l/100km,"[""apple_carplay"", ""dab_radio""]"
+volkswagen,touran,1.9,,77,kw,,,2010,164532,km,,,manual,,,,diesel,,,,black,,6,l/100km,"[""navigation""]"
+jeep,compass,,,177,kw,,,2020,31060,km,,,automatic,,,hybrid,,phev,,,black,,2.1,l/100km,[]
+alfa romeo,147,3.2,,184,kw,,,2004,151715,km,6,,manual,,,,petrol,,,,black,,12.1,l/100km,[]
+porsche,boxster,,,232,kw,,,2013,45350,km,,,automatic,,,,petrol,,,,black,,8,l/100km,"[""heated_seats"", ""navigation"", ""premium_audio""]"
+ssangyong,rexton,2.2,,131,kw,,,2017,44085,km,,,automatic,,,,diesel,,4wd,,black,,7,l/100km,"[""leather_seats"", ""navigation"", ""rear_camera""]"
+bmw,1 series,,,90,kw,,,2008,214000,km,,,manual,,,,petrol,,,,grey,,5.8,l/100km,[]
+mercedes-benz,b class,,,103,kw,,,2006,127500,km,,,automatic,,,,diesel,,,,grey,,6.3,l/100km,"[""air_conditioning"", ""parking_sensors""]"
+bmw,m2,,,272,kw,,,2017,52594,km,,coupe,manual,,,,petrol,,,,blue,,8.5,l/100km,"[""navigation""]"
+skoda,octavia,,,110,kw,,,2017,83532,km,,,manual,,,,petrol,,,,blue,,5.3,l/100km,"[""air_conditioning"", ""cruise_control"", ""parking_sensors"", ""tow_bar""]"
+citroen,c4,,,60,kw,,,2015,90000,km,,,manual,,,,petrol,,,,black,,4.6,l/100km,"[""heated_seats"", ""navigation"", ""rear_camera""]"
+volkswagen,up!,,,44,kw,,,2015,77000,km,,,manual,,,,petrol,,,,red,,4.5,l/100km,"[""air_conditioning"", ""electric_windows""]"
+kia,sportage,1.7,,85,kw,,,2012,269622,km,,,manual,,,,diesel,,,,black,,5.3,l/100km,[]
+audi,a6,,,180,kw,,,2012,197000,km,,,automatic,,,,diesel,,,,black,,5.7,l/100km,[]
+bmw,5 series,,,235,kw,,,2018,122732,km,,,automatic,,,,diesel,,,,silver,,6.1,l/100km,"[""tow_bar""]"
+alfa romeo,giulia,,,206,kw,turbo,,2023,15,km,,,automatic,,,,petrol,,,,silver,,7,l/100km,"[""apple_carplay"", ""climate_control""]"
+audi,q2,,,85,kw,,,2018,49690,km,,,manual,,,,petrol,,,,white,,5.4,l/100km,"[""panoramic_roof"", ""parking_sensors"", ""tow_bar""]"
+toyota,c-hr,,,72,kw,,,2023,10,km,,,automatic,,,hybrid,,,,,white,,3.8,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""navigation""]"
+audi,tt,2,,125,kw,,,2012,216000,km,,ABSTAIN,manual,,,,diesel,,,,silver,,5.6,l/100km,[]
+bmw,x4,,,375,kw,,,2021,25000,km,,,automatic,,,,petrol,,,,grey,,10.9,l/100km,"[""adaptive_cruise_control"", ""dab_radio"", ""head_up_display""]"
+kia,cee'd,,,99,kw,,,2017,80300,km,,,manual,,,,petrol,,,,grey,,6.3,l/100km,[]
+ford,mustang,5,,343,kw,,,2019,58000,km,,,automatic,,,,petrol,,,,blue,,12.1,l/100km,[]
+toyota,corolla,,,72,kw,,,2019,26041,km,,,automatic,,,hybrid,,,,,red,,3.3,l/100km,"[""navigation"", ""rear_camera""]"
+maserati,ghibli,3,,202,kw,,,2019,116172,km,6,,automatic,,,,diesel,,,,grey,,7.2,l/100km,"[""adaptive_cruise_control""]"
+bmw,1 series,,,105,kw,,,2008,200000,km,,,manual,,,,diesel,,,,white,,4.5,l/100km,"[""navigation""]"
+ford,ecosport,,,92,kw,,,2019,40800,km,,,manual,,,,petrol,,,,blue,,5.3,l/100km,"[""heated_seats"", ""parking_sensors"", ""rear_camera""]"
+audi,a4,,,176,kw,,,2008,154686,km,,,manual,,,,diesel,,,,black,,6.8,l/100km,[]
+mercedes-benz,glc class,,,190,kw,,,2017,228000,km,,,automatic,,,fossil,diesel,,,,silver,,,,"[""navigation""]"
+bmw,3 series,,,170,kw,,,2003,95000,km,,,automatic,,,,petrol,,,,black,,9.6,l/100km,"[""leather_seats"", ""navigation"", ""parking_sensors""]"
+volvo,xc60,,,228,kw,,,2019,32100,km,,,automatic,,,,petrol,,awd,,black,,7.8,l/100km,"[""dab_radio""]"
+mini,convertible,,,100,kw,,,2023,5000,km,,,automatic,,,,petrol,,,,yellow,,6.4,l/100km,"[""alloy_wheels""]"
+peugeot,2008,,,81,kw,,,2017,96890,km,,,manual,,,,petrol,,,,red,,4.4,l/100km,[]
+volkswagen,polo,1,,44,kw,,,2015,58428,km,,,manual,,,,petrol,,,,white,,4.7,l/100km,"[""air_conditioning""]"
+bmw,3 series,,,110,kw,,,2007,164000,km,,,manual,,,,petrol,,,,grey,,7.4,l/100km,[]
+audi,a5,,,180,kw,,,2015,94163,km,,,automatic,,,,diesel,,awd,,grey,,5.7,l/100km,"[""navigation""]"
+volkswagen,golf,,,135,kw,,,2019,65500,km,,,automatic,,,,diesel,,,,blue,,4.3,l/100km,[]
+bentley,continental,,,467,kw,,,2014,40200,km,,,automatic,,,,petrol,,,,blue,,14.6,l/100km,"[""leather_seats""]"
+mercedes-benz,c class,,,115,kw,,,2012,85500,km,,sedan,,,,,petrol,,,,black,,7.6,l/100km,[]
+skoda,fabia,,,55,kw,,,2019,75259,km,,,manual,,,,petrol,,,,grey,,4.9,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""dab_radio"", ""heated_seats"", ""parking_sensors""]"
+renault,kadjar,,,96,kw,,,2015,115404,km,,,manual,,,,diesel,,,,black,,4.9,l/100km,[]
+renault,twingo,,,54,kw,,,2020,21000,km,,,manual,,,,petrol,,,,grey,,4.5,l/100km,[]
+opel,corsa,,,64,kw,,,2011,99000,km,,,manual,,,,petrol,,,,brown,,5.5,l/100km,"[""air_conditioning"", ""alloy_wheels""]"
+opel,crossland x,,,96,kw,,,2018,71100,km,,,manual,,,,petrol,,,,white,,5,l/100km,[]
+peugeot,expert,,,66,kw,,,2015,95000,km,,,manual,,,,diesel,,,,white,,6.9,l/100km,"[""air_conditioning"", ""parking_sensors""]"
+opel,astra,,,96,kw,turbo,,2019,19796,km,,,manual,,,,petrol,,,,silver,,5.5,l/100km,"[""navigation"", ""rear_camera""]"
+nissan,x-trail,,,120,kw,,,2022,1900,km,,,automatic,,,,petrol,,,,blue,,,,[]
+bmw,x1,,,110,kw,,,2014,95000,km,,,manual,,,,petrol,,,,black,,7.7,l/100km,[]
+volkswagen,golf,,,81,kw,,,2018,34963,km,,,manual,,,,petrol,,,,yellow,,4.8,l/100km,"[""adaptive_cruise_control"", ""heated_seats"", ""navigation"", ""parking_sensors""]"
+volkswagen,up!,,,55,kw,,,2014,181061,km,,,manual,,,,petrol,,,,blue,,4.7,l/100km,"[""air_conditioning"", ""heated_seats""]"
+hyundai,ix20,1.6,,92,kw,,,2017,79296,km,,,automatic,,,,petrol,,,,silver,,6.5,l/100km,[]
+bmw,3 series,,,142,kw,,,2000,203000,km,,wagon,manual,,,,petrol,,,,silver,,9.3,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""leather_seats""]"
+volkswagen,golf,,,180,kw,,,2021,29300,km,,,automatic,,,hybrid,,,,,grey,,,,"[""dab_radio"", ""heated_seats"", ""navigation"", ""rear_camera""]"
+jeep,renegade,,,110,kw,,,2020,90500,km,,,automatic,,,,petrol,,,,black,,6.4,l/100km,"[""adaptive_cruise_control"", ""navigation"", ""rear_camera""]"
+peugeot,2008,,,96,kw,,,2021,47299,km,,,manual,,,,petrol,,,,grey,,5.7,l/100km,[]
+citroen,c3 picasso,,,70,kw,,,2010,131439,km,,,manual,,,,petrol,,,,black,,,,"[""air_conditioning"", ""cruise_control"", ""onboard_computer"", ""parking_sensors""]"
+kia,sportage,2,,136,kw,,,2019,54465,km,,,automatic,,,ABSTAIN,diesel,mhv,4wd,,black,,6.3,l/100km,[]
+toyota,avensis,,,97,kw,,,2010,112990,km,,,manual,,,,petrol,,,,silver,,6.5,l/100km,"[""air_conditioning"", ""parking_sensors""]"
+opel,astra,,,66,kw,,,2006,186000,km,,,manual,,,,petrol,,,,silver,,6.1,l/100km,[]
+opel,meriva,,,77,kw,,,2009,132000,km,,,automatic,,,,petrol,,,,grey,,6.7,l/100km,[]
+skoda,yeti,,,77,kw,,,2013,125000,km,,,manual,,,,petrol,,,,black,,6.6,l/100km,"[""air_conditioning""]"
+volkswagen,golf,,,110,kw,,,2019,62048,km,,,manual,,,,diesel,,,,black,,5.2,l/100km,"[""adaptive_cruise_control"", ""navigation""]"
+seat,arona,1,,81,kw,,,2022,20,km,,,manual,,,,petrol,,,,red,,4.8,l/100km,[]
+peugeot,2008,,,100,kw,,,2022,2560,km,,,automatic,,,electric,,,,,black,,460,l/100km,[]
+volkswagen,passat,,,90,kw,,,2009,218000,km,,,manual,,,,petrol,,,,blue,,5.9,l/100km,[]
+renault,clio,,,67,kw,,,2022,14330,km,,,manual,,,,petrol,,,,orange,,5.1,l/100km,"[""air_conditioning"", ""heated_seats"", ""navigation"", ""parking_sensors""]"
+bmw,5 series,,,145,kw,,,2008,158000,km,,,automatic,,,,diesel,,,,black,,6.9,l/100km,[]
+bmw,4 series,,,180,kw,,,2014,82800,km,,,automatic,,,,petrol,,awd,,blue,,6.8,l/100km,[]
+volkswagen,sharan,2,,110,kw,,,2017,86900,km,,,manual,,,,diesel,,,,blue,,5.1,l/100km,"[""navigation"", ""tow_bar""]"
+audi,a6,,,125,kw,,,2004,255000,km,,,manual,,,,petrol,,,,grey,,9.9,l/100km,[]
+mercedes-benz,s class,,,190,kw,,,2016,136000,km,,,automatic,,,fossil,diesel,,,,black,,5.7,l/100km,"[""panoramic_roof""]"
+volkswagen,golf,,,103,kw,,,2006,211000,km,,,manual,,,,diesel,,,,blue,,5.4,l/100km,[]
+audi,a5,2,,185,kw,,,2017,87000,km,,coupe,automatic,,,,petrol,,,,blue,,6.3,l/100km,"[""leather_seats"", ""rear_camera""]"
+peugeot,rifter,,,96,kw,,,2021,80805,km,,,manual,,,,diesel,,,,grey,,4.3,l/100km,[]
+porsche,macan,,,190,kw,,,2015,160000,km,,,automatic,,,,diesel,,,,white,,6.3,l/100km,"[""rear_camera""]"
+bmw,5 series,,,180,kw,,,2011,137000,km,,,automatic,,,,diesel,,,,black,,6.9,l/100km,[]
+opel,astra,,,110,kw,,,2018,88285,km,,,manual,,,,diesel,,,,black,,4.8,l/100km,"[""heated_seats"", ""rear_camera""]"
+mercedes-benz,c class,,,90,kw,,,2005,133000,km,,,automatic,,,,diesel,,,,silver,,6.9,l/100km,[]
+porsche,911,,,368,kw,,,2018,14182,km,,,manual,,,,petrol,,,,silver,,12.9,l/100km,[]
+ford,focus,,,206,kw,,,2019,33500,km,,,manual,,,,petrol,,,,red,,7.9,l/100km,[]
+ford,fiesta,1,,74,kw,,,2019,7035,km,,,manual,,,,petrol,,,,blue,,,,[]
+toyota,verso,,,108,kw,,,2009,199900,km,,,automatic,,,,petrol,,,,grey,,7,l/100km,"[""heated_seats"", ""rear_camera""]"
+porsche,macan,,,190,kw,,,2017,128300,km,,,automatic,,,,diesel,,,,grey,,6.3,l/100km,"[""navigation"", ""panoramic_roof"", ""premium_audio""]"
+audi,a1,,,81,kw,,,2023,6000,km,,,automatic,,,,petrol,,,,red,,5.7,l/100km,"[""bluetooth"", ""heated_seats"", ""parking_sensors""]"
+volkswagen,caddy,,,75,kw,,,2017,100000,km,,,manual,,,,diesel,,,,blue,,4.5,l/100km,"[""air_conditioning"", ""heated_seats"", ""navigation"", ""tow_bar""]"
+opel,omega,,,106,kw,,,2002,119990,km,,,manual,,,,lpg,,,,silver,,9.6,l/100km,[]
+mercedes-benz,x class,,,140,kw,,,2018,66800,km,,,automatic,,,,diesel,,,,white,,7.9,l/100km,"[""tow_bar""]"
+mercedes-benz,clk,,,120,kw,,,2005,120000,km,,,automatic,,,,petrol,,,,blue,,8.7,l/100km,"[""bluetooth"", ""heated_seats"", ""leather_seats"", ""parking_sensors"", ""tow_bar""]"
+ford,focus,,,74,kw,,,2013,84000,km,,,manual,,,,petrol,,,,white,,4.7,l/100km,[]
+audi,a3,,,110,kw,,,2023,10,km,,,manual,,,,petrol,,,,white,,5.6,l/100km,"[""air_conditioning"", ""cruise_control"", ""parking_sensors""]"
+mercedes-benz,sprinter,,,120,kw,,,2015,170260,km,,,manual,,,,diesel,,,,white,,8.2,l/100km,"[""cruise_control"", ""leather_seats"", ""navigation"", ""parking_sensors""]"
+kia,xceed,,,118,kw,,,2022,14300,km,,,manual,,,,petrol,,,,white,,6.1,l/100km,[]
+peugeot,boxer,,,121,kw,,,2023,10,km,,,manual,,,,diesel,,,,white,,9.1,l/100km,"[""dab_radio"", ""parking_sensors""]"
+hyundai,i20,,,88,kw,,,2023,1500,km,,,manual,,,,petrol,,,,green,,5.6,l/100km,[]
+mercedes-benz,e class,,,135,kw,,,2010,97636,km,,,automatic,,,,petrol,,,,black,,7.4,l/100km,[]
+mercedes-benz,e class,,,125,kw,,,2010,293000,km,,,manual,,,,diesel,,,,grey,,5,l/100km,[]
+toyota,aygo,,,53,kw,,,2022,10,km,,,manual,,,,petrol,,,,blue,,5,l/100km,[]
+mercedes-benz,c class,,,100,kw,,,2009,207643,km,,,manual,,,,diesel,,,,black,,6.1,l/100km,[]
+ford,fiesta,,,44,kw,,,2009,88095,km,,,manual,,,,petrol,,,,silver,,5.5,l/100km,"[""air_conditioning""]"
+porsche,911,,,412,kw,,,2014,173500,km,,convertible,automatic,,,,petrol,,,,black,,9.9,l/100km,[]
+audi,a3,,,92,kw,,,2016,83560,km,,convertible,manual,,,fossil,petrol,,,,black,,5.3,l/100km,"[""air_conditioning"", ""heated_seats"", ""navigation"", ""parking_sensors""]"
+fiat,500,1,,51,kw,,,2023,5,km,,,manual,,,hybrid,petrol,,,,grey,,5.2,l/100km,[]
+volkswagen,polo,,,55,kw,,,2015,123000,km,,,manual,,,,petrol,,,,grey,,5.1,l/100km,[]
+nissan,qashqai,,,103,kw,,,2023,20,km,,,manual,,,,petrol,,,,black,,5.8,l/100km,"[""navigation""]"
+ford,fiesta,,,60,kw,,,2008,77889,km,,,manual,,,,petrol,,,,blue,,5.7,l/100km,[]
+bmw,3 series,,,140,kw,,,2020,32400,km,,,automatic,,,,diesel,,,,blue,,4.5,l/100km,"[""adaptive_cruise_control""]"
+land rover,ABSTAIN,,,386,kw,,,2023,7000,km,,,automatic,,,,petrol,,,,blue,,12.8,l/100km,"[""head_up_display""]"
+audi,tt rs,2.5,,250,kw,,,2011,94980,km,,coupe,automatic,ABSTAIN,,fossil,petrol,,awd,,grey,,8.5,l/100km,"[""navigation"", ""premium_audio""]"
+audi,a3,,,92,kw,,,2012,117000,km,,,manual,,,,petrol,,,,brown,,6,l/100km,[]
+mitsubishi,pajero,,,140,kw,,,2017,74168,km,,,automatic,,,,diesel,,,,white,,9.3,l/100km,[]
+bmw,z4,,,225,kw,,,2009,122400,km,,roadster,automatic,,,,petrol,,,,blue,,9.4,l/100km,"[""leather_seats"", ""navigation""]"
+mercedes-benz,c class,,,127,kw,,,2012,198000,km,,,manual,,,,diesel,,,,black,,4.4,l/100km,[]
+volkswagen,polo,,,66,kw,,,2012,69000,km,,,automatic,,,,petrol,,,,grey,,5.3,l/100km,"[""parking_sensors"", ""sunroof""]"
+citroen,berlingo,,,73,kw,,,2016,114746,km,,,,,,,diesel,,,,blue,,4.3,l/100km,[]
+mercedes-benz,a class,,,80,kw,,,2005,219650,km,,,manual,,,,diesel,,,,silver,,5.4,l/100km,[]
+mitsubishi,,,,110,kw,,,2022,3050,km,,,manual,,,,diesel,,,,orange,,,,"[""air_conditioning""]"
+audi,a5,,,140,kw,,,2019,55700,km,,,automatic,,,,diesel,,awd,,red,,5.8,l/100km,"[""navigation"", ""panoramic_roof""]"
+mercedes-benz,e class,,,155,kw,,,2014,85000,km,,coupe,automatic,,,,petrol,,,,black,,5.6,l/100km,[]
+mini,convertible,,,90,kw,,,2012,74400,km,,,manual,,,,petrol,,,,red,,5.7,l/100km,"[""navigation""]"
+volkswagen,t-roc,,,110,kw,,,2022,17550,km,,,automatic,,,,petrol,,,,black,,5.4,l/100km,"[""navigation"", ""rear_camera""]"
+audi,a3,,,75,kw,,,2007,110450,km,,,manual,,,,petrol,,,,black,,7.1,l/100km,[]
+ford,focus,,,110,kw,,,2017,62000,km,,,automatic,,,,petrol,,,,grey,,6.1,l/100km,"[""navigation""]"
+audi,q3,,,110,kw,,,2023,9999,km,,,automatic,,,,diesel,,,,silver,,5,l/100km,"[""navigation""]"
+audi,tt,,,132,kw,,,2005,91000,km,,convertible,manual,,,,petrol,,awd,,silver,,9.5,l/100km,[]
+volkswagen,passat,,,110,kw,,,2005,133000,km,,,automatic,,,,petrol,,,,brown,,8.1,l/100km,[]
+seat,ateca,,,110,kw,,,2017,58000,km,,,automatic,,,,petrol,,,,white,,5.5,l/100km,"[""alloy_wheels"", ""navigation""]"
+aston martin,db11,,,447,kw,,,2017,12000,km,,,automatic,,,,petrol,,,,blue,,11.4,l/100km,[]
+mercedes-benz,c class,,,125,kw,,,2007,224924,km,,,automatic,,,,diesel,,,,black,,6.6,l/100km,[]
+skoda,rapid spaceback,,,70,kw,,,2018,47730,km,,,manual,,,,petrol,,,,red,,4.8,l/100km,"[""air_conditioning"", ""parking_sensors""]"
+bmw,4 series gran coupe,,,265,kw,,,2017,2100,km,,,automatic,,,,petrol,,,,black,,6.8,l/100km,[]
+fiat,qubo,,,54,kw,,,2009,170000,km,,,manual,,,,petrol,,,,blue,,7,l/100km,[]
+peugeot,5008,,,130,kw,,,2022,14800,km,,,automatic,,,,diesel,,,,white,,6,l/100km,"[""heated_seats"", ""leather_seats""]"
+volkswagen,golf,,,77,kw,,,2014,181900,km,,,manual,,,,diesel,,,,black,,3.9,l/100km,[]
+audi,sq2,,,221,kw,,,2023,10,km,,,automatic,,,,petrol,,,,red,,7.7,l/100km,"[""navigation""]"
+volkswagen,passat,,,90,kw,,,2011,120000,km,,,manual,,,,petrol,,,,blue,,6.4,l/100km,"[""navigation""]"
+volkswagen,golf,,,195,kw,,,2015,58350,km,,,automatic,,,,petrol,,,,black,,8.2,l/100km,[]
+audi,e-tron,,,230,kw,,,2020,53000,km,,,automatic,,,electric,,,awd,,white,,,,[]
+audi,a6,2.7,,140,kw,,,2010,179000,km,,,automatic,ABSTAIN,,,diesel,,awd,,black,,7.1,l/100km,[]
+volkswagen,touran,,,103,kw,,,2012,171000,km,,,manual,,,,diesel,,,,brown,,5.3,l/100km,[]
+fiat,tipo,1.4,,70,kw,,,2017,67573,km,,,manual,,,,,,,,white,,,,[]
+audi,a3,,,150,kw,,,2020,51000,km,,hatchback,automatic,,,hybrid,,,,,red,,1.9,l/100km,"[""adaptive_cruise_control"", ""heated_seats"", ""navigation"", ""parking_sensors""]"
+hyundai,tucson,,,130,kw,,,2016,107500,km,,,automatic,,,,petrol,,,,black,,7.5,l/100km,"[""alloy_wheels"", ""heated_seats"", ""leather_seats"", ""rear_camera""]"
+volkswagen,scirocco,,,130,kw,,,2013,111195,km,,,manual,,,,diesel,,,,blue,,5.1,l/100km,"[""bluetooth""]"
+ford,tourneo connect,,,88,kw,,,2018,75300,km,,,automatic,,,,diesel,,,,silver,,5.2,l/100km,[]
+ford,tourneo custom,,,125,kw,,,2023,15,km,,,automatic,,,,diesel,,,,grey,,7.3,l/100km,[]
+kia,stinger,,,269,kw,,,2020,7056,km,,,automatic,,,,petrol,,,,grey,,10.6,l/100km,"[""head_up_display"", ""panoramic_roof"", ""premium_audio""]"
+seat,arona,,,85,kw,,,2020,26000,km,,,manual,,,,petrol,,,,red,,5.7,l/100km,"[""leather_seats""]"
+kia,sportage,,,136,kw,,,2020,20637,km,,,automatic,,,,diesel,,,,white,,5.8,l/100km,"[""leather_seats""]"
+ford,kuga,,,100,kw,,,2008,133636,km,,,manual,,,,diesel,,,,black,,6.4,l/100km,"[""parking_sensors"", ""tow_bar""]"
+seat,ibiza,,,59,kw,,,2019,62100,km,,,manual,,,,petrol,,,,blue,,5,l/100km,[]
+skoda,octavia,,,110,kw,,,2016,246000,km,,,manual,,,fossil,diesel,,,,black,,4.7,l/100km,[]
+mazda,cx-3,,,77,kw,,,2015,93257,km,,,manual,,,,diesel,,,,red,,4,l/100km,[]
+skoda,kodiaq,,,140,kw,,,2017,123067,km,,,automatic,,,,diesel,,,,blue,,5.7,l/100km,"[""alloy_wheels"", ""navigation"", ""panoramic_roof""]"
+opel,astra,,,85,kw,,,2016,133800,km,,,manual,,,,petrol,,,,red,,6.3,l/100km,"[""air_conditioning"", ""heated_seats""]"
+volkswagen,polo,1.4,,132,kw,,,2011,105900,km,,,automatic,dct,,,petrol,,,,red,,5.9,l/100km,[]
+ford,focus,,,74,kw,,,2014,191666,km,,wagon,manual,,,,petrol,,,,white,,4.8,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""bluetooth""]"
+seat,ateca,,,110,kw,,,2021,32453,km,,,automatic,,,,petrol,,,,grey,,5.6,l/100km,"[""tow_bar""]"
+bmw,4 series,,,135,kw,,,2019,31013,km,,,automatic,,,,petrol,,,,silver,,6.3,l/100km,"[""dab_radio"", ""head_up_display""]"
+mercedes-benz,gla class,,,100,kw,,,2018,34595,km,,,automatic,,,,diesel,,,,blue,,5.5,l/100km,"[""memory_seats"", ""navigation"", ""panoramic_roof""]"
+jaguar,f-type,,,423,kw,,,2022,3500,km,,,automatic,,,,petrol,,,,black,,11,l/100km,"[""keyless_entry"", ""panoramic_roof"", ""premium_audio""]"
+volvo,s90,,,288,kw,,,2022,8900,km,,,automatic,,,hybrid,,,,,grey,,,,"[""navigation"", ""sunroof""]"
+seat,ateca,,,110,kw,,,2023,50,km,,,automatic,,,,petrol,,,,grey,,6.7,l/100km,[]
+skoda,karoq,1.5,,110,kw,,,2023,4950,km,,,automatic,,,,petrol,,,,grey,,6.2,l/100km,"[""navigation"", ""tow_bar""]"
+nissan,qashqai+2,2,,110,kw,,,2013,154000,km,,,automatic,,,,diesel,,ABSTAIN,,black,,7.1,l/100km,[]
+fiat,tipo,1,l,74,kw,,,2022,10,km,,,manual,,,,petrol,,,,silver,,5.4,l/100km,[]
+mercedes-benz,e class,,,135,kw,,,2018,30298,km,,,automatic,,,,petrol,,,,white,,6.3,l/100km,"[""alloy_wheels""]"
+ford,fiesta,,,74,kw,,,2018,113500,km,,,manual,,,,petrol,,,,orange,,4.6,l/100km,[]
+citroen,c4,1.2,,96,kw,,,2021,35998,km,,,automatic,other,,,petrol,,,,white,,4.8,l/100km,[]
+honda,cr-v,,,88,kw,,,2017,101500,km,,,manual,,,,diesel,,,,white,,4.5,l/100km,[]
+seat,leon,,,110,kw,,,2022,13971,km,,,automatic,,,,diesel,,,,grey,,4.5,l/100km,[]
+volkswagen,golf,,,150,kw,,,2020,23900,km,,,automatic,,,hybrid,,,,,blue,,1.2,l/100km,[]
+bmw,6 series,,,230,kw,,,2012,184000,km,,,automatic,,,,diesel,,,,black,,5.7,l/100km,[]
+mercedes-benz,b class,,,110,kw,,,2021,14000,km,,,automatic,,,,diesel,,,,blue,,5,l/100km,[]
+hyundai,ix20,1.6,,92,kw,,,2016,35900,km,,,automatic,,,,petrol,,,,beige,,6.5,l/100km,[]
+hyundai,i10,,,49,kw,,,2022,11890,km,,,manual,,,,petrol,,,,silver,,4.5,l/100km,[]
+mazda,cx-5,,,135,kw,,,2018,105266,km,,,manual,,6,,diesel,,awd,,grey,,5.2,l/100km,"[""leather_seats""]"
+mercedes-benz,e class,,,185,kw,,,2014,138000,km,,,automatic,,,,diesel,,,,brown,,5.9,l/100km,"[""leather_seats"", ""panoramic_roof"", ""rear_camera""]"
+bmw,3 series,,,180,kw,,,2011,125000,km,,,automatic,,,,petrol,,,,blue,,6.4,l/100km,"[""head_up_display"", ""navigation"", ""rear_camera"", ""sunroof""]"
+volkswagen,id.4,,,150,kw,,,2021,53911,km,,,automatic,,,electric,,,,,yellow,,,,"[""navigation""]"
+seat,mii,,,44,kw,,,2018,42000,km,,,manual,,,,petrol,,,,white,,4.4,l/100km,"[""air_conditioning""]"
+mercedes-benz,gla class,,,115,kw,,,2014,36000,km,,,automatic,,,,petrol,,,,white,,5.8,l/100km,"[""navigation"", ""panoramic_roof"", ""rear_camera""]"
+ford,transit,,,103,kw,,,2009,217000,km,,,manual,,6,,diesel,,,,white,,7.4,l/100km,"[""air_conditioning"", ""cruise_control""]"
+opel,astra,1.4,,110,kw,turbo,,2017,63000,km,,wagon,manual,,,fossil,petrol,icev,,,white,,5.5,l/100km,[]
+opel,crossland x,,,96,kw,turbo,,2019,25290,km,,,automatic,,,,petrol,,,,white,,5,l/100km,"[""navigation"", ""parking_sensors""]"
+mercedes-benz,clk,,,170,kw,,,2008,84000,km,,coupe,automatic,,,,petrol,,,,silver,,10,l/100km,[]
+seat,ateca,,,110,kw,,,2017,65000,km,,,manual,,,,petrol,,,,grey,,5.4,l/100km,"[""navigation"", ""rear_camera"", ""tow_bar""]"
+skoda,octavia,,,125,kw,,,2012,198893,km,,,manual,,,,diesel,,,,blue,,5.7,l/100km,[]
+mercedes-benz,c class,,,125,kw,,,2017,84950,km,,,automatic,,,,diesel,,,,silver,,4.3,l/100km,"[""cruise_control"", ""heated_seats"", ""leather_seats"", ""navigation"", ""rear_camera""]"
+saab,9-3,2.8,,188,kw,turbo,,2008,209560,km,6,convertible,manual,,,fossil,petrol,,,,blue,,10.6,l/100km,[]
+mercedes-benz,c class,,,115,kw,,,2017,156700,km,,,automatic,,,,petrol,,,,white,,5,l/100km,[]
+skoda,kodiaq,2,,147,kw,,,2022,16019,km,,,automatic,dct,,fossil,diesel,,ABSTAIN,,blue,,5.9,l/100km,[]
+nissan,350 z,,,230,kw,,,2008,95000,km,,convertible,manual,,,,petrol,,,,black,,12,l/100km,[]
+audi,q5,,,270,kw,,,2019,72000,km,,,automatic,,,hybrid,,,,,white,,2.1,l/100km,[]
+mazda,mazda6,,,121,kw,,,2018,44583,km,,,manual,,,,petrol,,,,black,,6.6,l/100km,[]
+ford,kuga,,,132,kw,,,2018,59752,km,,,manual,,,,diesel,,,,white,,6.1,l/100km,[]
+seat,leon,,,96,kw,,,2023,2,km,,,manual,,,,petrol,,,,grey,,5.5,l/100km,"[""adaptive_cruise_control"", ""air_conditioning"", ""navigation"", ""parking_assist"", ""parking_sensors"", ""rear_camera""]"
+mercedes-benz,glc class,,,190,kw,,,2018,130297,km,,,automatic,,,,diesel,,,,blue,,8.2,l/100km,"[""adaptive_cruise_control"", ""navigation"", ""rear_camera"", ""tow_bar""]"
+volkswagen,golf,,,77,kw,,,2014,80000,km,,,manual,,,,diesel,,,,grey,,3.9,l/100km,"[""tow_bar""]"
+opel,zafira,,,103,kw,,,2010,115800,km,,,manual,,,,petrol,,,,silver,,7.4,l/100km,"[""air_conditioning"", ""heated_seats"", ""parking_sensors""]"
+bmw,3 series,,,225,kw,,,2008,144000,km,,,automatic,,,,petrol,,,,silver,,9.6,l/100km,[]
+fiat,ducato,,,103,kw,,,2020,11003,km,,,manual,,,,diesel,,,,white,,,,[]
+citroen,c3,,,60,kw,,,2021,57070,km,,,manual,,,,petrol,,,,beige,,4.2,l/100km,"[""bluetooth"", ""dab_radio"", ""parking_sensors""]"
+volkswagen,tiguan allspace,,,110,kw,,,2023,10,km,,,automatic,,,,petrol,,,,silver,,6.9,l/100km,"[""navigation""]"
+audi,q5,,,195,kw,,,2023,1550,km,,,automatic,,,,petrol,,,,white,,8.9,l/100km,[]
+seat,ibiza,,,70,kw,,,2023,3000,km,,,manual,,,,petrol,,,,white,,4.8,l/100km,"[""parking_sensors"", ""rear_camera""]"
+renault,kadjar,,,117,kw,,,2019,39200,km,,,automatic,,,,petrol,,,,grey,,5.8,l/100km,[]
+renault,trafic,,,88,kw,,,2020,16970,km,,,manual,,,,diesel,,,,beige,,5.5,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""bluetooth"", ""central_locking"", ""electric_mirrors"", ""electric_windows"", ""navigation"", ""power_steering""]"
+hyundai,kona,1,,88,kw,,,2019,33900,km,,,manual,,,,petrol,,,,yellow,,,,[]
+ford,transit custom,,,77,kw,,,2018,97400,km,,,manual,,,,diesel,,,,silver,,6.8,l/100km,[]
+kia,picanto,1.2,,62,kw,,,2017,60000,km,,,automatic,,,,petrol,,,,white,,5.9,l/100km,[]
+skoda,superb,2,,140,kw,,,2019,49374,km,,,automatic,dct,,,diesel,,ABSTAIN,,grey,,6.7,l/100km,"[""panoramic_roof""]"
+kia,ev6,,,430,kw,,,2023,5000,km,,,automatic,,,electric,,,,,white,,,,"[""adaptive_cruise_control"", ""alloy_wheels"", ""heated_seats"", ""lane_departure_warning""]"
+volkswagen,golf,,,173,kw,,,2012,108142,km,,,manual,,,,petrol,,,,black,,8.1,l/100km,[]
+audi,q2,,,110,kw,,,2019,30900,km,,,automatic,,,,petrol,,,,white,,6.7,l/100km,"[""rear_camera"", ""tow_bar""]"
+skoda,fabia,1.2,,66,kw,,,2016,35000,km,,,manual,,,,petrol,,,,blue,,4.6,l/100km,[]
+ferrari,f430,,,375,kw,,,2008,26439,km,,,automatic,,,,petrol,,,,red,,15.7,l/100km,[]
+bmw,1 series,,,165,kw,,,2019,36000,km,,,automatic,,,,petrol,,,,grey,,6.2,l/100km,"[""heated_seats"", ""navigation"", ""parking_sensors"", ""sunroof""]"
+audi,a4,2.7,,140,kw,,,2010,248000,km,,wagon,automatic,,,,diesel,,,,brown,,6.2,l/100km,[]
+opel,zafira,,,103,kw,,,2009,106500,km,,,automatic,,,,petrol,,,,black,,7.4,l/100km,[]
+jaguar,f-pace,,,184,kw,,,2018,35015,km,,,automatic,,,,petrol,,,,grey,,8.3,l/100km,[]
+volkswagen,golf,,,59,kw,,,2008,111500,km,,,manual,,,,petrol,,,,silver,,6.9,l/100km,"[""air_conditioning""]"
+opel,insignia,,,121,kw,,,2018,96950,km,,,manual,,,,petrol,,,,white,,6.1,l/100km,"[""navigation"", ""parking_sensors"", ""rear_camera"", ""tow_bar""]"
+volkswagen,polo,1,,66,kw,,,2016,65986,km,,,manual,,,,petrol,,,,black,,,,"[""air_conditioning"", ""alloy_wheels"", ""central_locking""]"
+mazda,cx-5,,,110,kw,,,2015,248000,km,,,manual,,,,diesel,,,,white,,4.6,l/100km,"[""air_conditioning"", ""cruise_control"", ""navigation""]"
+opel,astra,,,110,kw,,,2016,53300,km,,,manual,,,,petrol,,,,green,,,,"[""cruise_control"", ""dab_radio"", ""heated_seats"", ""navigation"", ""rear_camera""]"
+toyota,proace,2,l,110,kw,,,2018,84500,km,,,manual,,,,diesel,,,,brown,,5.4,l/100km,[]
+ford,kuga,,,165,kw,,,2021,6000,km,,,automatic,,,hybrid,,phev,,,red,,1.2,l/100km,"[""blind_spot_monitoring"", ""head_up_display"", ""heated_seats"", ""premium_audio"", ""rear_camera""]"
+skoda,scala,,,85,kw,,,2020,47424,km,,,manual,,,,diesel,,,,green,,4.1,l/100km,"[""navigation"", ""panoramic_roof""]"
+ford,focus,1,,92,kw,,,2019,51000,km,,,automatic,,,,petrol,,,,red,,4.2,l/100km,[]
+volkswagen,golf,,,59,kw,,,2006,92000,km,,,manual,,,,petrol,,,,black,,6.9,l/100km,[]
+opel,vivaro,,,107,kw,,,2018,128000,km,,,manual,,,fossil,diesel,,,,silver,,,,"[""air_conditioning"", ""navigation""]"
+ford,puma,,,114,kw,,,2020,17000,km,,,manual,,,hybrid,,,,,red,,4.4,l/100km,"[""dab_radio"", ""leather_seats"", ""navigation""]"
+seat,leon,,,213,kw,,,2017,139700,km,,,automatic,,,,petrol,,,,black,,6.6,l/100km,"[""adaptive_cruise_control"", ""air_conditioning"", ""leather_seats"", ""navigation"", ""rear_camera""]"
+dacia,lodgy,,,85,kw,,,2017,60000,km,,,manual,,,,petrol,,,,blue,,5.5,l/100km,"[""bluetooth"", ""navigation"", ""tow_bar""]"
+ford,edge,2,,155,kw,,,2017,114600,km,,,automatic,,,,diesel,,ABSTAIN,,grey,,5.8,l/100km,"[""keyless_entry"", ""panoramic_roof""]"
+mercedes-benz,c class,,,143,kw,,,2019,81000,km,,,automatic,,,,diesel,,,,silver,,4.7,l/100km,"[""adaptive_cruise_control"", ""alloy_wheels"", ""electric_seats"", ""lane_departure_warning"", ""parking_sensors""]"
+volkswagen,golf,,,110,kw,,,2018,74774,km,,,automatic,,,fossil,petrol,icev,,,gold,,5,l/100km,"[""adaptive_cruise_control"", ""parking_sensors""]"
+dacia,sandero,,,62,kw,,,2012,97415,km,,,manual,,,,petrol,,,,grey,,6.7,l/100km,[]
+smart,fortwo,,,60,kw,,,2018,15700,km,,coupe,automatic,,,electric,,,,,white,,,,[]
+ford,fiesta,1.5,,147,kw,,,2020,48000,km,,,manual,,,,petrol,,,,blue,,5.9,l/100km,[]
+kia,venga,1.4,,66,kw,,,2013,79000,km,,,manual,,,,petrol,,,,black,,,,[]
+mercedes-benz,e class,,,125,kw,,,2010,240000,km,,,manual,,,,diesel,,,,black,,5.2,l/100km,[]
+mercedes-benz,e class,,,478,kw,,,2019,84550,km,,,automatic,,,,petrol,,,,grey,,10.8,l/100km,"[""panoramic_roof""]"
+opel,corsa,,,66,kw,,,2015,19753,km,,,,,,,petrol,,,,silver,,,,[]
+opel,astra,,,110,kw,,,2018,48100,km,,,automatic,,,,petrol,,,,grey,,5.4,l/100km,"[""parking_sensors""]"
+renault,clio,,,56,kw,,,2019,5862,km,,,manual,,,,petrol,,,,black,,5,l/100km,"[""air_conditioning"", ""dab_radio"", ""navigation""]"
+skoda,superb,,,140,kw,,,2015,112000,km,,wagon,automatic,dct,,,diesel,,,,white,,4.7,l/100km,[]
+skoda,scala,,,85,kw,,,2019,79900,km,,,automatic,,,,petrol,,,,black,,5.1,l/100km,"[""adaptive_cruise_control"", ""keyless_entry"", ""panoramic_roof""]"
+opel,insignia,,,125,kw,,,2017,128141,km,,,manual,,,,diesel,,,,grey,,6.5,l/100km,[]
+ford,kuga,,,165,kw,,,2021,18652,km,,,automatic,,,hybrid,,,,,blue,,1.2,l/100km,"[""alloy_wheels"", ""navigation""]"
+opel,corsa,,,63,kw,,,2011,114000,km,,,manual,,,,petrol,,,,black,,5.3,l/100km,[]
+mercedes-benz,c class,,,115,kw,,,2019,39000,km,,,automatic,,,,petrol,,,,black,,6.3,l/100km,[]
+toyota,c-hr,,,135,kw,,,2022,2200,km,,,automatic,,,hybrid,,,,,blue,,5.2,l/100km,[]
+mercedes-benz,c class,,,110,kw,,,2006,229446,km,,,automatic,,,,diesel,,,,silver,,7.3,l/100km,"[""parking_sensors""]"
+ford,focus,,,74,kw,,,2006,233999,km,,,manual,,,,petrol,,,,silver,,6.7,l/100km,[]
+toyota,corolla,,,90,kw,,,2020,37600,km,,,automatic,,,hybrid,,,,,black,,3.3,l/100km,[]
+opel,crossland x,,,96,kw,turbo,,2022,3680,km,,,manual,,,,petrol,,,,white,,4.7,l/100km,"[""dab_radio"", ""heated_seats"", ""parking_sensors"", ""rear_camera""]"
+volkswagen,california,,,110,kw,,,2021,33500,km,,,manual,,,,diesel,,,,silver,,6.3,l/100km,[]
+seat,alhambra,,,110,kw,,,2019,57500,km,,,automatic,,,,petrol,,,,black,,6.6,l/100km,[]
+opel,mokka,,,96,kw,,,2021,9900,km,,,manual,,,,petrol,,,,grey,,4.5,l/100km,[]
+seat,arona,,,110,kw,,,2019,36039,km,,,manual,,,,petrol,,,,white,,4.9,l/100km,"[""adaptive_cruise_control"", ""dab_radio"", ""keyless_entry"", ""navigation"", ""parking_sensors""]"
+opel,corsa,,,44,kw,,,2006,226000,km,,,manual,,,,petrol,,,,blue,,5.3,l/100km,[]
+skoda,kodiaq,,,110,kw,,,2023,10,km,,,automatic,,,,petrol,,,,white,,7.2,l/100km,"[""adaptive_cruise_control"", ""tow_bar""]"
+renault,clio,,,66,kw,,,2017,54300,km,,,manual,,,,petrol,,,,white,,,,"[""air_conditioning"", ""navigation""]"
+fiat,panda,,,51,kw,,,2023,99,km,,,manual,,,,petrol,,,,black,,4.1,l/100km,[]
+kia,sorento,,,169,kw,,,2023,0,km,,,automatic,,,hybrid,,,,,white,,5.4,l/100km,[]
+opel,astra,,,81,kw,,,2014,195000,km,,,manual,,,,diesel,,,,black,,4.5,l/100km,"[""navigation""]"
+volkswagen,transporter,,,75,kw,,,2002,190320,km,,,manual,,,,diesel,,,,silver,,10.1,l/100km,[]
+volkswagen,passat,,,176,kw,,,2014,107400,km,,,automatic,,,,diesel,,,,blue,,5.5,l/100km,[]
+volkswagen,golf,,,85,kw,,,2003,180000,km,,,manual,,,,petrol,,,,silver,,6.7,l/100km,[]
+toyota,corolla,,,135,kw,,,2022,5000,km,,,automatic,,,hybrid,,,,,silver,,3.7,l/100km,[]
+mercedes-benz,glc class,,,143,kw,,,2022,6000,km,,,automatic,,,hybrid,diesel,,,,blue,,,,"[""premium_audio"", ""tow_bar""]"
+opel,insignia,,,154,kw,,,2019,38287,km,,,automatic,,,,diesel,,,,black,,7.1,l/100km,[]
+hyundai,ABSTAIN,,,62,kw,,,2022,7242,km,,,manual,,,,petrol,,,,red,,5.7,l/100km,"[""dab_radio"", ""heated_steering_wheel""]"
+ford,s-max,2,,154,kw,turbo,,2016,126332,km,,,automatic,,,,diesel,,,,white,,5.5,l/100km,[]
+mazda,mx-5,2,l,135,kw,,,2023,660,km,,,manual,,,,petrol,,,,grey,,6.9,l/100km,[]
+mini,cooper s,,,141,kw,,,2019,31000,km,,,automatic,,,,petrol,,,,black,,5.6,l/100km,"[""adaptive_cruise_control"", ""air_conditioning"", ""alloy_wheels""]"
+mercedes-benz,gla class,,,115,kw,,,2019,35000,km,,,automatic,dct,7,,petrol,,,,white,,6.6,l/100km,"[""navigation"", ""panoramic_roof"", ""sunroof"", ""tow_bar""]"
+ford,transit custom,2,l,96,kw,,,2022,16000,km,,van,automatic,,,,diesel,,,,yellow,,6.9,l/100km,[]
+ford,puma,,,114,kw,,,2022,18990,km,,,manual,,,ABSTAIN,petrol,,,,silver,,5.5,l/100km,"[""navigation""]"
+renault,kadjar,,,103,kw,,,2022,22900,km,,,automatic,,,,petrol,,,,blue,,5.6,l/100km,"[""heated_seats"", ""navigation"", ""parking_sensors""]"
+mercedes-benz,glc class,,,125,kw,,,2017,72700,km,,,automatic,,,,diesel,,,,silver,,5.9,l/100km,[]
+skoda,kodiaq,,,110,kw,,,2018,107400,km,,,automatic,,,,diesel,,,,white,,4.9,l/100km,"[""navigation"", ""parking_sensors""]"
+skoda,octavia,2,,110,kw,,,2023,10,km,,wagon,automatic,dct,,fossil,diesel,,,,silver,,4.5,l/100km,"[""air_conditioning"", ""heated_seats"", ""sunroof""]"
+ford,mustang,5,,331,kw,,,2021,16000,km,8,coupe,manual,,,,petrol,,,,red,,,,[]
+opel,adam,,,51,kw,,,2013,147000,km,,,manual,,,,petrol,,,,blue,,5.3,l/100km,[]
+toyota,yaris cross,,,85,kw,,,2022,6500,km,,,automatic,,,hybrid,hydrogen,,ABSTAIN,,gold,,3.2,l/100km,[]
+fiat,tipo,1,,74,kw,,,2022,500,km,,,manual,,,,petrol,,,,white,,5.8,l/100km,"[""air_conditioning"", ""apple_carplay"", ""climate_control"", ""navigation""]"
+seat,arona,,,81,kw,,,2023,50,km,,,manual,,,,petrol,,,,black,,5.9,l/100km,[]
+peugeot,rifter,1.5,,75,kw,,,2023,10,km,,,manual,,,,diesel,,,,white,,4.3,l/100km,[]
+ford,ecosport,,,92,kw,,,2016,58700,km,,,manual,,,,petrol,,,,black,,5.4,l/100km,[]
+volkswagen,golf plus,,,85,kw,,,2005,105309,km,,,manual,,,,petrol,,,,silver,,7.2,l/100km,[]
+audi,tt,,,132,kw,,,2017,44067,km,,roadster,manual,,,,petrol,,,,black,,6.1,l/100km,"[""heated_seats"", ""navigation""]"
+volkswagen,polo,1.4,,55,kw,,,2002,193500,km,,,manual,,,,petrol,,,,black,,6.4,l/100km,"[""abs"", ""air_conditioning"", ""heated_seats"", ""power_steering""]"
+bmw,3 series,,,105,kw,,,2010,174000,km,,,manual,,,,petrol,,,,blue,,6.3,l/100km,[]
+opel,corsa,,,66,kw,,,2019,31535,km,,,manual,,,,petrol,,,,silver,,,,"[""air_conditioning"", ""electric_windows"", ""parking_sensors""]"
+bmw,5 series,,,250,kw,,,2019,125000,km,,,automatic,,,,petrol,,,,grey,,7.4,l/100km,"[""alloy_wheels"", ""leather_seats"", ""sunroof"", ""tow_bar""]"
+mercedes-benz,slk,,,120,kw,,,2004,69000,km,,convertible,manual,,,fossil,petrol,,,,grey,,8.7,l/100km,[]
+lamborghini,aventador,,,552,kw,,,2016,2960,km,,,automatic,,,,petrol,,,,orange,,16,l/100km,[]
+skoda,kamiq,1,,81,kw,,,2023,1000,km,,,manual,,,,petrol,,,,white,,5.1,l/100km,"[""rear_camera""]"
+hyundai,i30,,,81,kw,,,2023,18,km,,,manual,,,,petrol,,,,silver,,6,l/100km,"[""alloy_wheels"", ""cruise_control"", ""dab_radio"", ""heated_seats"", ""parking_sensors"", ""rear_camera""]"
+audi,a6,3,,235,kw,,,2015,208741,km,,wagon,automatic,,,fossil,diesel,,awd,,black,,6.2,l/100km,"[""alloy_wheels""]"
+audi,a3,1.4,,110,kw,,,2015,113869,km,,convertible,automatic,,,,petrol,,,,grey,,4.9,l/100km,[]
+audi,a4,,,110,kw,,,2019,49800,km,,,automatic,,,,diesel,,,,blue,,4.4,l/100km,[]
+jeep,renegade,,,88,kw,,,2023,99,km,,,manual,,,,petrol,,,,grey,,6.1,l/100km,"[""apple_carplay"", ""navigation""]"
+ford,mondeo,,,110,kw,,,2019,123131,km,,,automatic,,,,diesel,,,,grey,,5.2,l/100km,"[""navigation"", ""parking_sensors"", ""rear_camera""]"
+skoda,fabia,,,55,kw,,,2016,44700,km,,,manual,,,,petrol,,,,white,,4.8,l/100km,[]
+renault,kadjar,,,81,kw,,,2018,94506,km,,,automatic,,,,diesel,,,,black,,3.8,l/100km,"[""navigation"", ""rear_camera""]"
+mercedes-benz,e class,,,125,kw,,,2006,166500,km,,,automatic,,,,diesel,,,,silver,,7.1,l/100km,"[""air_conditioning"", ""tow_bar""]"
+dacia,dokker,,,75,kw,,,2019,53300,km,,,manual,,,,petrol,,,,white,,6.8,l/100km,"[""cruise_control"", ""navigation""]"
+bmw,x5,,,225,kw,,,2012,171900,km,,,automatic,,,,petrol,,,,black,,10.1,l/100km,"[""adaptive_cruise_control""]"
+mercedes-benz,c class,,,143,kw,,,2019,65600,km,,,automatic,,,,diesel,,,,silver,,6.1,l/100km,"[""adaptive_cruise_control"", ""navigation""]"
+volkswagen,golf,,,96,kw,,,2019,37500,km,,,manual,,,,petrol,,,,black,,4.8,l/100km,[]
+skoda,octavia,,,110,kw,,,2023,20,km,,,automatic,,,,petrol,,,,silver,,5.5,l/100km,"[""navigation""]"
+kia,cee'd,,,118,kw,,,2021,22800,km,,,manual,,,,petrol,,,,silver,,5.5,l/100km,"[""heated_seats"", ""navigation"", ""parking_sensors"", ""rear_camera""]"
+audi,q5,2,,185,kw,,direct,2017,41560,km,,,automatic,,,fossil,petrol,,awd,,white,,,,"[""heated_seats"", ""navigation""]"
+volvo,v90,,,173,kw,,,2018,48700,km,,,automatic,,,,diesel,,,,grey,,,,[]
+toyota,auris,,,100,kw,,,2016,108800,km,,,automatic,,,hybrid,ABSTAIN,,,,red,,3.5,l/100km,[]
+mercedes-benz,a class,,,115,kw,,,2013,100000,km,,,manual,,,,petrol,,,,silver,,5.5,l/100km,[]
+opel,zafira,1.6,,100,kw,,,2015,184000,km,,,manual,,,,diesel,,,,grey,,3.9,l/100km,[]
+mercedes-benz,sprinter,,,80,kw,,,2008,320000,km,,,manual,,,,diesel,,,,white,,,,[]
+toyota,yaris,,,192,kw,,,2021,28490,km,,,manual,,,,petrol,,,,black,,8.2,l/100km,[]
+audi,a1,,,110,kw,,,2023,6000,km,,,automatic,,,,petrol,,,,blue,,6.3,l/100km,[]
+mini,countryman,,,105,kw,,,2012,126008,km,,,automatic,,,,diesel,,,,black,,4.8,l/100km,[]
+volkswagen,polo,,,44,kw,,,2000,91800,km,,,manual,,,,petrol,,,,blue,,6.1,l/100km,"[""air_conditioning"", ""heated_seats""]"
+dacia,duster,,,74,kw,,,2020,16000,km,,,manual,,,,petrol,,,,silver,,6.5,l/100km,"[""air_conditioning"", ""navigation"", ""parking_sensors"", ""rear_camera""]"
+mercedes-benz,c class,,,150,kw,,,2013,73000,km,,,automatic,,,,petrol,,,,grey,,6.4,l/100km,[]
+volkswagen,up!,,,61,kw,,,2020,13400,km,,,automatic,,,electric,,,,,black,,,,"[""air_conditioning"", ""alloy_wheels"", ""navigation"", ""parking_sensors"", ""rear_camera""]"
+mercedes-benz,cla class,,,115,kw,,,2014,114100,km,,,automatic,,,,petrol,,,,black,,5.7,l/100km,"[""heated_seats"", ""leather_seats"", ""navigation"", ""rear_camera""]"
+jeep,renegade,,,103,kw,,,2018,109600,km,,,manual,,,,diesel,,,,grey,,,,"[""dab_radio"", ""navigation""]"
+dacia,sandero,,,55,kw,,,2010,137000,km,,,manual,,,,petrol,,,,,,5.9,l/100km,"[""air_conditioning""]"
+opel,crossland x,,,96,kw,,,2021,11950,km,,,automatic,,,,petrol,,,,grey,,4.9,l/100km,"[""navigation""]"
+mercedes-benz,m class,,,165,kw,,,2005,304705,km,,,automatic,,,,diesel,,,,silver,,9.6,l/100km,[]
+bmw,5 series,,,180,kw,,,2010,184525,km,,sedan,automatic,,,,diesel,,,,grey,,6.1,l/100km,"[""head_up_display"", ""leather_seats"", ""sunroof"", ""tow_bar""]"
+bmw,1 series,,,100,kw,,,2016,22600,km,,,manual,,,,petrol,,,,red,,,,[]
+audi,a8,,,283,kw,,,2013,205000,km,,,automatic,,,,diesel,,,,black,,7.4,l/100km,[]
+nissan,qashqai,1.3,,103,kw,,,2019,104000,km,,,manual,,,,petrol,,,,white,,5.3,l/100km,[]
+peugeot,407,,,103,kw,,,2007,130230,km,,,automatic,,,,lpg,,,,grey,,8.6,l/100km,"[""cruise_control"", ""tow_bar""]"
+mazda,mx-5,,,93,kw,,,2012,152000,km,,,manual,,,,petrol,,,,silver,,,,[]
+volkswagen,golf,,,77,kw,,,2013,57080,km,,,manual,,,,diesel,,,,blue,,4.2,l/100km,"[""air_conditioning"", ""heated_seats"", ""parking_sensors""]"
+audi,a4,2,,140,kw,,,2017,96000,km,,,manual,,,,diesel,,,,black,,4.3,l/100km,[]
+toyota,c-hr,,,135,kw,,,2020,20757,km,,,automatic,,,hybrid,,,,,blue,,,,"[""navigation"", ""rear_camera""]"
+mercedes-benz,c class,,,125,kw,,,2015,127572,km,,,automatic,,,,diesel,,,,grey,,,,"[""leather_seats"", ""navigation"", ""sunroof"", ""tow_bar""]"
+mini,cooper,,,100,kw,,,2022,3700,km,,,manual,,,fossil,petrol,,,,red,5,5.3,l/100km,"[""dab_radio"", ""head_up_display"", ""heated_seats"", ""navigation"", ""parking_sensors"", ""rear_camera""]"
+opel,mokka x,,,103,kw,,,2018,111678,km,,,manual,,,,petrol,,,,silver,,6.6,l/100km,"[""heated_seats"", ""navigation"", ""parking_sensors""]"
+hyundai,i20,,,74,kw,,,2020,35000,km,,,manual,,,,petrol,,,,white,,5.9,l/100km,[]
+toyota,proace,,,130,kw,,,2023,10,km,,,automatic,,,,diesel,,,,brown,,5,l/100km,"[""heated_seats"", ""navigation"", ""parking_sensors""]"
+ford,transit,,,103,kw,,,2013,200000,km,,,manual,,,,diesel,,,,blue,,,,[]
+bmw,3 series,,,95,kw,,,2005,193000,km,,,manual,,,,petrol,,,,grey,,,,[]
+ford,fiesta,,,51,kw,,,2008,89000,km,,,manual,,,,petrol,,,,black,,6.1,l/100km,[]
+ford,kuga,2,,140,kw,,,2022,4210,km,,,automatic,,,,diesel,,4wd,,silver,,6.4,l/100km,[]
+volkswagen,caddy,,,75,kw,,,2012,175000,km,,,manual,,,,diesel,,,,blue,,5.7,l/100km,"[""alloy_wheels"", ""heated_seats"", ""navigation"", ""parking_sensors""]"
+audi,q5,2,,140,kw,,,2016,144000,km,,,automatic,,,,diesel,,awd,,grey,,5.7,l/100km,"[""leather_seats"", ""navigation"", ""panoramic_roof""]"
+peugeot,3008,,,132,kw,,,2020,23100,km,,,automatic,,,,diesel,,,,black,,4.9,l/100km,"[""navigation"", ""rear_camera""]"
+volkswagen,passat,,,85,kw,,,2001,70602,km,,,automatic,,,,petrol,,,,silver,,8.4,l/100km,[]
+bmw,3 series,,,103,kw,,,2000,170000,km,,,manual,,,,petrol,,,,black,,8,l/100km,[]
+opel,astra,1,,77,kw,turbo,,2018,121000,km,,wagon,manual,,,fossil,petrol,icev,,,silver,,4.6,l/100km,[]
+audi,a5,,,180,kw,,,2015,91400,km,,convertible,automatic,,,,diesel,,awd,,green,,5.9,l/100km,"[""adaptive_cruise_control""]"
+hyundai,kona,1,,88,kw,,,2019,31700,km,,,manual,,,,petrol,,,,black,,5.3,l/100km,"[""alloy_wheels"", ""heated_seats"", ""navigation"", ""rear_camera""]"
+audi,a4,,,110,kw,,,2017,50817,km,,,automatic,,,,petrol,,,,blue,,5.7,l/100km,"[""alloy_wheels"", ""navigation""]"
+skoda,fabia,1.2,,63,kw,,,2014,112500,km,,wagon,manual,,,,petrol,,,,grey,,5.2,l/100km,[]
+volkswagen,transporter,,,132,kw,,,2014,196000,km,,van,automatic,,,,diesel,,,,silver,,7.5,l/100km,[]
+skoda,superb,,,140,kw,,,2016,89300,km,,,automatic,,,,diesel,,,,black,,5.1,l/100km,[]
+mercedes-benz,m class,,,165,kw,,,2008,195000,km,,,automatic,,,,diesel,,,,white,,9.4,l/100km,[]
+opel,insignia,,,121,kw,turbo,,2017,65516,km,,,manual,,,,petrol,,,,silver,,6,l/100km,"[""air_conditioning"", ""parking_sensors"", ""rear_camera""]"
+volkswagen,caddy,1.4,,96,kw,,,2019,75150,km,,,automatic,dct,,,petrol,,,,grey,,5.9,l/100km,[]
+volkswagen,touran,,,140,kw,,,2017,67000,km,,,automatic,,,,diesel,,,,orange,,4.7,l/100km,"[""navigation"", ""panoramic_roof""]"
+renault,express,1.3,,75,kw,,,2023,18,km,,van,manual,,,fossil,petrol,,,,grey,,6.4,l/100km,"[""air_conditioning"", ""bluetooth"", ""dab_radio""]"
+mercedes-benz,clk,,,165,kw,,,2006,169000,km,,convertible,automatic,,,,diesel,,,,black,,7.7,l/100km,"[""leather_seats"", ""navigation"", ""parking_sensors""]"
+mercedes-benz,c class,,,150,kw,,,2016,107796,km,,,automatic,,,,diesel,,,,white,,4.3,l/100km,[]
+mercedes-benz,c class,,,375,kw,,,2021,24763,km,,,automatic,,,,petrol,,,,silver,,,,[]
+opel,insignia,,,125,kw,,,2017,116000,km,,,manual,,,,diesel,,,,black,,5.3,l/100km,[]
+volkswagen,beetle,1.6,,75,kw,,,2003,158000,km,,convertible,manual,,,fossil,petrol,,,,blue,,7.8,l/100km,[]
+mercedes-benz,glc class,,,155,kw,,,2021,22400,km,,,automatic,,,,petrol,,,,blue,,7.3,l/100km,[]
+volkswagen,t-roc,,,85,kw,,,2018,75903,km,,,manual,,,,petrol,,,,blue,,5.2,l/100km,"[""adaptive_cruise_control"", ""navigation"", ""parking_sensors"", ""tow_bar""]"
+volkswagen,t-cross,,,110,kw,,,2022,12550,km,,,automatic,,,,petrol,,,,beige,,6,l/100km,"[""alloy_wheels"", ""navigation"", ""tow_bar""]"
+opel,corsa,,,74,kw,turbo,,2019,29800,km,,,manual,,,,petrol,,,,orange,,5.9,l/100km,"[""parking_sensors""]"
+renault,captur,1.3,,103,kw,,,2022,2001,km,,,automatic,,,hybrid,petrol,,,,white,,5.6,l/100km,[]
+nissan,qashqai,1.3,l,116,kw,,,2023,500,km,,,automatic,ABSTAIN,,hybrid,petrol,mhv,ABSTAIN,,black,,6.4,l/100km,[]
+mazda,mazda3,,,88,kw,,,2014,98350,km,,,manual,,,,petrol,,,,black,,5.1,l/100km,"[""climate_control"", ""heated_seats"", ""parking_sensors""]"
+hyundai,i20,,,62,kw,,,2019,56834,km,,,manual,,,,petrol,,,,blue,,5.8,l/100km,"[""air_conditioning"", ""central_locking"", ""electric_windows""]"
+audi,q2,,,110,kw,,,2023,1110,km,,,automatic,,,,petrol,,,,red,,6,l/100km,[]
+mercedes-benz,c class,,,115,kw,,,2014,107000,km,,,manual,,,,petrol,,,,silver,,5.1,l/100km,"[""alloy_wheels"", ""heated_seats"", ""parking_sensors""]"
+skoda,octavia,,,125,kw,,,2008,230738,km,,,manual,,,,diesel,,,,silver,,5.9,l/100km,"[""air_conditioning"", ""climate_control"", ""leather_seats""]"
+ABSTAIN,discovery,3,,225,kw,,,2018,103071,km,,,automatic,,,,diesel,,,,grey,,7.6,l/100km,"[""sunroof"", ""tow_bar""]"
+opel,corsa,,,66,kw,,,2017,133211,km,,,automatic,,,,petrol,,,,silver,,5.9,l/100km,"[""heated_seats"", ""parking_sensors""]"
+mini,one,,,70,kw,,,2008,142825,km,,,manual,,,,petrol,,,,yellow,,5.3,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""electric_mirrors"", ""electric_windows""]"
+fiat,500x,,,110,kw,,,2022,16416,km,,,automatic,,,,petrol,,,,blue,,6.9,l/100km,"[""leather_seats""]"
+bmw,x2,,,170,kw,,,2018,186200,km,,,automatic,,,,diesel,,,,blue,,5.3,l/100km,"[""navigation"", ""panoramic_roof"", ""tow_bar""]"
+skoda,kodiaq,2,,140,kw,,,2020,60900,km,,,automatic,dct,,fossil,diesel,,ABSTAIN,,white,,7,l/100km,"[""adaptive_cruise_control"", ""memory_seats""]"
+ABSTAIN,giulietta,,,88,kw,,,2012,176835,km,,,manual,,,,petrol,,,,black,,6.4,l/100km,"[""air_conditioning"", ""alloy_wheels""]"
+volkswagen,golf,,,169,kw,,,2014,94000,km,,,automatic,,,fossil,petrol,,,,white,,6.4,l/100km,"[""navigation"", ""panoramic_roof"", ""rear_camera""]"
+volkswagen,beetle,,,85,kw,,,2004,118000,km,,,automatic,,,,petrol,,,,silver,,8.7,l/100km,[]
+bmw,5 series,,,294,kw,,,2019,67410,km,,,automatic,,,,diesel,,,,black,,6.5,l/100km,[]
+toyota,corolla,,,132,kw,,,2020,30596,km,,,automatic,,,hybrid,,,,,white,,,,[]
+bmw,3 series,,,135,kw,,,2014,136400,km,,,automatic,,,,diesel,,,,brown,,4.9,l/100km,"[""leather_seats"", ""navigation""]"
+mercedes-benz,c class,,,125,kw,,,2013,261700,km,,,automatic,,,,diesel,,,,black,,6.1,l/100km,[]
+audi,a4,,,150,kw,,,2022,1000,km,,,automatic,,,,diesel,,,,silver,,4.7,l/100km,"[""panoramic_roof""]"
+mini,cooper se,,,135,kw,,,2023,1500,km,,,automatic,,,electric,,,,,red,3,,,[]
+volkswagen,golf,,,85,kw,,,2018,117600,km,,,manual,,,,petrol,,,,black,,4.8,l/100km,"[""heated_seats"", ""navigation""]"
+seat,alhambra,2,,130,kw,,,2014,200000,km,,,manual,,,fossil,diesel,,,,black,,5.8,l/100km,[]
+citroen,berlingo,,,96,kw,,,2023,10,km,,,manual,,,,diesel,,,,white,,4.2,l/100km,[]
+renault,captur,,,66,kw,,,2019,30222,km,,,manual,,,,petrol,,,,orange,,5.4,l/100km,"[""air_conditioning""]"
+volkswagen,golf,1.9,,77,kw,,,2008,251000,km,,,manual,,,,diesel,,,,black,,5.1,l/100km,[]
+bmw,4 series,,,135,kw,,,2015,63000,km,,coupe,manual,,,fossil,diesel,,awd,,white,,4.8,l/100km,[]
+renault,grand scenic,,,81,kw,,,2015,94200,km,,,automatic,,,,diesel,,,,black,,4.7,l/100km,[]
+mini,cooper s,,,141,kw,,,2019,78000,km,,,manual,,,,petrol,,,,grey,,6.4,l/100km,"[""head_up_display"", ""rear_camera""]"
+mercedes-benz,eqc 400,,,300,kw,,,2020,31500,km,,,automatic,,,electric,other,,,,grey,,,,"[""adaptive_cruise_control"", ""rear_camera"", ""tow_bar""]"
+audi,q3,2,,140,kw,,,2019,47210,km,,,automatic,,,,diesel,,,,red,,7,l/100km,"[""dab_radio"", ""navigation""]"
+opel,ABSTAIN,,,84,kw,,,2007,390506,km,,van,manual,,,fossil,diesel,,,,blue,,,,[]
+citroen,ds3,,,60,kw,,,2014,61000,km,,,manual,,,,petrol,,,,silver,,4.9,l/100km,[]
+skoda,karoq,,,110,kw,,,2020,63511,km,,,automatic,,,,petrol,,,,blue,,5.2,l/100km,"[""adaptive_cruise_control"", ""dab_radio""]"
+nissan,juke,1,,84,kw,,,2022,15,km,,,manual,,,,petrol,,,,black,,5,l/100km,"[""navigation""]"
+hyundai,i20,,,63,kw,,,2014,115200,km,,,manual,,,,petrol,,,,white,,4.9,l/100km,[]
+porsche,911,,,353,kw,,,2022,11234,km,,,automatic,,,,petrol,,,,black,,10.8,l/100km,"[""adaptive_cruise_control""]"
+volvo,xc90,,,288,kw,,,2021,55300,km,,,automatic,,,hybrid,,,awd,,white,,37,,[]
+ford,focus,,,74,kw,,,2010,72000,km,,,manual,,,,petrol,,,,black,,6.7,l/100km,"[""air_conditioning""]"
+opel,zafira,1.6,,88,kw,,,2017,69878,km,,,manual,,,,diesel,,,,silver,,4.5,l/100km,"[""air_conditioning""]"
+volkswagen,bora,,,85,kw,,,2003,229500,km,,,manual,,,,petrol,,,,black,,8,l/100km,[]
+peugeot,3008,,,96,kw,,,2019,51700,km,,,manual,,,,diesel,,,,white,,3.8,l/100km,"[""electric_tailgate"", ""heated_seats"", ""navigation""]"
+mercedes-benz,gle class,,,143,kw,,,2022,9611,km,,,automatic,,,hybrid,diesel,,,,silver,,0.8,l/100km,"[""tow_bar""]"
+bmw,5 series,,,140,kw,,,2010,154115,km,,,automatic,,,,diesel,,,,white,,,,"[""rear_camera""]"
+seat,alhambra,,,110,kw,,,2018,81900,km,,,automatic,,,,diesel,,,,blue,,5.2,l/100km,"[""navigation"", ""rear_camera""]"
+bmw,5 series,,,190,kw,,,2012,180000,km,,,automatic,,,,diesel,,,,blue,,5.9,l/100km,"[""leather_seats"", ""navigation""]"
+volkswagen,passat,,,110,kw,,,2018,127000,km,,,automatic,,,,petrol,,,,,,5.1,l/100km,"[""navigation"", ""panoramic_roof"", ""tow_bar""]"
+kia,picanto,,,49,kw,,,2020,34400,km,,,manual,,,,petrol,,,,white,,4.4,l/100km,"[""air_conditioning"", ""electric_windows""]"
+volkswagen,t-cross,,,110,kw,,,2023,10,km,,,automatic,,,,petrol,,,,grey,,5.9,l/100km,[]
+ABSTAIN,range rover sport,,,258,kw,,,2023,1900,km,,,automatic,,,,diesel,,,,grey,,,,[]
+volvo,s90,,,184,kw,,,2019,30095,km,,,automatic,,,,petrol,,,,white,,6.6,l/100km,"[""apple_carplay"", ""navigation"", ""tow_bar""]"
+ABSTAIN,defender,,,90,kw,,,2013,90000,km,,pickup,manual,,,,diesel,,,,black,,11.1,l/100km,[]
+jaguar,e-pace,,,132,kw,,,2018,45500,km,,,automatic,,,,diesel,,,,black,,6.1,l/100km,[]
+bmw,x1,,,110,kw,,,2021,33882,km,,,automatic,,,,diesel,,,,beige,,4.3,l/100km,"[""heated_seats"", ""navigation"", ""tow_bar""]"
+bmw,,,,100,kw,,,2021,18700,km,,,automatic,,,,petrol,,,,black,,5.3,l/100km,"[""head_up_display"", ""tow_bar""]"
+renault,clio,,,43,kw,,,2006,219138,km,,,manual,,,,petrol,,,,grey,,6,l/100km,[]
+mercedes-benz,e class,,,200,kw,,,2010,158988,km,,,automatic,,,,petrol,,,,silver,,9.6,l/100km,[]
+mercedes-benz,sprinter,,,80,kw,,,2007,332523,km,,,manual,,,,diesel,,,,white,,9.4,l/100km,[]
+audi,a5,3,,180,kw,,,2015,65004,km,,ABSTAIN,automatic,,,,diesel,,awd,,white,,5.8,l/100km,"[""adaptive_cruise_control"", ""lane_departure_warning"", ""rear_camera""]"
+opel,grandland x,,,96,kw,,,2021,32500,km,,,automatic,,,,petrol,,,,grey,,6.7,l/100km,[]
+volkswagen,passat,,,88,kw,,,2017,183515,km,,,manual,,,,diesel,,,,silver,,3.8,l/100km,"[""adaptive_cruise_control"", ""heated_seats"", ""navigation"", ""tow_bar""]"
+hyundai,i30,1,,88,kw,,,2023,100,km,,,manual,,,,petrol,,,,grey,,6.2,l/100km,[]
+opel,corsa,,,74,kw,,,2015,72000,km,,,manual,,,,petrol,,,,grey,,5.1,l/100km,"[""heated_seats"", ""leather_seats"", ""navigation""]"
+volkswagen,sharan,,,85,kw,,,2002,143000,km,,,manual,,,fossil,petrol,,,,blue,,9.7,l/100km,"[""air_conditioning""]"
+ABSTAIN,defender,,,386,kw,,,2022,12000,km,,,automatic,,,,petrol,,,,black,,12.8,l/100km,"[""head_up_display"", ""keyless_entry"", ""panoramic_roof""]"
+skoda,octavia,,,180,kw,,,2023,10,km,,,automatic,,,,petrol,,,,white,,6.5,l/100km,"[""navigation""]"
+opel,mokka,,,96,kw,turbo,direct,2022,1900,km,,,automatic,,,,petrol,,,,silver,,,,[]
+toyota,corolla,,,132,kw,,,2021,23000,km,,,automatic,,,hybrid,ABSTAIN,,,,grey,,3.7,l/100km,"[""navigation""]"
+renault,megane,,,114,kw,,,2023,90,km,,,automatic,,,,petrol,,,,black,,8.5,l/100km,[]
+mini,countryman,,,82,kw,,,2011,91000,km,,,manual,,,,diesel,,,,black,,4.9,l/100km,[]
+opel,corsa,,,66,kw,,,2018,52550,km,,,manual,,,,petrol,,,,blue,,5.7,l/100km,[]
+ford,fiesta,,,51,kw,,,2008,143430,km,,,manual,,,,petrol,,,,black,,,,[]
+ford,fiesta,,,59,kw,,,2008,283213,km,,,automatic,,,,petrol,,,,grey,,6.6,l/100km,"[""air_conditioning"", ""electric_windows""]"
+honda,civic,,,95,kw,,,2017,52700,km,,,automatic,,,,petrol,,,,red,,5,l/100km,"[""adaptive_cruise_control"", ""rear_camera""]"
+seat,alhambra,2,,110,kw,,,2021,20949,km,,,automatic,dct,6,fossil,diesel,,,,grey,,5.3,l/100km,"[""alloy_wheels"", ""dab_radio"", ""panoramic_roof"", ""rear_camera"", ""tow_bar""]"
+dacia,duster,,,110,kw,,,2022,50,km,,,manual,,,,petrol,,,,orange,,6.1,l/100km,"[""heated_seats"", ""rear_camera""]"
+seat,ateca,,,110,kw,,,2022,10000,km,,,automatic,,,,petrol,,,,grey,,5.6,l/100km,"[""navigation"", ""parking_sensors"", ""premium_audio"", ""tow_bar""]"
+citroen,c4 cactus,,,81,kw,,,2019,111874,km,,,manual,,,,petrol,,,,red,,4.6,l/100km,"[""air_conditioning"", ""alloy_wheels"", ""navigation"", ""parking_sensors""]"
+volkswagen,polo,1.2,,40,kw,,,2002,169000,km,,,manual,,,,petrol,,,,silver,,5.8,l/100km,[]
+porsche,911,,,294,kw,,,2015,29950,km,,convertible,automatic,,,fossil,petrol,,,,white,,10,l/100km,"[""premium_audio""]"
+mercedes-benz,slk,,,150,kw,,,2000,118000,km,,roadster,manual,,,,petrol,,,,silver,,9.9,l/100km,[]
+volkswagen,id.3,,,150,kw,,,2020,16600,km,,,automatic,,,electric,other,,,,white,,,,"[""adaptive_cruise_control""]"
+ford,focus,,,92,kw,,,2014,89000,km,,,manual,,,,petrol,,,,blue,,5,l/100km,[]
+volvo,xc60,,,140,kw,,,2020,99000,km,,,automatic,,,,diesel,,,,black,,6.1,l/100km,"[""leather_seats"", ""rear_camera""]"
+audi,a3,,,110,kw,,,2020,37095,km,,,automatic,,,hybrid,,,,,yellow,,,,[]
+ABSTAIN,range rover evoque,,,110,kw,,,2017,157383,km,,,manual,,,,diesel,,,,grey,,4.8,l/100km,"[""panoramic_roof""]"
+bmw,1 series,,,125,kw,,,2013,79000,km,,,manual,,,,petrol,,,,black,,5.7,l/100km,[]
+fiat,500,,,51,kw,,,2022,100,km,,,manual,,,hybrid,petrol,,,,orange,,5.3,l/100km,"[""apple_carplay"", ""bluetooth"", ""panoramic_roof""]"
+nissan,qashqai,,,103,kw,,,2022,7626,km,,,manual,,,,petrol,,,,black,,5.8,l/100km,"[""rear_camera""]"
+renault,captur,,,81,kw,,,2018,49440,km,,,manual,,,,diesel,,,,red,,3.7,l/100km,"[""navigation"", ""parking_sensors""]"
+volkswagen,caddy,,,84,kw,,,2022,12300,km,,,manual,,,,petrol,,,,beige,,6.5,l/100km,"[""adaptive_cruise_control"", ""heated_seats""]"
+dodge,ram,5.7,l,295,kw,,,2020,82430,km,,,automatic,,,,petrol,,,,grey,,,,"[""leather_seats""]"
