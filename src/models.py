@@ -199,9 +199,12 @@ class Vehicle(BaseModel):
         description="Vehicle condition as reported by the seller (new=unused, excellent=near-perfect, very good=minor wear, good=normal used, fair=noticeable wear, poor=significant issues, salvage=written-off or insurance total loss)",
     )
 
-    color: Optional[str] = Field(
+    color: Literal[
+        "black", "white", "silver", "grey", "red", "blue", "green",
+        "yellow", "orange", "brown", "beige", "gold", "purple", "other", None,
+    ] = Field(
         default=None,
-        description="Exterior paint or body color of the vehicle, in lowercase (e.g. red, black, white, silver, grey, blue, green, yellow, orange, brown, beige)",
+        description="Exterior paint or body color of the vehicle. Map manufacturer color names to the closest standard value (e.g. 'Midnight Black' → 'black', 'Pearl White' → 'white'). Use 'other' for colors that do not fit any standard value.",
     )
 
     doors: Optional[int] = Field(
