@@ -1,126 +1,288 @@
 [
-    {
-        "input": {"attribute": "brand", "x": "mercedes", "y": "mercedes-benz"},
-        "output": {"reasoning": "'mercedes' is the common shorthand for the manufacturer officially known as 'mercedes-benz'.", "is_match": true}
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "mercedes",
+      "y": "mercedes-benz"
     },
-    {
-        "input": {"attribute": "brand", "x": "mercedes-benz", "y": "mercedes"},
-        "output": {"reasoning": "'mercedes-benz' is the official name; 'mercedes' is its universally accepted shorthand — same manufacturer.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "brand", "x": "vw", "y": "volkswagen"},
-        "output": {"reasoning": "'vw' is the standard abbreviation for 'volkswagen'.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "brand", "x": "chevy", "y": "chevrolet"},
-        "output": {"reasoning": "'chevy' is the common nickname for 'chevrolet'.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "brand", "x": "alfa romeo", "y": "alfa-romeo"},
-        "output": {"reasoning": "Same brand, hyphen vs space difference only.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "model", "x": "serie 3", "y": "3 series"},
-        "output": {"reasoning": "'serie 3' is the Spanish/French name for the BMW '3 series' — same model line.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "model", "x": "t roc", "y": "t-roc"},
-        "output": {"reasoning": "Same Volkswagen model, spacing vs hyphen difference only.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "model", "x": "c 350", "y": "c350"},
-        "output": {"reasoning": "Same Mercedes model, spacing difference only.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "submodel", "x": "320 d", "y": "320d"},
-        "output": {"reasoning": "Same BMW submodel, spacing difference only.", "is_match": true}
-    },
-    {
-        "input": {"attribute": "brand", "x": "toyota", "y": "honda"},
-        "output": {"reasoning": "'toyota' and 'honda' are two entirely distinct manufacturers.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "brand", "x": "fiat", "y": "alfa-romeo"},
-        "output": {"reasoning": "Fiat and Alfa Romeo are separate brands (both under Stellantis, but distinct marques).", "is_match": false}
-    },
-    {
-        "input": {"attribute": "brand", "x": "skoda", "y": "volkswagen"},
-        "output": {"reasoning": "Skoda is a separate brand from Volkswagen despite being in the same group.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "corolla", "y": "corolla cross"},
-        "output": {"reasoning": "'corolla cross' is a distinct SUV variant — not the same as the base 'corolla' sedan/hatchback.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "corolla", "y": "corolla verso"},
-        "output": {"reasoning": "'corolla verso' is a distinct MPV/compact van body style — not the same as the base 'corolla'.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "xc40", "y": "xc60"},
-        "output": {"reasoning": "'xc40' and 'xc60' are two different Volvo SUV models.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "tts", "y": "tt"},
-        "output": {"reasoning": "'tts' is a higher-performance variant of the Audi TT — they are distinct models.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "trim_level", "x": "titanium", "y": "titanium sport"},
-        "output": {"reasoning": "'titanium sport' is a distinct trim above 'titanium' — the 'sport' qualifier makes it a different level.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "trim_level", "x": "titanium", "y": "titanium x"},
-        "output": {"reasoning": "'titanium x' is a distinct trim above 'titanium' — the 'x' qualifier makes it a different level.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "trim_level", "x": "comfortline style", "y": "comfortline"},
-        "output": {"reasoning": "'comfortline style' adds the 'style' qualifier, making it a distinct trim — not the same as 'comfortline'.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "500x", "y": "500"},
-        "output": {"reasoning": "The 'x' suffix in '500x' denotes a distinct SUV model — not the same as the base '500' city car.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "xceed", "y": "ceed"},
-        "output": {"reasoning": "'xceed' is a separate crossover model from Kia; 'ceed' is a different hatchback model. Sharing a name root does not make them the same model.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "submodel", "x": "touring", "y": "d xdrive touring (e61)"},
-        "output": {"reasoning": "'d xdrive touring (e61)' is a specific engine/drivetrain/generation variant; 'touring' alone is not a match for that more qualified entry.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "golf gti", "y": "golf"},
-        "output": {"reasoning": "'golf gti' is a distinct performance variant with a different engine and suspension tune — not the same as the base 'golf'. The 'gti' suffix is a meaningful qualifier, not mere formatting.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "308 sw", "y": "308"},
-        "output": {"reasoning": "'308 sw' is the estate/wagon body style of the Peugeot 308, listed as a separate model. 'SW' is a meaningful body-style qualifier — not the same vehicle as the '308' hatchback.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "transit connect", "y": "transit custom"},
-        "output": {"reasoning": "'transit connect' (compact van) and 'transit custom' (medium van) are distinct Ford Transit family members of different sizes and payloads — not the same model.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "submodel", "x": "long range", "y": "long range awd"},
-        "output": {"reasoning": "'long range awd' specifies all-wheel drive — a distinct drivetrain variant from 'long range' alone. The AWD qualifier makes it a different catalog entry.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "trim_level", "x": "se", "y": "s"},
-        "output": {"reasoning": "'SE' (Sport Edition) and 'S' are distinct trim levels in many manufacturers' lineups — SE is above S and has different standard equipment. One letter difference, but they are not the same trim.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "xsara picasso", "y": "xsara"},
-        "output": {"reasoning": "'xsara picasso' is a distinct MPV model from Citroën — not the same as the 'xsara' hatchback. The 'picasso' suffix denotes a different body style and platform; it is not merely a variant name.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "model", "x": "grand cherokee l", "y": "grand cherokee"},
-        "output": {"reasoning": "'grand cherokee l' is the long-wheelbase, 3-row version launched in 2021 — a distinct model from the standard 2-row 'grand cherokee'. The 'l' suffix is a meaningful qualifier, not a formatting difference.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "submodel", "x": "gti", "y": "gti performance"},
-        "output": {"reasoning": "'gti performance' is a distinct higher-output variant (245hp) compared to the standard 'gti' (230hp). 'gti' is not shorthand for 'gti performance' — they are separate catalog entries.", "is_match": false}
-    },
-    {
-        "input": {"attribute": "trim_level", "x": "inscription", "y": "inscription expression"},
-        "output": {"reasoning": "'inscription expression' is a distinct sub-tier within Volvo's Inscription family — not the same as base 'inscription'. 'expression' is a meaningful additional qualifier.", "is_match": false}
+    "output": {
+      "reasoning": "'mercedes' is the universally accepted shorthand for the manufacturer officially known as 'mercedes-benz' — same brand.",
+      "is_match": true
     }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "vw",
+      "y": "volkswagen"
+    },
+    "output": {
+      "reasoning": "'vw' is the standard abbreviation for 'volkswagen' — same brand.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "chevy",
+      "y": "chevrolet"
+    },
+    "output": {
+      "reasoning": "'chevy' is the common nickname for 'chevrolet' — same brand.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "alfa romeo",
+      "y": "alfa-romeo"
+    },
+    "output": {
+      "reasoning": "Same brand, hyphen vs space only.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "brand: saturn, model: vue, year: 2008, color: silver, mileage: 130000, body_type: suv",
+      "y": "brand: buick, model: vue, year: 2008, color: silver, mileage: 130000, body_type: suv"
+    },
+    "output": {
+      "reasoning": "Saturn and Buick are two distinct GM brands — Saturn was discontinued in 2010; Buick is still active. Identical year, mileage, color, and body_type are irrelevant: the brands themselves are different entities.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "brand: mercury, model: milan, year: 2010, fuel_type: petrol, transmission_type: automatic",
+      "y": "brand: ford, model: milan, year: 2010, fuel_type: petrol, transmission_type: automatic"
+    },
+    "output": {
+      "reasoning": "Mercury was Ford's defunct marque (discontinued 2011), but Mercury and Ford are distinct brands — the Mercury Milan and Ford Fusion are platform siblings marketed under different brands. Context matching does not make them the same brand.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "brand: gmc, model: sierra, year: 2012, body_type: pickup, cylinders: 8",
+      "y": "brand: chevrolet, model: sierra, year: 2012, body_type: pickup, cylinders: 8"
+    },
+    "output": {
+      "reasoning": "GMC and Chevrolet are separate GM brands. They share platforms (Sierra/Silverado) but are marketed as distinct marques to distinct dealer networks. Context matching is irrelevant.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "brand: dodge, model: 1500, year: 2011, body_type: pickup",
+      "y": "brand: ram, model: 1500, year: 2011, body_type: pickup"
+    },
+    "output": {
+      "reasoning": "Dodge and Ram are separate brands — Ram was spun off as its own marque in 2010. Pre-split trucks were sold as 'Dodge Ram 1500' but the brand and model are formally distinct today.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "skoda",
+      "y": "volkswagen"
+    },
+    "output": {
+      "reasoning": "Skoda and Volkswagen are distinct brands within the VW Group.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "fiat",
+      "y": "alfa-romeo"
+    },
+    "output": {
+      "reasoning": "Fiat and Alfa Romeo are distinct Stellantis marques.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "brand",
+      "x": "toyota",
+      "y": "honda"
+    },
+    "output": {
+      "reasoning": "Toyota and Honda are unrelated manufacturers.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "serie 3",
+      "y": "3 series"
+    },
+    "output": {
+      "reasoning": "Spanish/French name for the BMW '3 series' — same model line.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "t roc",
+      "y": "t-roc"
+    },
+    "output": {
+      "reasoning": "Same Volkswagen model, hyphen vs space only.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "c 350",
+      "y": "c350"
+    },
+    "output": {
+      "reasoning": "Same Mercedes model, spacing only.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "f-150",
+      "y": "f150"
+    },
+    "output": {
+      "reasoning": "Same Ford pickup model, hyphen only.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "classe e",
+      "y": "e class"
+    },
+    "output": {
+      "reasoning": "French name for the Mercedes 'E-Class'.",
+      "is_match": true
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "brand: gmc, model: sierra, year: 2012, body_type: pickup, cylinders: 8",
+      "y": "brand: gmc, model: silverado, year: 2012, body_type: pickup, cylinders: 8"
+    },
+    "output": {
+      "reasoning": "Sierra (GMC) and Silverado (Chevrolet) are platform siblings but distinct models under different marketing names. Context matching is irrelevant — the model names refer to different real-world model lines.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "brand: renault, model: 19, year: 1995, fuel_type: petrol",
+      "y": "brand: renault, model: gol, year: 1995, fuel_type: petrol"
+    },
+    "output": {
+      "reasoning": "Renault 19 and (VW) Gol are entirely unrelated models. A shared brand field does not make different model names equivalent.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "brand: renault, model: dokker, year: 2018, body_type: van",
+      "y": "brand: renault, model: express, year: 2018, body_type: van"
+    },
+    "output": {
+      "reasoning": "Dokker and Express are distinct compact-van models (Dacia Dokker vs Renault Express). Both are vans, but they are different model lines.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "corolla",
+      "y": "corolla cross"
+    },
+    "output": {
+      "reasoning": "'corolla cross' is a distinct SUV variant, not the same vehicle as the base 'corolla'.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "xc40",
+      "y": "xc60"
+    },
+    "output": {
+      "reasoning": "Two different Volvo SUV models of different sizes.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "golf gti",
+      "y": "golf"
+    },
+    "output": {
+      "reasoning": "'golf gti' is a distinct performance variant with different engine and tuning — the 'gti' suffix is a meaningful qualifier, not formatting.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "transit connect",
+      "y": "transit custom"
+    },
+    "output": {
+      "reasoning": "'transit connect' (compact) and 'transit custom' (medium) are distinct Ford Transit family members of different sizes — not the same model.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "grand cherokee l",
+      "y": "grand cherokee"
+    },
+    "output": {
+      "reasoning": "'grand cherokee l' is the long-wheelbase 3-row version — a distinct model from the 2-row 'grand cherokee'.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "xceed",
+      "y": "ceed"
+    },
+    "output": {
+      "reasoning": "'xceed' is a separate Kia crossover model; 'ceed' is a hatchback — different platforms and body styles.",
+      "is_match": false
+    }
+  },
+  {
+    "input": {
+      "attribute": "model",
+      "x": "e 320",
+      "y": "320"
+    },
+    "output": {
+      "reasoning": "'e 320' is a Mercedes E-Class variant (E320); '320' typically denotes a BMW 3 Series (320i/320d). Different brands, different models — context of the rest of the record may clarify, but as model names they are not equivalent.",
+      "is_match": false
+    }
+  }
 ]

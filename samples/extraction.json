@@ -13,8 +13,6 @@
       "year": 2012,
       "mileage": 267200,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "suv",
       "transmission_type": "automatic",
@@ -29,7 +27,10 @@
       "doors": 5,
       "fuel_consumption": null,
       "fuel_consumption_unit": null,
-      "equipment": ["heated_seats", "parking_sensors"]
+      "equipment": [
+        "heated_seats",
+        "parking_sensors"
+      ]
     }
   },
   {
@@ -46,8 +47,6 @@
       "year": 2019,
       "mileage": 43590,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": "s-line",
       "cylinders": 3,
       "body_type": "hatchback",
       "transmission_type": "automatic",
@@ -62,7 +61,11 @@
       "doors": 5,
       "fuel_consumption": null,
       "fuel_consumption_unit": null,
-      "equipment": ["adaptive_cruise_control", "premium_audio", "navigation"]
+      "equipment": [
+        "adaptive_cruise_control",
+        "premium_audio",
+        "navigation"
+      ]
     }
   },
   {
@@ -79,8 +82,6 @@
       "year": 2015,
       "mileage": 106772,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 6,
       "body_type": "coupe",
       "transmission_type": "automatic",
@@ -95,7 +96,9 @@
       "doors": 2,
       "fuel_consumption": null,
       "fuel_consumption_unit": null,
-      "equipment": ["head_up_display"]
+      "equipment": [
+        "head_up_display"
+      ]
     }
   },
   {
@@ -112,8 +115,6 @@
       "year": 2007,
       "mileage": 213000,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 8,
       "body_type": "sedan",
       "transmission_type": "manual",
@@ -145,8 +146,6 @@
       "year": 2007,
       "mileage": 212000,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "convertible",
       "transmission_type": "manual",
@@ -161,7 +160,11 @@
       "doors": 2,
       "fuel_consumption": null,
       "fuel_consumption_unit": null,
-      "equipment": ["air_conditioning", "leather_seats", "alloy_wheels"]
+      "equipment": [
+        "air_conditioning",
+        "leather_seats",
+        "alloy_wheels"
+      ]
     }
   },
   {
@@ -178,8 +181,6 @@
       "year": 2013,
       "mileage": 155000,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": "gt/cs",
       "cylinders": 8,
       "body_type": "coupe",
       "transmission_type": "automatic",
@@ -211,8 +212,6 @@
       "year": 2009,
       "mileage": 220000,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "hatchback",
       "transmission_type": "manual",
@@ -244,8 +243,6 @@
       "year": 2020,
       "mileage": 81000,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": "experience",
       "cylinders": null,
       "body_type": "hatchback",
       "transmission_type": "automatic",
@@ -260,7 +257,10 @@
       "doors": 5,
       "fuel_consumption": null,
       "fuel_consumption_unit": null,
-      "equipment": ["apple_carplay", "android_auto"]
+      "equipment": [
+        "apple_carplay",
+        "android_auto"
+      ]
     }
   },
   {
@@ -277,8 +277,6 @@
       "year": 2012,
       "mileage": 127949,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "sedan",
       "transmission_type": "automatic",
@@ -310,8 +308,6 @@
       "year": 2016,
       "mileage": 7076,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": "1lt",
       "cylinders": 4,
       "body_type": "sedan",
       "transmission_type": "automatic",
@@ -343,8 +339,6 @@
       "year": 2004,
       "mileage": 128400,
       "mileage_unit": "mi",
-      "submodel": "xl",
-      "trim_level": null,
       "cylinders": 6,
       "body_type": "suv",
       "transmission_type": "automatic",
@@ -376,8 +370,6 @@
       "year": 2020,
       "mileage": 10449,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "suv",
       "transmission_type": "automatic",
@@ -409,8 +401,6 @@
       "year": 2014,
       "mileage": 17805,
       "mileage_unit": "mi",
-      "submodel": "access cab",
-      "trim_level": null,
       "cylinders": null,
       "body_type": "pickup",
       "transmission_type": null,
@@ -442,8 +432,6 @@
       "year": 2016,
       "mileage": 73061,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": null,
       "body_type": "pickup",
       "transmission_type": "automatic",
@@ -475,8 +463,6 @@
       "year": 2020,
       "mileage": 1419,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": "gt premium",
       "cylinders": 8,
       "body_type": "coupe",
       "transmission_type": null,
@@ -508,8 +494,6 @@
       "year": 2018,
       "mileage": 27205,
       "mileage_unit": "mi",
-      "submodel": "300h",
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "suv",
       "transmission_type": "automatic",
@@ -541,8 +525,6 @@
       "year": 2019,
       "mileage": 29497,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 6,
       "body_type": "van",
       "transmission_type": "automatic",
@@ -574,8 +556,6 @@
       "year": 2007,
       "mileage": 60798,
       "mileage_unit": "mi",
-      "submodel": null,
-      "trim_level": "x",
       "cylinders": 6,
       "body_type": "suv",
       "transmission_type": "manual",
@@ -607,8 +587,6 @@
       "year": 2013,
       "mileage": 274999,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "suv",
       "transmission_type": "manual",
@@ -623,7 +601,11 @@
       "doors": 5,
       "fuel_consumption": null,
       "fuel_consumption_unit": null,
-      "equipment": ["leather_seats", "navigation", "parking_sensors"]
+      "equipment": [
+        "leather_seats",
+        "navigation",
+        "parking_sensors"
+      ]
     }
   },
   {
@@ -640,8 +622,6 @@
       "year": 2010,
       "mileage": 22499,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "van",
       "transmission_type": "manual",
@@ -673,8 +653,6 @@
       "year": 2010,
       "mileage": 194999,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "hatchback",
       "transmission_type": "manual",
@@ -706,8 +684,6 @@
       "year": 2012,
       "mileage": 154999,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "hatchback",
       "transmission_type": "manual",
@@ -739,8 +715,6 @@
       "year": 2023,
       "mileage": 32499,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "hatchback",
       "transmission_type": "automatic",
@@ -772,8 +746,6 @@
       "year": 2008,
       "mileage": 17499,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "sedan",
       "transmission_type": "automatic",
@@ -805,8 +777,6 @@
       "year": 2022,
       "mileage": 32499,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 3,
       "body_type": "hatchback",
       "transmission_type": "manual",
@@ -838,8 +808,6 @@
       "year": 2019,
       "mileage": null,
       "mileage_unit": null,
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "suv",
       "transmission_type": "automatic",
@@ -871,8 +839,6 @@
       "year": 2020,
       "mileage": null,
       "mileage_unit": null,
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "suv",
       "transmission_type": "automatic",
@@ -904,8 +870,6 @@
       "year": 2018,
       "mileage": null,
       "mileage_unit": null,
-      "submodel": null,
-      "trim_level": null,
       "cylinders": 4,
       "body_type": "hatchback",
       "transmission_type": "manual",
@@ -937,8 +901,6 @@
       "year": 2020,
       "mileage": 77499,
       "mileage_unit": "km",
-      "submodel": null,
-      "trim_level": null,
       "cylinders": null,
       "body_type": "suv",
       "transmission_type": "automatic",
