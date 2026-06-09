@@ -1,20 +1,20 @@
 """
-catalog.py  —  build the knowledge catalog 𝒦 for brand and model from DVM-CAR.
+catalog.py  -  build the knowledge catalog K for brand and model from DVM-CAR.
 
-The catalog instantiates the open-domain attributes 𝒦_brand and 𝒦_model used
+The catalog instantiates the open-domain attributes K_brand and K_model used
 throughout the experiments. For each attribute we:
 
   1. Extract unique canonical values from data/dvm.csv.
   2. Apply minimal normalization (lowercase + strip).
-  3. Embed with OpenAI `text-embedding-3-small` (L2-normalized → cosine sim).
+  3. Embed with OpenAI `text-embedding-3-small` (L2-normalized -> cosine sim).
   4. Build a FAISS HNSW index (M=32, ef_search=64) as reported in the paper.
 
 Output layout (matches the format expected by `src.normalizer.Normalizer`,
 so experiments can instantiate `Normalizer(persist_directory=<out_dir>)`):
 
-  <out_dir>/catalog.db          — SQLite: catalog + hnsw_values + mappings tables
-  <out_dir>/hnsw_brand.index    — FAISS HNSW index for brand
-  <out_dir>/hnsw_model.index    — FAISS HNSW index for model
+  <out_dir>/catalog.db          - SQLite: catalog + hnsw_values + mappings tables
+  <out_dir>/hnsw_brand.index    - FAISS HNSW index for brand
+  <out_dir>/hnsw_model.index    - FAISS HNSW index for model
 
 Usage:
     uv run python scripts/catalog.py

@@ -1,5 +1,5 @@
 """
-ablation_k.py — A2 ablation: sensitivity of IE+IR+ER to retrieval depth k.
+ablation_k.py - A2 ablation: sensitivity of IE+IR+ER to retrieval depth k.
 
 For each dataset (default: autoscout24, mucars):
   (1) Run IE once.
@@ -184,7 +184,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         ds = report["datasets"][dataset]
         ie = ds["ie_metrics"]
 
-        # ─── Col 0: model accuracy + macro F1 ──────────────────────────────
+        # Col 0: model accuracy + macro F1
         ax = axes[row, 0]
         vals_acc, cis_acc = _series(ds, "model_acc", k_grid)
         vals_f1, cis_f1 = _series(ds, "model_f1", k_grid)
@@ -202,7 +202,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
             ax.set_xlabel(r"Retrieval depth $k$")
         ax.set_ylabel("Metric value", fontsize=9.5, labelpad=3)
 
-        # ─── Col 1: novelty P / R / F1 ─────────────────────────────────────
+        # Col 1: novelty P / R / F1
         ax = axes[row, 1]
         vals_p, cis_p = _series(ds, "novelty_p", k_grid)
         vals_r, cis_r = _series(ds, "novelty_r", k_grid)
@@ -222,7 +222,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         if row == n_rows - 1:
             ax.set_xlabel(r"Retrieval depth $k$")
 
-        # ─── Col 2: catalog compression ────────────────────────────────────
+        # Col 2: catalog compression
         ax = axes[row, 2]
         vals_mc, _ = _series(ds, "model_compression", k_grid)
         vals_bc, _ = _series(ds, "brand_compression", k_grid)

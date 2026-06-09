@@ -1,11 +1,11 @@
 """
-summarize_reports.py — print the consolidated VN evaluation tables from
+summarize_reports.py - print the consolidated VN evaluation tables from
 the saved data/{dataset}_normalizer_report_{suffix}.json files.
 
 Loads three reports per dataset:
-  - {dataset}_normalizer_report_3way.json    → ie + threshold(τ=0.90) + llm
-  - {dataset}_normalizer_report_thr085.json  → threshold(τ=0.85)
-  - {dataset}_normalizer_report_thr095.json  → threshold(τ=0.95)
+  - {dataset}_normalizer_report_3way.json    -> ie + threshold(τ=0.90) + llm
+  - {dataset}_normalizer_report_thr085.json  -> threshold(τ=0.85)
+  - {dataset}_normalizer_report_thr095.json  -> threshold(τ=0.95)
 
 and prints:
   (1) Intrinsic accuracy / macro-F1 per (attribute, variant, dataset)
@@ -95,9 +95,9 @@ def main() -> None:
             r3[ds]["intrinsic"]["llm"], r3[ds]["macro_prf"]["llm"], a))
         print()
 
-    # (2) Novelty detection — Precision / Recall / F1 on the novel class  [95% bootstrap CI]
+    # (2) Novelty detection - Precision / Recall / F1 on the novel class  [95% bootstrap CI]
     print("=" * 160)
-    print("Novelty detection on (brand, model) pairs — DVM-CAR as known set  [95% bootstrap CI]")
+    print("Novelty detection on (brand, model) pairs - DVM-CAR as known set  [95% bootstrap CI]")
     print("=" * 160)
     hdr = f"{'variant':<22s} " + " ".join(
         [f"{ds + ' P [CI]':>24s} {ds + ' R [CI]':>24s} {ds + ' F1 [CI]':>24s}" for ds in args.datasets]
@@ -128,7 +128,7 @@ def main() -> None:
 
     # (3) Canonicalization compression on `model`
     print("=" * 80)
-    print("Canonicalization compression (model) — IE-unique -> VN-unique")
+    print("Canonicalization compression (model) - IE-unique -> VN-unique")
     print("=" * 80)
     hdr = f"{'variant':<22s} " + " ".join([f"{ds:>24s}" for ds in args.datasets])
     print(hdr)

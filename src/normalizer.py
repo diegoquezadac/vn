@@ -81,10 +81,10 @@ class Normalizer:
     """
     Vehicle representation normalizer. Three modes controlled by ``match_mode``:
 
-    - ``"off"``      — extraction only (IE). No catalog, no FAISS, no ER.
-    - ``"threshold"`` — IE + IR. Top-1 candidate is accepted iff its cosine
-                       similarity is ≥ ``match_threshold``; else novel.
-    - ``"llm"``      — Full pipeline. IE → IR → LLM entity-resolution with
+    - ``"off"``      - extraction only (IE). No catalog, no FAISS, no ER.
+    - ``"threshold"`` - IE + IR. Top-1 candidate is accepted iff its cosine
+                       similarity is >= ``match_threshold``; else novel.
+    - ``"llm"``      - Full pipeline. IE -> IR -> LLM entity-resolution with
                        full-vehicle context + intra-batch dedup.
 
     Catalog and HNSW values are persisted in {persist_directory}/catalog.db (SQLite).
@@ -143,7 +143,7 @@ class Normalizer:
             dim = _EMBED_DIM[embedding_model]
             os.makedirs(persist_directory, exist_ok=True)
 
-            # ── SQLite: catalog + hnsw_values ─────────────────────────────────
+            # SQLite: catalog + hnsw_values
             catalog_db_path = os.path.join(persist_directory, "catalog.db")
             catalog_conn = sqlite3.connect(catalog_db_path)
             catalog_conn.execute(
@@ -171,7 +171,7 @@ class Normalizer:
                         catalog_conn.executemany("INSERT OR IGNORE INTO catalog VALUES (?, ?)", rows)
                         catalog_conn.commit()
                         os.rename(old_path, old_path + ".bak")
-                        print(f"[migration] catalog.json → catalog.db ({len(rows)} entries)")
+                        print(f"[migration] catalog.json -> catalog.db ({len(rows)} entries)")
                         break
 
             if not catalog_conn.execute("SELECT 1 FROM hnsw_values LIMIT 1").fetchone():
@@ -187,7 +187,7 @@ class Normalizer:
                     catalog_conn.executemany("INSERT OR IGNORE INTO hnsw_values VALUES (?, ?, ?)", rows)
                     catalog_conn.commit()
                     os.rename(old_hnsw, old_hnsw + ".bak")
-                    print(f"[migration] hnsw_values.json → catalog.db ({len(rows)} entries)")
+                    print(f"[migration] hnsw_values.json -> catalog.db ({len(rows)} entries)")
 
             # Load catalog into memory
             catalog = get_empty_catalog()
@@ -203,14 +203,14 @@ class Normalizer:
                 if attr in hnsw_values:
                     hnsw_values[attr].append(val)
 
-            # Load mapping cache: (attr, brand, raw_value) → canonical
+            # Load mapping cache: (attr, brand, raw_value) -> canonical
             mapping_cache: Dict[tuple, str] = {}
             for attr, brand, raw, canonical in catalog_conn.execute(
                 "SELECT attribute, brand, raw_value, canonical FROM mappings"
             ):
                 mapping_cache[(attr, brand, raw)] = canonical
 
-            # ── FAISS HNSW indexes ────────────────────────────────────────────
+            # FAISS HNSW indexes
             hnsw_indexes = {}
             for attr in ["brand", "model"]:
                 index_path = os.path.join(persist_directory, f"hnsw_{attr}.index")
@@ -221,7 +221,7 @@ class Normalizer:
                 idx.hnsw.efSearch = ef_search
                 hnsw_indexes[attr] = idx
 
-            # ── Matching chain (only needed for LLM mode) ─────────────────────
+            # Matching chain (only needed for LLM mode)
             if match_mode == "llm":
                 with open("./samples/matching.json") as f:
                     matching_samples = json.load(f)
@@ -379,8 +379,8 @@ class Normalizer:
     async def match(self, y: str, D: List[Document], attr: str, extraction: dict) -> str:
         """Match extracted value y against candidates D using full vehicle context.
 
-        Builds ŝ = Serialize(x̂) and, for each candidate cᵢ,
-        ŝ_{j→cᵢ} = Serialize(â₁, …, cᵢ, …, â_m) by swapping attr's value in the
+        Builds s_hat = Serialize(x_hat) and, for each candidate c_i,
+        s_hat_{j->c_i} = Serialize(a_1, ..., c_i, ..., a_m) by swapping attr's value in the
         extraction dict and re-serializing. Returns the first matching canonical
         in similarity-ranked order, or ''.
         """
@@ -401,7 +401,7 @@ class Normalizer:
         Sequentially deduplicate new values within a batch for a single attribute.
 
         Processes values in order: the first value is always canonical. Each subsequent
-        value is matched against all accumulated canonicals — if a match is found it is
+        value is matched against all accumulated canonicals - if a match is found it is
         redirected to that canonical, otherwise it becomes a new canonical itself.
 
         val_contexts: list of (value, extraction) tuples where extraction is the full
@@ -444,16 +444,16 @@ class Normalizer:
 
         Behaviour depends on ``self.match_mode``:
 
-          "off"       — return the IE extractions directly. No catalog, no FAISS.
-          "threshold" — IE → IR → accept top-1 canonical iff cos ≥ match_threshold,
+          "off"       - return the IE extractions directly. No catalog, no FAISS.
+          "threshold" - IE -> IR -> accept top-1 canonical iff cos >= match_threshold,
                         else treat as novel and add. Intra-batch dedup uses the
                         same cosine threshold.
-          "llm"       — IE → IR → full LLM entity-resolution with context-swap,
+          "llm"       - IE -> IR -> full LLM entity-resolution with context-swap,
                         plus sequential LLM-based intra-batch dedup.
         """
         t0 = _time.perf_counter()
 
-        # ── Step 1: extract all concurrently (skip if pre-extracted) ─────────
+        # Step 1: extract all concurrently (skip if pre-extracted)
         if extractions is None:
             extractions = await self.extract_all(xs)
         t1 = _time.perf_counter()
@@ -468,7 +468,7 @@ class Normalizer:
                        "cache_hits": len(xs), "catalog_brand": 0, "catalog_model": 0}
             return output, metrics
 
-        # ── Step 2: encode eⱼ = Encode(âⱼ) per attribute and retrieve ────────
+        # Step 2: encode e_j = Encode(a_j) per attribute and retrieve
         rows_needing_retrieval = [
             i for i, y in enumerate(extractions)
             if any(
@@ -506,7 +506,7 @@ class Normalizer:
                     k = min(self.k, idx.ntotal)
                     distances, indices = idx.search(q, k)
                     # FAISS IndexHNSWFlat returns squared L2; for unit vectors
-                    # cos = 1 - d²/2.
+                    # cos = 1 - d^2/2.
                     if len(distances[0]) > 0:
                         top_cos = float(1.0 - distances[0][0] / 2.0)
                     docs = [
@@ -522,7 +522,7 @@ class Normalizer:
                     retrieval_map.setdefault(i, {})[attr] = docs
         t2 = _time.perf_counter()
 
-        # ── Step 3: match unique (attr, value) pairs concurrently ─────────────
+        # Step 3: match unique (attr, value) pairs concurrently
         unique_pairs: Dict[tuple, List[Document]] = {}
         unique_pair_extraction: Dict[tuple, dict] = {}
         unique_pair_brands: Dict[tuple, str] = {}
@@ -561,7 +561,7 @@ class Normalizer:
             match_map[key] = ""
 
         if self.match_mode == "threshold":
-            # Top-1 cosine threshold — no LLM calls.
+            # Top-1 cosine threshold - no LLM calls.
             for key in pairs_needing_match:
                 attr, _ = key
                 docs = unique_pairs[key]
@@ -582,7 +582,7 @@ class Normalizer:
         pair_keys = list(unique_pairs.keys())
         t3 = _time.perf_counter()
 
-        # ── Step 4: intra-batch dedup for new values ──────────────────────────
+        # Step 4: intra-batch dedup for new values
         canonical_map: Dict[tuple, str] = {}
         if self.match_mode == "threshold":
             new_by_attr_emb: Dict[str, List[tuple]] = {}
@@ -620,11 +620,11 @@ class Normalizer:
                         canonical_map[(attr, val)] = canonical
         t4 = _time.perf_counter()
 
-        # ── Persist new mappings to SQLite ────────────────────────────────────
+        # Persist new mappings to SQLite
         # Only for pairs resolved via LLM (not from cache, not auto-inserts).
-        # - matched to existing catalog entry → save raw → canonical
-        # - dedup redirect (canonical != val) → save raw → canonical
-        # - new catalog entry (canonical == val) → skip; will be in catalog_sets next run
+        # - matched to existing catalog entry -> save raw -> canonical
+        # - dedup redirect (canonical != val) -> save raw -> canonical
+        # - new catalog entry (canonical == val) -> skip; will be in catalog_sets next run
         mapping_inserts: List[tuple] = []
         for key in pairs_needing_match:
             attr, val = key
@@ -644,7 +644,7 @@ class Normalizer:
             )
             self.catalog_conn.commit()
 
-        # ── Step 5: assemble results, write catalog inserts to SQLite ─────────
+        # Step 5: assemble results, write catalog inserts to SQLite
         logs = []
         docs_to_insert: List[Document] = []
         catalog_inserts: List[tuple] = []
@@ -701,7 +701,7 @@ class Normalizer:
             )
             self.catalog_conn.commit()
 
-        # ── Step 6: single HNSW flush for all new catalog entries ─────────────
+        # Step 6: single HNSW flush for all new catalog entries
         if docs_to_insert:
             await self._hnsw_add(docs_to_insert, flush=True)
 

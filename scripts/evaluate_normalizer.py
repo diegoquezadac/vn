@@ -1,5 +1,5 @@
 """
-evaluate_normalizer.py — end-to-end evaluation of the VN pipeline against ground truth.
+evaluate_normalizer.py - end-to-end evaluation of the VN pipeline against ground truth.
 
 For each of data/{dataset}_sample.csv + data/{dataset}_ground_truth.csv we run:
 
@@ -10,11 +10,11 @@ For each of data/{dataset}_sample.csv + data/{dataset}_ground_truth.csv we run:
 
   (2) Canonicalization ratio for brand and model:
         #distinct IE strings / #distinct VN canonicals.
-      High ratio ↔ strong string-variance collapse.
+      High ratio <-> strong string-variance collapse.
 
   (3) Novelty detection (pair-level):
-        gold: (GT.brand, GT.model) ∉ DVM-CAR pairs
-        pred: (VN.brand, VN.model) ∉ DVM-CAR pairs
+        gold: (GT.brand, GT.model) not in DVM-CAR pairs
+        pred: (VN.brand, VN.model) not in DVM-CAR pairs
       Report precision, recall, F1.
 
 Each dataset runs against a fresh copy of the seed catalog so results do
@@ -72,7 +72,7 @@ def clip_row(row: pd.Series, max_chars: int = MAX_VALUE_CHARS) -> pd.Series:
 
 
 def normalize_value(v) -> str:
-    """Null-like → ''; numeric strings → int-ish canonical form."""
+    """Null-like -> ''; numeric strings -> int-ish canonical form."""
     if v is None:
         return ""
     if isinstance(v, float) and np.isnan(v):
@@ -380,7 +380,7 @@ async def evaluate_dataset(
     print(f"  n={len(listings)} | variants={variants} | τ={match_threshold}")
 
     # IE once, reuse for all downstream variants.
-    print("  [1] IE-only pass …")
+    print("  [1] IE-only pass ...")
     ie_norm = Normalizer(
         match_mode="off",
         extraction_prompt=extraction_prompt,
@@ -392,7 +392,7 @@ async def evaluate_dataset(
     for v in variants:
         if v == "ie":
             continue
-        print(f"  [{v}] full pass (reusing IE extractions) …")
+        print(f"  [{v}] full pass (reusing IE extractions) ...")
         variant_results[v] = await _run_variant(
             mode=v, listings=listings, ie_results=ie_results,
             seed_dir=seed_dir, dataset=dataset,
@@ -469,11 +469,11 @@ async def evaluate_dataset(
             canon[v][a] = canonicalization_ratio(ie_vals, vn_vals)
             examples[v][a] = merge_examples(ie_vals, vn_vals)
 
-    print(f"\n  canonicalization ratio (ie_unique → vn_unique):")
+    print(f"\n  canonicalization ratio (ie_unique -> vn_unique):")
     for v in canon:
         for a in ["brand", "model"]:
             r = canon[v][a]
-            print(f"    {v:>9s} {a:6s}: {r['ie_unique']:4d} → {r['vn_unique']:4d}   (ratio {r['ratio']:.2f}x)")
+            print(f"    {v:>9s} {a:6s}: {r['ie_unique']:4d} -> {r['vn_unique']:4d}   (ratio {r['ratio']:.2f}x)")
 
     # (4) novelty (pair-level) per non-IE variant
     def to_pair(b, m):
@@ -614,7 +614,7 @@ def main() -> None:
     if reports:
         non_ie = [v for v in reports[0]["variants"] if v != "ie"]
         print("\n" + "=" * 104)
-        print(f"Consolidated summary (brand, model) — variants vs IE baseline")
+        print(f"Consolidated summary (brand, model) - variants vs IE baseline")
         print("=" * 104)
         header = f"{'attr':<6s} {'dataset':<12s} {'variant':<10s} {'acc_IE':>7s} {'acc_V':>7s} {'Δacc':>6s}  {'F1_IE':>6s} {'F1_V':>6s} {'ΔF1':>6s}  {'ΔP':>6s} {'ΔR':>6s}"
         print(header)

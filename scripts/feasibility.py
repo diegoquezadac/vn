@@ -1,5 +1,5 @@
 """
-feasibility.py — deployment-feasibility profiling of the IE+IR+ER pipeline.
+feasibility.py - deployment-feasibility profiling of the IE+IR+ER pipeline.
 
 The pipeline offloads all heavy compute (embeddings, LLM) to a remote API;
 locally it only runs FAISS HNSW search on CPU. This script quantifies what a
@@ -16,7 +16,7 @@ production deployment actually needs, across three axes:
   (2) Online (serial) latency
       A held-out slice processed one record at a time against a cold, growing
       catalog, giving the per-record end-to-end latency distribution (p50/p95)
-      broken down by stage — the upper bound for interactive use.
+      broken down by stage - the upper bound for interactive use.
 
   (3) Local compute footprint (no network)
       FAISS HNSW search latency / QPS on CPU over the seeded indexes, index
@@ -80,7 +80,7 @@ DATASETS = {
 }
 
 
-# ── helpers ──────────────────────────────────────────────────────────────────
+# helpers
 
 def _pct(xs: List[float], q: float) -> float:
     return float(np.percentile(xs, q)) if xs else float("nan")
@@ -158,7 +158,7 @@ def _wrap_embedding_counter(norm: Normalizer) -> dict:
     return counter
 
 
-# ── (3) FAISS HNSW search micro-benchmark (local, no network) ─────────────────
+# (3) FAISS HNSW search micro-benchmark (local, no network)
 
 def faiss_microbench(seed_dir: str, embedding_model: str, k: int,
                      ef_search: int, n_queries: int) -> dict:
@@ -177,7 +177,7 @@ def faiss_microbench(seed_dir: str, embedding_model: str, k: int,
         idx.hnsw.efSearch = ef_search
         rss_after = proc.memory_info().rss
 
-        # Random unit query vectors (no network) — measures CPU traversal cost.
+        # Random unit query vectors (no network) - measures CPU traversal cost.
         rng = np.random.default_rng(0)
         q = rng.standard_normal((n_queries, dim)).astype(np.float32)
         q /= np.maximum(np.linalg.norm(q, axis=1, keepdims=True), 1e-9)
@@ -211,7 +211,7 @@ def faiss_microbench(seed_dir: str, embedding_model: str, k: int,
     return out
 
 
-# ── (1) streaming throughput + amortization ───────────────────────────────────
+# (1) streaming throughput + amortization
 
 async def stream_dataset(listings: List[str], seed_dir: str, dataset: str,
                          batch_size: int, prefetch: int) -> dict:
@@ -352,7 +352,7 @@ async def stream_dataset(listings: List[str], seed_dir: str, dataset: str,
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
-# ── plotting ──────────────────────────────────────────────────────────────────
+# plotting
 
 def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
     _setup_rc()
@@ -379,7 +379,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         trace = report["datasets"][ds]["stream"]["trace"]
         x = [t["cum_records"] for t in trace]
 
-        # ── Col 0: end-to-end per-record latency (extraction + resolution) ────
+        # Col 0: end-to-end per-record latency (extraction + resolution)
         ax = axes[row, 0]
         lat = [t["latency_s"] for t in trace]
         ax.plot(x, _smooth(lat), lw=1.4, color=COLORS["blue_dark"], zorder=3)
@@ -389,7 +389,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         ax.grid(True)
         ax.set_ylim(bottom=0)
 
-        # ── Col 1: realized throughput over a trailing window ─────────────────
+        # Col 1: realized throughput over a trailing window
         # Per-batch instantaneous rate is bursty under prefetch (back-to-back
         # completions); average over a trailing window of the reconstructed
         # wall-clock timeline for a faithful records/min curve.
@@ -412,7 +412,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         ax.grid(True)
         ax.set_ylim(bottom=0)
 
-        # ── Col 2: API calls per record, decaying to extraction floor ─────────
+        # Col 2: API calls per record, decaying to extraction floor
         ax = axes[row, 2]
         cum = [t["cum_llm_per_record"] for t in trace]
         ax.plot(x, cum, lw=1.4, color=COLORS["gold_dark"], zorder=3)
@@ -442,7 +442,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
     print(f"  wrote {out_png}")
 
 
-# ── entrypoint ─────────────────────────────────────────────────────────────────
+# entrypoint
 
 def _write_report(args, env, faiss_bench, per_ds, k, ef_search, embedding_model):
     report = {

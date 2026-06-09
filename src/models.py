@@ -2,18 +2,18 @@ from typing import Optional, Literal, List
 from pydantic import BaseModel, Field
 
 EquipmentItem = Literal[
-    # ── safety ────────────────────────────────────────────────────────────────
+    # safety
     "abs",                      # Anti-lock Braking System (ABS)
     "airbags",                  # any airbags (driver, passenger, side, curtain)
     "esp",                      # Electronic Stability Program / ESC / stability control
-    "traction_control",         # Traction Control System (TCS) — distinct from full ESP
+    "traction_control",         # Traction Control System (TCS) - distinct from full ESP
     "rear_camera",              # Rear / backup / reversing camera
     "parking_sensors",          # PDC / ultrasonic parking sensors (front or rear)
     "blind_spot_monitoring",    # Blind Spot Detection / Side Assist
     "lane_departure_warning",   # Lane Departure Warning / Lane Keep Assist
     "forward_collision_warning",# Forward Collision Warning / Autonomous Emergency Braking
     "adaptive_cruise_control",  # ACC / radar cruise control
-    # ── comfort ───────────────────────────────────────────────────────────────
+    # comfort
     "air_conditioning",         # AC / Climatisation / Klima (single-zone)
     "climate_control",          # Dual/automatic climate control (multi-zone)
     "heated_seats",             # Heated / seat warmer
@@ -24,7 +24,7 @@ EquipmentItem = Literal[
     "sunroof",                  # Sunroof / moonroof / toit ouvrant
     "panoramic_roof",           # Panoramic / glass roof
     "heated_steering_wheel",    # Heated steering wheel
-    # ── technology ────────────────────────────────────────────────────────────
+    # technology
     "navigation",               # Built-in GPS / navigation system / sat-nav
     "bluetooth",                # Bluetooth audio or hands-free (CD/MP3/Bluetooth counts)
     "dab_radio",                # DAB / digital radio (AutoTrader UK, AutoScout24 filter)
@@ -34,7 +34,7 @@ EquipmentItem = Literal[
     "head_up_display",          # HUD / head-up display
     "wireless_charging",        # Qi wireless phone charging
     "onboard_computer",         # Trip computer / onboard computer / MFD
-    # ── convenience ───────────────────────────────────────────────────────────
+    # convenience
     "cruise_control",           # Standard (non-adaptive) cruise control / régulateur
     "speed_limiter",            # Speed limiter / limiteur de vitesse
     "electric_windows",         # Power windows / electric windows
@@ -48,7 +48,7 @@ EquipmentItem = Literal[
     "tow_bar",                  # Tow bar / trailer hitch / attelage
     "power_steering",           # Power steering (relevant on older vehicles)
     "paddle_shifters",          # Steering-wheel paddle shifters
-    # ── exterior ──────────────────────────────────────────────────────────────
+    # exterior
     "alloy_wheels",             # Alloy / aluminium wheels (Alu, jantes alliage)
     "tinted_windows",           # Tinted / privacy windows
 ]

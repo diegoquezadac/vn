@@ -1,5 +1,5 @@
 """
-audit.py  —  run a small sample through the full pipeline and print detailed
+audit.py  -  run a small sample through the full pipeline and print detailed
 results for debugging: raw extraction, canonical vehicle, catalog operations.
 
 Uses a temporary catalog and FAISS indexes deleted after the run,
@@ -59,38 +59,38 @@ DATASETS = {
 W = 70  # separator width
 
 
-def _sep(char="─"):
+def _sep(char="-"):
     print(char * W)
 
 
 def _header(title: str):
-    print(f"\n{'═' * W}")
+    print(f"\n{'=' * W}")
     print(f"  {title}")
-    print(f"{'═' * W}")
+    print(f"{'=' * W}")
 
 
 def _print_result(i: int, r: dict):
     _sep()
     print(f"  [{i + 1}] INPUT")
-    _sep("·")
+    _sep(".")
     print(f"  {r['query']}")
 
     print()
     _sep()
     print(f"  {'FIELD':<26}  {'EXTRACTED':<28}  CANONICAL")
-    _sep("·")
+    _sep(".")
     all_keys = [k for k, v in r["extraction"].items() if v is not None]
     for k in all_keys:
         raw = r["extraction"].get(k)
         canonical = r["vehicle"].get(k)
         changed = raw != canonical and canonical is not None
-        marker = "  ◄" if changed else ""
+        marker = "  <-" if changed else ""
         print(f"  {k:<26}  {str(raw):<28}  {canonical}{marker}")
 
     print()
     _sep()
     print("  CATALOG OPERATIONS")
-    _sep("·")
+    _sep(".")
     if r["operations"]:
         for op in r["operations"]:
             icon = "+" if op["operation"] == "insert" else "~"
@@ -98,7 +98,7 @@ def _print_result(i: int, r: dict):
                 f"  [{icon}] {op['operation']:<8}  {op['attribute']:<14}  {op['value']}"
             )
     else:
-        print("  (none — all attributes already in catalog)")
+        print("  (none - all attributes already in catalog)")
     print()
 
 
@@ -116,7 +116,7 @@ async def run(args) -> None:
         )
 
         for name, cfg in selected.items():
-            _header(f"DATASET: {name.upper()}  —  {args.n} samples")
+            _header(f"DATASET: {name.upper()}  -  {args.n} samples")
 
             df = pd.read_csv(cfg["path"])
             present_cols = [c for c in cfg["cols_to_normalize"] if c in df.columns]
@@ -150,9 +150,9 @@ async def run(args) -> None:
             )
             catalog_size = sum(len(v) for v in normalizer.catalog.values())
 
-            _sep("═")
-            print(f"  SUMMARY  —  {name}")
-            _sep("·")
+            _sep("=")
+            print(f"  SUMMARY - {name}")
+            _sep(".")
             print(f"  Samples processed          : {len(results)}")
             print(f"  Catalog inserts            : {inserts}")
             print(f"  Catalog updates (matched)  : {updates}")

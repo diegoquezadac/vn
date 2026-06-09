@@ -1,5 +1,5 @@
 """
-evaluate_annotation.py — inter-annotator agreement + ground-truth build.
+evaluate_annotation.py - inter-annotator agreement + ground-truth build.
 
 For each dataset, reads every data/{dataset}_*_labeled.csv and computes:
 
@@ -36,9 +36,9 @@ KAPPA_THRESHOLD = 0.60
 MIN_NONNULL_FRAC = 0.10
 # Lower floor for `_unit` fields: they are structurally sparser than
 # attribute-value fields (many listings omit the unit token), but κ on the
-# non-null rows is still the signal we want to surface — provided there's
+# non-null rows is still the signal we want to surface - provided there's
 # enough of it. Below this threshold the non-null sample is too small to
-# interpret κ meaningfully (e.g. 1–2 disagreeing cells out of 500).
+# interpret κ meaningfully (e.g. 1-2 disagreeing cells out of 500).
 UNIT_MIN_NONNULL_FRAC = 0.10
 NULL_SENTINEL = "__NULL__"
 
@@ -108,7 +108,7 @@ def fleiss_kappa_categorical(raters: list[list[str]]) -> float:
 def majority_vote(values: list[str]) -> str:
     counts = Counter(values)
     top = counts.most_common()
-    if len(top) == len(values):  # all distinct → ABSTAIN
+    if len(top) == len(values):  # all distinct -> ABSTAIN
         return "ABSTAIN"
     return top[0][0]
 
@@ -143,7 +143,7 @@ def _parse_equipment(s):
 def evaluate(dataset: str, data_dir: str, min_nonnull_frac: float) -> dict | None:
     paths = _find_labeled(dataset, data_dir)
     if len(paths) < 2:
-        print(f"[{dataset}] need ≥ 2 annotators; found {len(paths)}. Skipping.")
+        print(f"[{dataset}] need >= 2 annotators; found {len(paths)}. Skipping.")
         return None
 
     annotators = [_annotator_id(p, dataset) for p in paths]
@@ -157,7 +157,7 @@ def evaluate(dataset: str, data_dir: str, min_nonnull_frac: float) -> dict | Non
     ]
     attributes = [c.removeprefix("ann_") for c in ann_cols]
 
-    print(f"\n=== {dataset} — {len(dfs)}, n={n} ===")
+    print(f"\n=== {dataset} - {len(dfs)}, n={n} ===")
     header = f"  {'attribute':32s}  {'% null':>9s}  {'κ':>7s}  {'P_A':>6s}  flag"
     print(header)
     print("  " + "-" * (len(header) - 2))
@@ -211,7 +211,7 @@ def evaluate(dataset: str, data_dir: str, min_nonnull_frac: float) -> dict | Non
             null_frac = 1.0 - nonnull_frac
             if nonnull_frac < min_nonnull_frac:
                 report["skipped_sparse"].append({"attribute": attr, "null_frac": null_frac})
-                print(f"  {attr:32s}  {null_frac:>9.1%}  {'—':>7s}  {'—':>6s}  [sparse, skipped]")
+                print(f"  {attr:32s}  {null_frac:>9.1%}  {'-':>7s}  {'-':>6s}  [sparse, skipped]")
             else:
                 jac = pairwise_jaccard(set_raters)
                 report["attributes"][attr] = {
@@ -235,7 +235,7 @@ def evaluate(dataset: str, data_dir: str, min_nonnull_frac: float) -> dict | Non
         threshold = UNIT_MIN_NONNULL_FRAC if attr.endswith("_unit") else min_nonnull_frac
         if nonnull_frac < threshold:
             report["skipped_sparse"].append({"attribute": attr, "null_frac": null_frac})
-            print(f"  {attr:32s}  {null_frac:>9.1%}  {'—':>7s}  {'—':>6s}  [sparse, skipped]")
+            print(f"  {attr:32s}  {null_frac:>9.1%}  {'-':>7s}  {'-':>6s}  [sparse, skipped]")
             continue
 
         k = fleiss_kappa_categorical(raters_raw)

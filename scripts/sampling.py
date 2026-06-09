@@ -1,16 +1,16 @@
 """
-sampling.py  —  draw 500 evaluation records from autoscout24 and mucars.
+sampling.py  -  draw 500 evaluation records from autoscout24 and mucars.
 
 Proportional stratified sampling on brand. This preserves the population
 brand distribution in expectation, so dataset-level metrics estimated on
 the sample remain unbiased estimators of the population mean. We deliberately
 stratify on brand alone: adding a second attribute (e.g. fuel type) produces
-brand × fuel strata that are extremely sparse relative to n, so floor
+brand x fuel strata that are extremely sparse relative to n, so floor
 allocation leaves most strata at 0 and the leftover-fill phase does almost
-all the work — without meaningfully improving balance on either attribute.
+all the work - without meaningfully improving balance on either attribute.
 
 As a diagnostic we also report, per dataset, the fraction of rows
-whose brand is in 𝒦_brand and whose (brand, model) pair appears in
+whose brand is in K_brand and whose (brand, model) pair appears in
 DVM-CAR, both after lowercasing and whitespace stripping. When the
 dataset encodes the model column as "{brand} {model}" (common in
 AutoScout24) the brand prefix is stripped before lookup. Catalog
@@ -136,7 +136,7 @@ def sample_one(
 
     # Some datasets (e.g. autoscout24) encode the model column as "{brand} {model}".
     # For catalog membership we compare the model stem (with brand prefix stripped
-    # when present) against 𝒦_model. This is still a heuristic, but matches what
+    # when present) against K_model. This is still a heuristic, but matches what
     # the IE step would extract at inference time.
     def strip_brand(row):
         m, b = row["_model"], row["_brand"]

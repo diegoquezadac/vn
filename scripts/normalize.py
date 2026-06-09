@@ -1,29 +1,27 @@
 """
-normalize_all.py  —  normalize unique vehicles from autoscout24 and mucars.
+normalize.py  -  normalize unique vehicles from autoscout24 and mucars.
 
-FULL PIPELINE MODE: extract → retrieve → match → catalog update.
-Each vehicle description is extracted into structured fields, then brand/model/submodel/
-trim_level are matched against a shared catalog to avoid duplicates. New canonical values
+FULL PIPELINE MODE: extract -> retrieve -> match -> catalog update.
+Each vehicle description is extracted into structured fields, then brand and model
+are matched against a shared catalog to avoid duplicates. New canonical values
 are added to the catalog automatically.
 
 FILES WRITTEN:
-  db/catalog.db                  — SQLite catalog (canonical values + HNSW value index)
-  db/hnsw_brand.index            — FAISS HNSW index for brand similarity search
-  db/hnsw_model.index            — FAISS HNSW index for model similarity search
-  db/hnsw_submodel.index         — FAISS HNSW index for submodel similarity search
-  db/hnsw_trim_level.index       — FAISS HNSW index for trim_level similarity search
-  data/autoscout24_mappings.db   — SQLite result cache for autoscout24
-  data/mucars_mappings.db        — SQLite result cache for mucars
+  db/catalog.db                  - SQLite catalog (canonical values + HNSW value index)
+  db/hnsw_brand.index            - FAISS HNSW index for brand similarity search
+  db/hnsw_model.index            - FAISS HNSW index for model similarity search
+  data/autoscout24_mappings.db   - SQLite result cache for autoscout24
+  data/mucars_mappings.db        - SQLite result cache for mucars
 
 Progress is saved after every batch. Ctrl+C or crashes are safe to resume.
 Re-run the same command to continue from where you left off.
 
 Usage:
-    uv run python scripts/normalize_all.py                          # normalize all datasets
-    uv run python scripts/normalize_all.py --datasets autoscout24  # one dataset
-    uv run python scripts/normalize_all.py --test --test_n 5       # dry-run sample
-    uv run python scripts/normalize_all.py --fresh_start           # wipe everything and restart
-    uv run python scripts/normalize_all.py --batch_size 8          # tune concurrency
+    uv run python scripts/normalize.py                          # normalize all datasets
+    uv run python scripts/normalize.py --datasets autoscout24  # one dataset
+    uv run python scripts/normalize.py --test --test_n 5       # dry-run sample
+    uv run python scripts/normalize.py --fresh_start           # wipe everything and restart
+    uv run python scripts/normalize.py --batch_size 8          # tune concurrency
 """
 
 import argparse
@@ -44,7 +42,7 @@ load_dotenv()
 sys.path.insert(0, ".")
 from src.normalizer import Normalizer, serialize_row  # noqa: E402
 
-# ── Per-dataset config ────────────────────────────────────────────────────────
+# Per-dataset config
 
 DATASETS = {
     "autoscout24": {
@@ -64,7 +62,7 @@ DATASETS = {
 DB_DIR = "db"
 ANALYTICS_DB = "data/analytics.db"
 
-# ── Utilities ─────────────────────────────────────────────────────────────────
+# Utilities
 
 
 def _fmt(seconds: float) -> str:
@@ -211,7 +209,7 @@ def _do_fresh_start(selected: dict) -> None:
     print()
 
 
-# ── Dataset normalization ─────────────────────────────────────────────────────
+# Dataset normalization
 
 
 async def _normalize_dataset(
@@ -253,7 +251,7 @@ async def _normalize_dataset(
         print(f"  Already cached   : {len(mappings):>8,}")
         print(f"  To normalize     : {len(to_normalize):>8,}")
 
-        # ── Test mode ─────────────────────────────────────────────────────────
+        # Test mode
         if test:
             sample = to_normalize[:test_n] or unique_descs[:test_n]
             print(f"\n  [TEST MODE] Normalizing {len(sample)} descriptions:\n")
@@ -265,10 +263,10 @@ async def _normalize_dataset(
             return
 
         if not to_normalize:
-            print("  Nothing to normalize — all cached.")
+            print("  Nothing to normalize - all cached.")
             return
 
-        # ── Batch loop ─────────────────────────────────────────────────────────
+        # Batch loop
         total = len(to_normalize)
         done = 0
         failed_total = 0
@@ -333,7 +331,7 @@ async def _normalize_dataset(
                 "cost":               normalizer.get_cost()       - pre["cost"],
             }
 
-            # Save successes only — failures are retried on re-run
+            # Save successes only - failures are retried on re-run
             batch_pairs: list[tuple[str, dict]] = []
             batch_failed = 0
             for desc, vehicle in zip(batch, results):
@@ -388,7 +386,7 @@ async def _normalize_dataset(
         conn.close()
 
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+# Main
 
 
 async def run(args) -> None:
@@ -397,7 +395,7 @@ async def run(args) -> None:
         print(f"[error] No valid datasets. Choose from: {list(DATASETS.keys())}")
         sys.exit(1)
 
-    # ── --fresh_start ─────────────────────────────────────────────────────────
+    # --fresh_start
     if args.fresh_start:
         if not _confirm_fresh_start(selected):
             print("  Aborted.")
@@ -407,7 +405,7 @@ async def run(args) -> None:
             os.remove(ANALYTICS_DB)
             print(f"  Deleted: {ANALYTICS_DB}")
 
-    # ── Startup banner ────────────────────────────────────────────────────────
+    # Startup banner
     if not args.test:
         print("\nFiles that will be written:")
         print(f"  {DB_DIR}/catalog.db   (canonical catalog + HNSW values)")
@@ -451,11 +449,11 @@ async def run(args) -> None:
                 analytics_conn=analytics_conn,
             )
     except KeyboardInterrupt:
-        print("\n\n[!] Interrupted — progress saved. Re-run to resume.")
+        print("\n\n[!] Interrupted - progress saved. Re-run to resume.")
     finally:
         analytics_conn.close()
 
-    # ── Final summary ─────────────────────────────────────────────────────────
+    # Final summary
     if not args.test:
         t_e = normalizer.tokens["extract"]
         t_m = normalizer.tokens["match"]
