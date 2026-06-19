@@ -72,7 +72,7 @@ and MuCars (Morocco), respectively, with 95\% bootstrap intervals
 above the extraction-only baseline.
 The utility of normalization extends downstream to
 vehicle price prediction, improving MAPE by
-2.7--5.3\% on MuCars across CatBoost, XGBoost, and LightGBM,
+2.7--5.4\% on MuCars across CatBoost, XGBoost, and LightGBM,
 and is larger on listings with canonicalized models, where MAE
 improves by up to 8.7\%.
 Ablations show the record-level resolver achieves
@@ -1082,7 +1082,7 @@ IE-only baseline; dotted: $k = 5$, used for the main results
 \label{sec:downstream}
 
 We train three gradient-boosting regressors (CatBoost,
-XGBoost, LightGBM) with default library hyperparameters to predict listing price on MuCars,
+XGBoost, LightGBM) to predict listing price on MuCars,
 averaging errors over ten random 20\% holdout splits per
 model. The IE step is instantiated with a prompt variation
 in order to populate the schema in full: beyond extracting
@@ -1093,7 +1093,10 @@ aspiration, doors). We train each regressor on two
 configurations: the nine MuCars columns plus a 16-dimensional
 equipment one-hot encoding (\textit{raw}, $25$ features), and
 the same inputs concatenated with the 16 imputed schema
-fields (\textit{normalized}, $41$ features). The gap measures
+fields (\textit{normalized}, $41$ features). For XGBoost and LightGBM, brand and model are
+target-encoded, the remaining categorical attributes one-hot
+encoded, and the tree depth capped; CatBoost uses native
+categorical handling at default settings. The gap measures
 the marginal contribution of canonicalization plus imputation
 alone. Listings with
 implausible prices (outside $5{,}000$ to $5{,}000{,}000$~MAD)
@@ -1113,12 +1116,12 @@ on the canonicalized-models subset separately.
 
 Table~\ref{tab:downstream} reports the results. Normalization
 reduces error on every metric, every model, and both slices.
-On the full test set MAPE decreases by $2.7$ to $5.3\%$
-(CatBoost weakest, XGBoost largest) and MAE by
-$4.4$ to $6.4\%$ (LightGBM weakest, XGBoost largest). On the
+On the full test set MAPE decreases by $2.7$ to $5.4\%$
+and MAE by $5.3$ to $6.3\%$, with CatBoost weakest and
+XGBoost largest on both. On the
 canonicalized-models subset the reduction concentrates: MAPE decreases
-by $4.5$ to $5.1\%$, MdAPE by $6.5$ to $8.3\%$, and MAE by
-$5.5$ to $8.7\%$, with CatBoost recording the largest MAE
+by $4.5$ to $5.8\%$, MdAPE by $6.5$ to $8.5\%$, and MAE by
+$7.6$ to $8.7\%$, with CatBoost recording the largest MAE
 reduction at $8.7\%$. The
 improvement is consistent in direction and comparable in
 magnitude across architectures, indicating that the canonical
@@ -1140,14 +1143,14 @@ change).}
 \multicolumn{4}{|l|}{\textit{Full test set} ($n = 15{,}147$)} \\
 \hline
 CatBoost & $0.197 \to \mathbf{0.192}$ ($-2.7\%$) & $0.093 \to \mathbf{0.089}$ ($-3.6\%$) & $26{,}676 \to \mathbf{25{,}260}$ ($-5.3\%$) \\
-XGBoost  & $0.201 \to \mathbf{0.190}$ ($-5.3\%$) & $0.105 \to \mathbf{0.096}$ ($-8.3\%$) & $27{,}602 \to \mathbf{25{,}847}$ ($-6.4\%$) \\
-LightGBM & $0.200 \to \mathbf{0.192}$ ($-4.3\%$) & $0.106 \to \mathbf{0.100}$ ($-5.9\%$) & $27{,}650 \to \mathbf{26{,}422}$ ($-4.4\%$) \\
+XGBoost  & $0.190 \to \mathbf{0.179}$ ($-5.4\%$) & $0.096 \to \mathbf{0.088}$ ($-8.5\%$) & $26{,}003 \to \mathbf{24{,}357}$ ($-6.3\%$) \\
+LightGBM & $0.191 \to \mathbf{0.181}$ ($-5.3\%$) & $0.097 \to \mathbf{0.089}$ ($-8.5\%$) & $26{,}176 \to \mathbf{24{,}607}$ ($-6.0\%$) \\
 \hline
 \multicolumn{4}{|l|}{\textit{Canonicalized models} ($n = 3{,}272$, $21.6\%$ of test set)} \\
 \hline
 CatBoost & $0.192 \to \mathbf{0.183}$ ($-4.5\%$) & $0.103 \to \mathbf{0.096}$ ($-6.5\%$) & $33{,}668 \to \mathbf{30{,}747}$ ($-8.7\%$) \\
-XGBoost  & $0.200 \to \mathbf{0.190}$ ($-5.1\%$) & $0.113 \to \mathbf{0.103}$ ($-8.3\%$) & $33{,}596 \to \mathbf{31{,}017}$ ($-7.7\%$) \\
-LightGBM & $0.198 \to \mathbf{0.188}$ ($-4.9\%$) & $0.113 \to \mathbf{0.106}$ ($-6.8\%$) & $33{,}567 \to \mathbf{31{,}719}$ ($-5.5\%$) \\
+XGBoost  & $0.190 \to \mathbf{0.179}$ ($-5.8\%$) & $0.104 \to \mathbf{0.095}$ ($-8.5\%$) & $31{,}576 \to \mathbf{29{,}120}$ ($-7.8\%$) \\
+LightGBM & $0.191 \to \mathbf{0.180}$ ($-5.8\%$) & $0.105 \to \mathbf{0.097}$ ($-8.4\%$) & $31{,}657 \to \mathbf{29{,}256}$ ($-7.6\%$) \\
 \hline
 \end{tabular}
 \label{tab:downstream}
@@ -1220,11 +1223,11 @@ catalogs, and record-level LLM resolution. On $1{,}000$ human-annotated
 listings from AutoScout24 and MuCars, the full pipeline
 improves model accuracy and novelty F1 over an extraction-only
 baseline on both datasets, and reduces price-prediction MAPE
-by $2.7$--$5.3\%$ on MuCars across CatBoost, XGBoost, and
+by $2.7$--$5.4\%$ on MuCars across CatBoost, XGBoost, and
 LightGBM. The downstream improvement concentrates on the
 $21.6\%$ of MuCars test rows whose model name was canonicalized
 by the pipeline: on this subset, MAE decreases by
-$5.5$--$8.7\%$, well above the full-set figure. Downstream
+$7.6$--$8.7\%$, well above the full-set figure. Downstream
 regressors therefore benefit mostly from variant pooling: a
 single canonical label lets the regressor treat as one input
 what the raw data splits into separate categories.
