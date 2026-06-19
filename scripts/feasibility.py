@@ -382,7 +382,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         # Col 0: end-to-end per-record latency (extraction + resolution)
         ax = axes[row, 0]
         lat = [t["latency_s"] for t in trace]
-        ax.plot(x, _smooth(lat), lw=1.4, color=COLORS["blue_dark"], zorder=3)
+        ax.plot(x, _smooth(lat), lw=1.4, color=COLORS["blue_mid"], zorder=3)
         if row == 0:
             ax.set_title("Latency", pad=6)
         ax.set_ylabel("Latency (s)", fontsize=9.5, labelpad=3)
@@ -405,7 +405,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
             j = max(0, i - K)
             dt = cw[i] - cw[j]
             thr.append((xr[i] - xr[j]) / dt * 60.0 if dt > 1e-9 else 0.0)
-        ax.plot(x, thr, lw=1.4, color=COLORS["green_dark"], zorder=3)
+        ax.plot(x, thr, lw=1.4, color=COLORS["green_mid"], zorder=3)
         if row == 0:
             ax.set_title("Throughput", pad=6)
         ax.set_ylabel("Records / min", fontsize=9.5, labelpad=3)
@@ -415,7 +415,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         # Col 2: API calls per record, decaying to extraction floor
         ax = axes[row, 2]
         cum = [t["cum_llm_per_record"] for t in trace]
-        ax.plot(x, cum, lw=1.4, color=COLORS["gold_dark"], zorder=3)
+        ax.plot(x, cum, lw=1.4, color=COLORS["gold_mid"], zorder=3)
         ax.axhline(1.0, color=COLORS["ie_ref"], ls=(0, (4, 3)), lw=0.9,
                    alpha=0.75, zorder=1)
         if row == 0:
@@ -433,7 +433,7 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
     for row, ds in enumerate(datasets):
         bbox = axes[row, 0].get_position()
         fig.text(0.008, (bbox.y0 + bbox.y1) / 2.0, pretty.get(ds, ds),
-                 fontsize=11, fontweight="bold", color="#222222",
+                 fontsize=11, fontweight="bold", color="#07060F",
                  ha="left", va="center", rotation=90)
 
     fig.savefig(out_pdf)

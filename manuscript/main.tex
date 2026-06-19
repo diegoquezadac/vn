@@ -14,6 +14,20 @@
 \usetikzlibrary{arrows.meta, positioning, calc, fit}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% --- Figure palette (shared with the thesis document; see ../thesis/CLAUDE.md) ---
+% Four hue families drawn from the thesis palette: sky (data / catalog),
+% violet (LLM steps), mint (normalized result). Operations, arrows and text
+% stay neutral gray (ink). Soft pastel fills with deep borders for definition.
+\definecolor{skydeep}{HTML}{0A5480}
+\definecolor{skysoft}{HTML}{AADFFB}
+\definecolor{violetdark}{HTML}{4B4AC0}
+\definecolor{violetsoft}{HTML}{D0CFF7}
+\definecolor{mintdeep}{HTML}{0A5C44}
+\definecolor{mintdark}{HTML}{0E9066}
+\definecolor{mintlight}{HTML}{6DF5CC}
+\definecolor{mintsoft}{HTML}{A8FAE0}
+
 \begin{document}
 
 \title{Vehicle Data Normalization with Retrieval-Augmented LLMs\\
@@ -86,7 +100,7 @@ The expansion of online platforms has produced a proliferation of heterogeneous 
 Several standardization efforts have attempted to prescribe how a vehicle \textit{should} be modeled, yet open datasets in practice do not follow any of them. The Vehicle Identification Number (VIN), standardized under ISO 3779~\cite{iso3779}, is effective within closed industry systems and dealership networks, but its decoding tables are proprietary, vary across manufacturers, and VIN data are rarely present in open datasets. The NHTSA vPIC database~\cite{NHTSAvPIC} decodes VINs into approximately 130 attributes but is restricted to US-market vehicles and excludes condition, usage history, and equipment. The ACES/PIES standards~\cite{AutoCareACES} provide structured fitment data for aftermarket parts in North America, not whole-vehicle attributes. The W3C Automotive Ontology and its \texttt{schema.org} extension~\cite{SchemaOrgAuto} define a minimal set of vehicle properties for web markup, but accept free-form text for key fields and omit trim, equipment, and condition entirely. COVESA's Vehicle Signal Specification (VSS)~\cite{COVESAVSS} standardizes in-vehicle telemetry signals rather than vehicle-as-product attributes, and its own gap analysis acknowledges persistent interoperability issues across OEMs~\cite{COVESAVDMReq}. A standard that is not adopted at scale offers no interoperability in practice: heterogeneous listings from open platforms continue to diverge along the three axes described above, regardless of which schema has been formally defined. This problem has been repeatedly noted in the vehicle price prediction literature~\cite{electronics12143083, vehicles7030094, 10825740}, where studies report that extensive ad-hoc preprocessing is required for each new dataset and call for standardized representation protocols.
 
 % Paragraph about contribution
-In this work, we propose a vehicle data normalization framework that combines large language models (LLMs) for information extraction (IE) and entity resolution (ER) with dense information retrieval (IR) over a knowledge catalog, following the retrieval-augmented generation (RAG) paradigm, to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream ML tasks. Our framework is designed to be open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements.
+In this work, we propose a vehicle data normalization framework that combines large language models (LLMs) for information extraction (IE) and entity resolution (ER) with dense information retrieval (IR) over a knowledge catalog, following the retrieval-augmented generation (RAG) paradigm, to map any raw vehicle description to a normalized, domain-consistent representation suitable for downstream ML tasks. Our framework is designed to be open-source and extensible, allowing practitioners to define custom output schemas tailored to their specific attribute requirements.\footnote{Source code is available at \url{https://github.com/diegoquezadac/vn}.}
 
 
 \section{Related Work}
@@ -133,31 +147,31 @@ $\mathcal{K}_j$. The remainder of this section formalizes each component.
     op/.style={draw, rounded corners=2pt, fill=gray!8,
                draw=gray!60, thick, minimum height=0.36cm,
                minimum width=1.7cm, inner sep=1.5pt, align=center},
-    llm/.style={draw, rounded corners=2pt, fill=blue!6,
-                draw=blue!40, thick, minimum height=0.36cm,
+    llm/.style={draw, rounded corners=2pt, fill=violetsoft,
+                draw=violetdark, thick, minimum height=0.36cm,
                 minimum width=1.7cm, inner sep=1.5pt, align=center},
-    sel/.style={draw, rounded corners=2pt, fill=green!6,
-                draw=green!50, thick, minimum height=0.36cm,
+    sel/.style={draw, rounded corners=2pt, fill=mintsoft,
+                draw=mintdark, thick, minimum height=0.36cm,
                 minimum width=1.7cm, inner sep=1.5pt, align=center},
     ops/.style={draw, rounded corners=2pt, fill=gray!8,
                 draw=gray!60, thick, minimum height=0.36cm,
                 minimum width=1.7cm, inner sep=1.5pt},
-    llms/.style={draw, rounded corners=2pt, fill=blue!6,
-                 draw=blue!40, thick, minimum height=0.60cm,
+    llms/.style={draw, rounded corners=2pt, fill=violetsoft,
+                 draw=violetdark, thick, minimum height=0.60cm,
                  minimum width=1.7cm, inner sep=1.5pt},
-    sels/.style={draw, rounded corners=2pt, fill=green!6,
-                 draw=green!50, thick, minimum height=0.36cm,
+    sels/.style={draw, rounded corners=2pt, fill=mintsoft,
+                 draw=mintdark, thick, minimum height=0.36cm,
                  minimum width=1.7cm, inner sep=1.5pt},
-    cats/.style={draw, rounded corners=2pt, fill=yellow!8, 
-                 draw=yellow!60, thick, minimum width=1.4cm,
+    cats/.style={draw, rounded corners=2pt, fill=skysoft,
+                 draw=skydeep, thick, minimum width=1.4cm,
                  minimum height=0.85cm, inner sep=1.5pt},
-    dat/.style={align=center, inner sep=0.5pt, 
+    dat/.style={align=center, inner sep=0.5pt,
                 text height=1.6ex, text depth=0.5ex},
-    cat/.style={draw, rounded corners=2pt, fill=yellow!8, 
-                draw=yellow!60, thick, minimum width=1.4cm,
+    cat/.style={draw, rounded corners=2pt, fill=skysoft,
+                draw=skydeep, thick, minimum width=1.4cm,
                 minimum height=0.85cm, inner sep=1.5pt, align=center},
-    outnode/.style={draw, rounded corners=2pt, fill=teal!8,
-                    draw=teal!50, thick, minimum height=0.36cm,
+    outnode/.style={draw, rounded corners=2pt, fill=mintlight,
+                    draw=mintdeep, thick, minimum height=0.36cm,
                     minimum width=1.7cm, inner sep=1.5pt, align=center},
     dm/.style={font=\scriptsize\itshape, text=gray!55},
     arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
@@ -555,19 +569,19 @@ otherwise, isolating the contribution of the LLM resolver $M$.
     every node/.style={font=\scriptsize},
     op/.style={draw, rounded corners=2pt, fill=gray!8, draw=gray!60, thick,
                minimum height=0.36cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
-    llm/.style={draw, rounded corners=2pt, fill=blue!6, draw=blue!40, thick,
+    llm/.style={draw, rounded corners=2pt, fill=violetsoft, draw=violetdark, thick,
                 minimum height=0.36cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
-    sel/.style={draw, rounded corners=2pt, fill=green!6, draw=green!50, thick,
+    sel/.style={draw, rounded corners=2pt, fill=mintsoft, draw=mintdark, thick,
                 minimum height=0.36cm, minimum width=1.9cm, inner sep=1.5pt, align=center},
-    cat/.style={draw, rounded corners=2pt, fill=yellow!8, draw=yellow!60, thick,
+    cat/.style={draw, rounded corners=2pt, fill=skysoft, draw=skydeep, thick,
                 minimum width=1.2cm, minimum height=0.7cm, inner sep=1.5pt, align=center},
-    outnode/.style={draw, rounded corners=2pt, fill=teal!8, draw=teal!50, thick,
+    outnode/.style={draw, rounded corners=2pt, fill=mintlight, draw=mintdeep, thick,
                     minimum height=0.36cm, minimum width=2.3cm, inner sep=1.5pt, align=center},
     dat/.style={align=center, inner sep=0.5pt, text height=1.6ex, text depth=0.5ex},
     arr/.style={-{Stealth[length=2.5pt]}, semithick, gray!60},
     darr/.style={-{Stealth[length=2.5pt]}, gray!45, dashed},
     lb/.style={font=\scriptsize, text=gray!55},
-    llms/.style={draw, rounded corners=2pt, fill=blue!6, draw=blue!40, thick,
+    llms/.style={draw, rounded corners=2pt, fill=violetsoft, draw=violetdark, thick,
                  minimum height=0.52cm, minimum width=1.9cm, inner sep=1.5pt},
     soff/.style={xshift=3pt, yshift=3pt},
     soff2/.style={xshift=6pt, yshift=6pt},

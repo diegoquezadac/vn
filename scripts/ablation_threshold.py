@@ -220,20 +220,26 @@ async def evaluate_dataset(
 
 # --- plotting ---------------------------------------------------------------
 
-# Tikz-matched palette (manuscript/main.tex uses gray/blue/green/yellow/teal).
-# Curves use the *darker* edge tones; baselines use mid grays.
+# Thesis palette (shared with the thesis document and manuscript/main.tex;
+# see ../thesis/CLAUDE.md). One hue family per panel using graduated shades:
+# sky = model normalization, violet = novelty detection, mint = compression.
+# Ink supplies neutral grays for baselines, markers, frame and text.
 COLORS = {
-    "blue_dark":   "#3D6FA3",
-    "blue_mid":    "#7AA8D6",
-    "teal_dark":   "#2A5C57",
-    "teal_mid":    "#5DA29A",
-    "teal_light":  "#9CC9C2",
-    "green_dark":  "#356935",
-    "green_mid":   "#6BA46B",
-    "gold_dark":   "#A88F44",
-    "gold_mid":    "#D6BC78",
-    "ie_ref":      "#888888",
-    "tau_marker":  "#444444",
+    # Model normalization panel -> sky (deep + base)
+    "blue_dark":   "#0A5480",  # sky deep
+    "blue_mid":    "#3DB8F5",  # sky base
+    # Novelty detection panel -> violet (F1 deep, precision dark, recall base)
+    "teal_dark":   "#1C1B6A",  # violet deep  (F1)
+    "teal_mid":    "#B2B1F0",  # violet light (unused)
+    "teal_light":  "#D0CFF7",  # violet soft  (unused)
+    "green_dark":  "#4B4AC0",  # violet dark  (precision)
+    "green_mid":   "#8E8DE8",  # violet base  (recall)
+    # Catalog compression panel -> mint (deep + base)
+    "gold_dark":   "#0A5C44",  # mint deep
+    "gold_mid":    "#2EEDB5",  # mint base
+    # Neutral reference lines -> ink
+    "ie_ref":      "#55528A",  # ink light
+    "tau_marker":  "#3A3768",  # ink mid
 }
 
 
@@ -249,16 +255,16 @@ def _setup_rc():
         "xtick.labelsize": 8,
         "ytick.labelsize": 8,
         "axes.linewidth":  0.7,
-        "axes.edgecolor":  "#333333",
-        "axes.labelcolor": "#222222",
-        "xtick.color":     "#444444",
-        "ytick.color":     "#444444",
-        "grid.color":      "#999999",
+        "axes.edgecolor":  "#3A3768",  # ink mid (frame)
+        "axes.labelcolor": "#07060F",  # ink (text)
+        "xtick.color":     "#07060F",  # ink (text)
+        "ytick.color":     "#07060F",  # ink (text)
+        "grid.color":      "#7B78A8",  # ink muted
         "grid.alpha":      0.25,
         "grid.linewidth":  0.4,
         "legend.frameon":  True,
         "legend.framealpha": 0.92,
-        "legend.edgecolor": "#bbbbbb",
+        "legend.edgecolor": "#7B78A8",  # ink muted
         "savefig.bbox":    "tight",
     })
 
@@ -415,14 +421,14 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         y_center = (bbox.y0 + bbox.y1) / 2.0
         fig.text(
             0.008, y_center, pretty.get(dataset, dataset),
-            fontsize=11, fontweight="bold", color="#222222",
+            fontsize=11, fontweight="bold", color="#07060F",
             ha="left", va="center", rotation=90,
         )
 
     # One horizontal legend per column, hugging the x-label baseline.
     legend_kwargs = dict(
         loc="upper center",
-        frameon=True, framealpha=0.92, edgecolor="#bbbbbb",
+        frameon=True, framealpha=0.92, edgecolor="#7B78A8",
         fontsize=8.5, handlelength=1.8, columnspacing=1.3,
         borderpad=0.35, handletextpad=0.5,
     )

@@ -263,13 +263,13 @@ def plot_report(report: dict, out_pdf: str, out_png: str) -> None:
         y_center = (bbox.y0 + bbox.y1) / 2.0
         fig.text(
             0.008, y_center, pretty.get(dataset, dataset),
-            fontsize=11, fontweight="bold", color="#222222",
+            fontsize=11, fontweight="bold", color="#07060F",
             ha="left", va="center", rotation=90,
         )
 
     legend_kwargs = dict(
         loc="upper center",
-        frameon=True, framealpha=0.92, edgecolor="#bbbbbb",
+        frameon=True, framealpha=0.92, edgecolor="#7B78A8",
         fontsize=8.5, handlelength=1.8, columnspacing=1.3,
         borderpad=0.35, handletextpad=0.5,
     )
