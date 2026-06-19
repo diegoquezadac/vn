@@ -73,8 +73,8 @@ async def evaluate_dataset(
     n_bootstrap: int = N_BOOTSTRAP,
 ) -> dict:
     print(f"\n=== {dataset} ===")
-    sample_df = pd.read_csv(f"{data_dir}/{dataset}_sample.csv")
-    gt_df = pd.read_csv(f"{data_dir}/{dataset}_ground_truth.csv").head(
+    sample_df = pd.read_csv(f"{data_dir}/X_{dataset}.csv")
+    gt_df = pd.read_csv(f"{data_dir}/Y_{dataset}.csv").head(
         len(sample_df)
     )
     listings = [serialize_row(clip_row(r)) for _, r in sample_df.iterrows()]

@@ -10,7 +10,7 @@ For each dataset, reads every data/{dataset}_*_labeled.csv and computes:
   - Flag if κ < κ_min             (default κ_min = 0.60)
 
 Outputs:
-  - data/{dataset}_ground_truth.csv
+  - data/Y_{dataset}.csv
   - data/{dataset}_annotation_report.json
   - Printed summary per dataset.
 
@@ -259,7 +259,7 @@ def evaluate(dataset: str, data_dir: str, min_nonnull_frac: float) -> dict | Non
     print(f"  skipped (sparse, >{1 - min_nonnull_frac:.0%} null): {len(report['skipped_sparse'])} attributes")
     print(f"  ABSTAIN rate: {report['abstain_rate']:.3%}")
 
-    gt_path = os.path.join(data_dir, f"{dataset}_ground_truth.csv")
+    gt_path = os.path.join(data_dir, f"Y_{dataset}.csv")
     gt.to_csv(gt_path, index=False)
     print(f"  wrote {gt_path}")
 

@@ -1,7 +1,7 @@
 """
 evaluate_normalizer.py - end-to-end evaluation of the VN pipeline against ground truth.
 
-For each of data/{dataset}_sample.csv + data/{dataset}_ground_truth.csv we run:
+For each of data/X_{dataset}.csv + data/Y_{dataset}.csv we run:
 
   (1) Intrinsic accuracy per attribute:
         - IE-only baseline  vs ground truth
@@ -373,8 +373,8 @@ async def evaluate_dataset(
     extraction_samples: str = "./samples/extraction.json",
 ) -> dict:
     print(f"\n=== {dataset} ===")
-    sample_df = pd.read_csv(f"{data_dir}/{dataset}_sample.csv")
-    gt_df = pd.read_csv(f"{data_dir}/{dataset}_ground_truth.csv").head(len(sample_df))
+    sample_df = pd.read_csv(f"{data_dir}/X_{dataset}.csv")
+    gt_df = pd.read_csv(f"{data_dir}/Y_{dataset}.csv").head(len(sample_df))
 
     listings = [serialize_row(clip_row(r)) for _, r in sample_df.iterrows()]
     print(f"  n={len(listings)} | variants={variants} | τ={match_threshold}")

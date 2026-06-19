@@ -20,7 +20,7 @@ pipeline. These coverage numbers are purely descriptive; the
 ground-truth novelty flag used in downstream metrics is assigned by
 human annotators.
 
-Output: data/{dataset}_sample.csv  (all original columns preserved).
+Output: data/X_{dataset}.csv  (all original columns preserved).
 
 Usage:
     uv run python scripts/sampling.py
@@ -166,7 +166,7 @@ def sample_one(
     original_cols = [c for c in df.columns if not c.startswith("_")]
     out_df = sample[original_cols]
 
-    out_path = os.path.join(out_dir, f"{name}_sample.csv")
+    out_path = os.path.join(out_dir, f"X_{name}.csv")
     out_df.to_csv(out_path, index=False)
 
     smp_brand_ic = 100 * sample["_brand_in"].mean() if len(sample) else 0.0

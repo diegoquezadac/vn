@@ -74,8 +74,8 @@ Calling the normalizer on a batch returns `(results, metrics)`. Pass `verbose=Tr
 This repository ships everything needed to reproduce the **headline evaluation and ablations** without any external download:
 
 - `data/dvm.csv` — DVM-CAR, used to seed the brand/model catalog
-- `data/{autoscout24,mucars}_sample.csv` — the 500-listing evaluation samples
-- `data/{autoscout24,mucars}_ground_truth.csv` — majority-vote human annotations
+- `data/X_{autoscout24,mucars}.csv` — the 500-listing evaluation samples (model input)
+- `data/Y_{autoscout24,mucars}.csv` — majority-vote human annotations (labels)
 
 **1. Seed the knowledge catalog** (builds `experiments/db/{catalog.db, hnsw_brand.index, hnsw_model.index}` from DVM-CAR):
 

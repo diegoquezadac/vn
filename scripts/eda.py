@@ -1,4 +1,4 @@
-"""EDA for the *_sample.csv files in data/.
+"""EDA for the X_*.csv files in data/.
 
 Produces, per dataset:
   - Shape / dtypes / describe printed to stdout
@@ -496,7 +496,7 @@ def _write_caption(path: Path,
 def run(datasets: list[str], skip_full: bool = False) -> None:
     frames: dict[str, pd.DataFrame] = {}
     for name in datasets:
-        csv = DATA_DIR / f"{name}_sample.csv"
+        csv = DATA_DIR / f"X_{name}.csv"
         if not csv.exists():
             print(f"[skip] {csv} not found")
             continue
