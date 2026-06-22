@@ -83,12 +83,10 @@ Prompts are Jinja2 templates rendered once at `Normalizer.__init__` with the few
 vn/
 ├── src/
 │   ├── normalizer.py     # Normalizer (match_mode: off | threshold | llm) + serialize_row
-│   ├── models.py         # Vehicle (26-attribute schema) + Resolution
-│   └── train.py          # downstream price regressors (CatBoost / XGBoost / LightGBM)
+│   └── models.py         # Vehicle (26-attribute schema) + Resolution
 ├── prompts/              # extraction.j2, matching.j2 — few-shot baked in at init
 ├── samples/              # few-shot examples rendered into the prompts
-├── scripts/              # reproduction pipeline (see CLEI2026.md)
-├── notebooks/            # downstream price-prediction evaluation
+├── scripts/              # reproduction pipeline incl. train.py + evaluate_downstream.py (see CLEI2026.md)
 ├── data/                 # eval samples, ground truth, DVM-CAR catalog seed, EDA figures
 ├── db/                   # generated: catalog.db + hnsw_{brand,model}.index
 └── manuscript/           # CLEI 2026 paper (LaTeX + figures)
